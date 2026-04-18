@@ -3,10 +3,12 @@ import { useNavigate, useLocation } from 'react-router-dom'
 const modulos = [
   { path: '/dashboard', icon: '🏠', label: 'Dashboard' },
   { path: '/prontuario', icon: '🦷', label: 'Prontuário' },
+  { path: '/agenda', icon: '📅', label: 'Agenda' },
   { path: '/orcamento', icon: '💰', label: 'Orçamento' },
   { path: '/receituario', icon: '💊', label: 'Receituário' },
   { path: '/atestado', icon: '📋', label: 'Atestado' },
   { path: '/exames', icon: '🔬', label: 'Exames' },
+  { path: '/configuracoes', icon: '⚙️', label: 'Configurações' },
 ]
 
 export default function Sidebar() {

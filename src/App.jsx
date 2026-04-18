@@ -6,6 +6,8 @@ import Layout from './pages/Layout'
 import Login from './pages/Login'
 import Cadastro from './pages/Cadastro'
 import Dashboard from './pages/Dashboard'
+import Configuracoes from './pages/Configuracoes'
+import Agenda from './modules/Agenda'
 import Prontuario from './modules/Prontuario'
 import Orcamento from './modules/Orcamento'
 import Receituario from './modules/Receituario'
@@ -28,8 +30,10 @@ export default function App() {
               </RotaProtegida>
             }>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/agenda" element={<Agenda />} />
               <Route path="/prontuario" element={<Prontuario />} />
               <Route path="/orcamento" element={<Orcamento />} />
+              <Route path="/configuracoes" element={<Configuracoes />} />
               <Route path="/receituario" element={<Receituario />} />
               <Route path="/atestado" element={<Atestado />} />
               <Route path="/exames" element={<Exames />} />
