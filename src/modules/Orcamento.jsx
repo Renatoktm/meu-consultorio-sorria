@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { usePacientes } from '../hooks/usePacientes'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../components/Toast'
@@ -110,6 +110,15 @@ const CATALOGO_PADRAO = [
   { id: 77, categoria: 'Outros',          nome: 'Toxina botulínica (por área)',          codigo: 'OUT005', preco: '600.00' },
 ]
 
+const STATUS_CONFIG = {
+  em_analise: { label: 'Em Análise', cor: '#b45309', bg: '#fef3c7', border: '#fcd34d' },
+  aprovado:   { label: 'Aprovado',   cor: '#15803d', bg: '#dcfce7', border: '#86efac' },
+  recusado:   { label: 'Recusado',   cor: '#dc2626', bg: '#fee2e2', border: '#fca5a5' },
+  pendente:   { label: 'Em Análise', cor: '#b45309', bg: '#fef3c7', border: '#fcd34d' },
+}
+
+const FORMA_LABEL = { pix: 'PIX', avista: 'À Vista', cartao: 'Cartão', convenio: 'Convênio' }
+
 const TODAS_CATEGORIAS = ['Todas', 'Preventivo', 'Restaurações', 'Endodontia', 'Periodontia',
   'Cirurgia', 'Prótese', 'Ortodontia', 'Implantodontia', 'Estética', 'Radiologia',
   'Odontopediatria', 'Outros']
@@ -146,6 +155,11 @@ export default function Orcamento() {
   const [desconto, setDesconto] = useState(5)
   const [parcelas, setParcelas] = useState(1)
   const [salvando, setSalvando] = useState(false)
+
+  // ── Histórico ───────────────────────────────────────────────────────────────
+  const [historico, setHistorico] = useState([])
+  const [carregandoHist, setCarregandoHist] = useState(false)
+  const [filtroHist, setFiltroHist] = useState('todos')
 
   // ── Busca inline de procedimento ────────────────────────────────────────────
   const [buscaProc, setBuscaProc] = useState('')
@@ -257,6 +271,39 @@ export default function Orcamento() {
     toast('Procedimento adicionado ao catálogo', 'success')
   }
 
+  // ── Histórico: carregar e atualizar status ───────────────────────────────────
+  const carregarHistorico = useCallback(async () => {
+    setCarregandoHist(true)
+    try {
+      const { data, error } = await supabase
+        .from('orcamentos')
+        .select('*, pacientes(nome)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      setHistorico(data || [])
+    } catch (err) {
+      toast('Erro ao carregar histórico: ' + (err.message || ''), 'error')
+    } finally {
+      setCarregandoHist(false)
+    }
+  }, [user?.id])
+
+  useEffect(() => {
+    if (aba === 'historico') carregarHistorico()
+  }, [aba, carregarHistorico])
+
+  async function atualizarStatus(id, novoStatus) {
+    const { error } = await supabase
+      .from('orcamentos')
+      .update({ status: novoStatus })
+      .eq('id', id)
+    if (error) { toast('Erro ao salvar status.', 'error'); return }
+    setHistorico(prev => prev.map(o => o.id === id ? { ...o, status: novoStatus } : o))
+    const cfg = STATUS_CONFIG[novoStatus]
+    toast(`Status atualizado para "${cfg?.label}"`, 'success')
+  }
+
   // ── Style helpers ───────────────────────────────────────────────────────────
   const abaStyle = id => ({
     padding: '9px 22px',
@@ -306,8 +353,9 @@ export default function Orcamento() {
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-        <button style={abaStyle('novo')}     onClick={() => setAba('novo')}>📋 Novo Orçamento</button>
-        <button style={abaStyle('catalogo')} onClick={() => setAba('catalogo')}>
+        <button style={abaStyle('novo')}      onClick={() => setAba('novo')}>📋 Novo Orçamento</button>
+        <button style={abaStyle('historico')} onClick={() => setAba('historico')}>📂 Histórico</button>
+        <button style={abaStyle('catalogo')}  onClick={() => setAba('catalogo')}>
           🗂 Catálogo
           {itens.length > 0 && (
             <span style={{
@@ -607,6 +655,145 @@ export default function Orcamento() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── ABA HISTÓRICO ───────────────────────────────────────────────────── */}
+      {aba === 'historico' && (
+        <div>
+          {/* Filtros */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+            {[
+              { id: 'todos',      label: 'Todos' },
+              { id: 'em_analise', label: 'Em Análise' },
+              { id: 'aprovado',   label: 'Aprovados' },
+              { id: 'recusado',   label: 'Recusados' },
+            ].map(f => (
+              <button
+                key={f.id}
+                onClick={() => setFiltroHist(f.id)}
+                style={{
+                  padding: '7px 18px', borderRadius: 20, fontSize: 13, fontWeight: 600,
+                  border: `1.5px solid ${filtroHist === f.id ? C.primary : '#e2e8f0'}`,
+                  background: filtroHist === f.id ? C.primary : '#fff',
+                  color: filtroHist === f.id ? '#fff' : '#4a5568',
+                  cursor: 'pointer',
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+            <button
+              onClick={carregarHistorico}
+              style={{ marginLeft: 'auto', padding: '7px 14px', borderRadius: 8, fontSize: 13, border: '1.5px solid #e2e8f0', background: '#fff', cursor: 'pointer', color: '#6b7280' }}
+              title="Recarregar"
+            >
+              🔄
+            </button>
+          </div>
+
+          {/* Tabela */}
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            {/* Cabeçalho */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: '120px 1fr 130px 120px 160px',
+              padding: '10px 18px', background: '#f0fdf4',
+              fontSize: 12, fontWeight: 700, color: C.dark,
+              borderBottom: '1px solid #e5e7eb',
+            }}>
+              <span>Data</span>
+              <span>Paciente</span>
+              <span>Pagamento</span>
+              <span style={{ textAlign: 'right' }}>Total</span>
+              <span style={{ textAlign: 'center' }}>Status</span>
+            </div>
+
+            {carregandoHist ? (
+              <div style={{ textAlign: 'center', padding: '40px 0', color: '#9ca3af' }}>
+                ⏳ Carregando...
+              </div>
+            ) : (() => {
+              const lista = historico.filter(o => {
+                if (filtroHist === 'todos') return true
+                const s = o.status || 'em_analise'
+                return s === filtroHist || (filtroHist === 'em_analise' && s === 'pendente')
+              })
+
+              if (lista.length === 0) return (
+                <div style={{ textAlign: 'center', padding: '48px 0', color: '#9ca3af' }}>
+                  <div style={{ fontSize: 36, marginBottom: 10 }}>📂</div>
+                  <div style={{ fontSize: 14 }}>Nenhum orçamento encontrado</div>
+                </div>
+              )
+
+              return lista.map((orc, idx) => {
+                const statusAtual = orc.status || 'em_analise'
+                const cfg = STATUS_CONFIG[statusAtual] || STATUS_CONFIG.em_analise
+                const data = orc.created_at
+                  ? new Date(orc.created_at).toLocaleDateString('pt-BR')
+                  : '—'
+                const pacienteNome = orc.pacientes?.nome || '—'
+                const forma = FORMA_LABEL[orc.forma_pagamento] || orc.forma_pagamento || '—'
+
+                return (
+                  <div
+                    key={orc.id}
+                    style={{
+                      display: 'grid', gridTemplateColumns: '120px 1fr 130px 120px 160px',
+                      alignItems: 'center', padding: '12px 18px',
+                      borderBottom: idx < lista.length - 1 ? '1px solid #f1f5f9' : 'none',
+                      background: '#fff',
+                      transition: 'background 0.1s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#fff'}
+                  >
+                    <span style={{ fontSize: 13, color: '#6b7280' }}>{data}</span>
+
+                    <span style={{ fontSize: 13, fontWeight: 600, color: '#1f2937' }}>{pacienteNome}</span>
+
+                    <span style={{ fontSize: 13, color: '#4b5563' }}>{forma}</span>
+
+                    <span style={{ fontSize: 14, fontWeight: 700, color: C.primary, textAlign: 'right' }}>
+                      R$ {parseFloat(orc.valor_total || 0).toFixed(2)}
+                    </span>
+
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <select
+                        value={['em_analise', 'aprovado', 'recusado'].includes(statusAtual) ? statusAtual : 'em_analise'}
+                        onChange={e => atualizarStatus(orc.id, e.target.value)}
+                        style={{
+                          padding: '4px 8px', borderRadius: 20, fontSize: 12, fontWeight: 700,
+                          border: `1.5px solid ${cfg.border}`,
+                          background: cfg.bg, color: cfg.cor,
+                          cursor: 'pointer', outline: 'none', appearance: 'none',
+                          WebkitAppearance: 'none', textAlign: 'center',
+                          paddingRight: 22, paddingLeft: 10,
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E")`,
+                          backgroundRepeat: 'no-repeat', backgroundPosition: 'right 6px center',
+                        }}
+                      >
+                        <option value="em_analise">Em Análise</option>
+                        <option value="aprovado">Aprovado</option>
+                        <option value="recusado">Recusado</option>
+                      </select>
+                    </div>
+                  </div>
+                )
+              })
+            })()}
+          </div>
+
+          {/* Contador */}
+          {!carregandoHist && (
+            <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 10, textAlign: 'right' }}>
+              {historico.filter(o => {
+                if (filtroHist === 'todos') return true
+                const s = o.status || 'em_analise'
+                return s === filtroHist || (filtroHist === 'em_analise' && s === 'pendente')
+              }).length} orçamento(s)
+            </div>
+          )}
         </div>
       )}
 
