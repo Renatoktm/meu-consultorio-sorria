@@ -187,6 +187,10 @@ export default function Orcamento() {
     setItens(prev => prev.filter(i => i.id !== id))
   }
 
+  function alterarPreco(id, valor) {
+    setItens(prev => prev.map(i => i.id === id ? { ...i, preco: valor } : i))
+  }
+
   // ── Salvar Supabase ─────────────────────────────────────────────────────────
   async function salvar() {
     if (!pacienteSelecionado) { toast('Selecione um paciente.', 'error'); return }
@@ -454,8 +458,22 @@ export default function Orcamento() {
                       <button onClick={() => alterarQtd(item.id, +1)} style={btnQtd}>+</button>
                     </div>
 
-                    <div style={{ textAlign: 'right', fontSize: 13, color: '#4b5563' }}>
-                      R$ {parseFloat(item.preco).toFixed(2)}
+                    <div style={{ textAlign: 'right' }}>
+                      <input
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        value={item.preco}
+                        onChange={e => alterarPreco(item.id, e.target.value)}
+                        style={{
+                          width: 90, textAlign: 'right', fontSize: 13,
+                          border: '1.5px solid #e5e7eb', borderRadius: 5,
+                          padding: '3px 6px', color: '#4b5563',
+                          outline: 'none',
+                        }}
+                        onFocus={e => e.target.style.borderColor = C.primary}
+                        onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                      />
                     </div>
 
                     <div style={{ textAlign: 'right', fontWeight: 700, color: C.primary, fontSize: 14 }}>
