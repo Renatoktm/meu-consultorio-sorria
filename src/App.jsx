@@ -5,6 +5,7 @@ import RotaProtegida from './components/RotaProtegida'
 import Layout from './pages/Layout'
 import Login from './pages/Login'
 import Cadastro from './pages/Cadastro'
+import LandingPage from './pages/LandingPage'
 import Dashboard from './pages/Dashboard'
 import Configuracoes from './pages/Configuracoes'
 import Pacientes from './pages/Pacientes'
@@ -21,9 +22,9 @@ export default function App() {
       <AuthProvider>
         <ToastProvider>
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="/" element={<Navigate to="/login" replace />} />
 
             <Route element={
               <RotaProtegida>
