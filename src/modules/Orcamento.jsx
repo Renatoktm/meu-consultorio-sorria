@@ -5,6 +5,7 @@ import { useToast } from '../components/Toast'
 import Autocomplete from '../components/Autocomplete'
 import { gerarOrcamentoPDF } from '../lib/pdf'
 import { supabase } from '../lib/supabase'
+import { fetchClinicaData } from '../lib/pdfHelper'
 
 // ─── Taxas de juros cartão de crédito ────────────────────────────────────────
 const TAXAS_CARTAO = {
@@ -242,9 +243,10 @@ export default function Orcamento() {
   }
 
   // ── Gerar PDF ───────────────────────────────────────────────────────────────
-  function gerarPDF() {
+  async function gerarPDF() {
     if (!pacienteSelecionado) { toast('Selecione um paciente.', 'error'); return }
     if (itens.length === 0)   { toast('Adicione pelo menos um procedimento.', 'error'); return }
+    const clinicaData = await fetchClinicaData(user?.id)
     gerarOrcamentoPDF({
       paciente: pacienteSelecionado.nome,
       itens,
@@ -257,6 +259,7 @@ export default function Orcamento() {
       subtotal,
       dentista: profile?.nome || '',
       clinica: profile?.clinica || 'Meu Consultório SorrIA',
+      clinicaData,
     })
     toast('PDF gerado!', 'success')
   }

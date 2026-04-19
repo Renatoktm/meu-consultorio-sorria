@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../components/Toast'
 import Autocomplete from '../components/Autocomplete'
 import { gerarAtestadoPDF } from '../lib/pdf'
+import { fetchClinicaData } from '../lib/pdfHelper'
 
 const O = {
   primary: '#ea580c', dark: '#c2410c', bg: '#fff7ed',
@@ -18,7 +19,7 @@ const PERIODOS = [
 
 export default function Atestado() {
   const { pacientes } = usePacientes()
-  const { profile } = useAuth()
+  const { profile, user } = useAuth()
   const toast = useToast()
 
   const [busca, setBusca] = useState('')
@@ -40,8 +41,9 @@ export default function Atestado() {
     setForm({ data: new Date().toISOString().split('T')[0], periodo: '1 dia', cid: '', observacoes: '' })
   }
 
-  function gerarPDF() {
+  async function gerarPDF() {
     if (!pacienteSelecionado) { toast('Selecione um paciente.', 'error'); return }
+    const clinicaData = await fetchClinicaData(user?.id)
     gerarAtestadoPDF({
       paciente: pacienteSelecionado.nome,
       cpf: pacienteSelecionado.cpf || '',
@@ -52,6 +54,7 @@ export default function Atestado() {
       dentista: profile?.nome || 'Dentista',
       cro: profile?.cro || '',
       clinica: profile?.clinica || 'Meu Consultório SorrIA',
+      clinicaData,
     })
     toast('Atestado gerado!', 'success')
   }

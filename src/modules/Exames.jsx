@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../components/Toast'
 import Autocomplete from '../components/Autocomplete'
 import { gerarExamesPDF } from '../lib/pdf'
+import { fetchClinicaData } from '../lib/pdfHelper'
 
 const GRUPOS = [
   {
@@ -55,7 +56,7 @@ const GRUPOS = [
 
 export default function Exames() {
   const { pacientes } = usePacientes()
-  const { profile } = useAuth()
+  const { profile, user } = useAuth()
   const toast = useToast()
 
   const [busca, setBusca] = useState('')
@@ -102,7 +103,7 @@ export default function Exames() {
     setNovoExame('')
   }
 
-  function gerarPDF() {
+  async function gerarPDF() {
     if (!pacienteSelecionado) { toast('Selecione um paciente.', 'error'); return }
     if (selecionados.size === 0) { toast('Selecione pelo menos um exame.', 'error'); return }
 
@@ -111,6 +112,7 @@ export default function Exames() {
       ...examesPersonalizados.filter(e => selecionados.has(e)).map(e => ({ nome: e, obs: obs[e] || '', grupo: 'Outros' })),
     ]
 
+    const clinicaData = await fetchClinicaData(user?.id)
     gerarExamesPDF({
       paciente: pacienteSelecionado.nome,
       data: new Date(dataSolicitacao + 'T12:00:00').toLocaleDateString('pt-BR'),
@@ -119,6 +121,7 @@ export default function Exames() {
       dentista: profile?.nome || 'Dentista',
       cro: profile?.cro || '',
       clinica: profile?.clinica || 'Meu Consultório SorrIA',
+      clinicaData,
     })
     toast('Solicitação de exames gerada!', 'success')
   }

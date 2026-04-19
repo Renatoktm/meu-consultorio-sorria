@@ -1,19 +1,5 @@
 import jsPDF from 'jspdf'
-
-function cabecalho(doc, clinica = 'Meu Consultório SorrIA', dentista = '') {
-  doc.setFillColor(13, 148, 136)
-  doc.rect(0, 0, 210, 22, 'F')
-  doc.setTextColor(255, 255, 255)
-  doc.setFontSize(16)
-  doc.setFont('helvetica', 'bold')
-  doc.text(clinica, 14, 13)
-  if (dentista) {
-    doc.setFontSize(9)
-    doc.setFont('helvetica', 'normal')
-    doc.text(dentista, 14, 19)
-  }
-  doc.setTextColor(0, 0, 0)
-}
+import { buildClinicHeader } from './pdfHelper'
 
 function rodape(doc) {
   const hoje = new Date().toLocaleDateString('pt-BR')
@@ -30,10 +16,10 @@ export function gerarOrcamentoPDF({
   parcelas = 1, valorParcela = 0,
   subtotal = 0, totalFinal = 0,
   dentista, clinica,
-  // Compatibilidade retroativa com versão antiga
+  clinicaData,
+  // Compatibilidade retroativa
   procedimentos, plano,
 }) {
-  // Suporte ao formato antigo (procedimentos sem qtd)
   if (!itens.length && procedimentos?.length) {
     itens = procedimentos.map(p => ({ ...p, qtd: 1 }))
     formaPagamento = plano || 'pix'
@@ -42,37 +28,37 @@ export function gerarOrcamentoPDF({
     totalFinal = subtotal - valorDesconto
   }
 
+  const headerData = clinicaData ?? { nome_clinica: clinica, nome_dentista: dentista }
   const doc = new jsPDF()
-  cabecalho(doc, clinica, dentista)
+  buildClinicHeader(doc, headerData)
 
   doc.setFontSize(14)
   doc.setFont('helvetica', 'bold')
-  doc.text('ORÇAMENTO ODONTOLÓGICO', 14, 34)
+  doc.text('ORÇAMENTO ODONTOLÓGICO', 14, 47)
 
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Paciente: ${paciente}`, 14, 44)
-  doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 150, 44)
+  doc.text(`Paciente: ${paciente}`, 14, 57)
+  doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 150, 57)
 
   doc.setDrawColor(13, 148, 136)
-  doc.line(14, 48, 196, 48)
+  doc.line(14, 61, 196, 61)
 
-  // Cabeçalho tabela
+  // Table header
   doc.setFont('helvetica', 'bold')
   doc.setFillColor(240, 253, 250)
-  doc.rect(14, 52, 182, 8, 'F')
-  doc.text('Procedimento', 16, 58)
-  doc.text('Qtd', 108, 58)
-  doc.text('Unit.', 128, 58)
-  doc.text('Total', 162, 58)
+  doc.rect(14, 65, 182, 8, 'F')
+  doc.text('Procedimento', 16, 71)
+  doc.text('Qtd', 108, 71)
+  doc.text('Unit.', 128, 71)
+  doc.text('Total', 162, 71)
 
   doc.setFont('helvetica', 'normal')
-  let y = 68
+  let y = 81
   itens.forEach((item) => {
     const qtd = item.qtd || 1
     const unit = parseFloat(item.preco)
     const tot = unit * qtd
-    // Truncar nome longo
     const nome = item.nome.length > 48 ? item.nome.slice(0, 46) + '…' : item.nome
     doc.text(nome, 16, y)
     doc.text(String(qtd), 110, y)
@@ -88,7 +74,6 @@ export function gerarOrcamentoPDF({
   const isPix    = formaPagamento === 'pix' || formaPagamento === 'avista'
   const isCartao = formaPagamento === 'cartao'
 
-  // Subtotal
   doc.setFont('helvetica', 'normal')
   doc.text('Subtotal:', 130, y)
   doc.text(`R$ ${subtotal.toFixed(2)}`, 162, y)
@@ -103,7 +88,6 @@ export function gerarOrcamentoPDF({
     y += 8
   }
 
-  // Total final
   doc.setFont('helvetica', 'bold')
   doc.setTextColor(13, 148, 136)
   doc.text('TOTAL:', 130, y)
@@ -111,7 +95,6 @@ export function gerarOrcamentoPDF({
   doc.setTextColor(0, 0, 0)
   y += 10
 
-  // Condição de pagamento
   if (isCartao && parcelas > 1) {
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(9)
@@ -139,27 +122,31 @@ export function gerarOrcamentoPDF({
   doc.save(`orcamento_${paciente.replace(/\s+/g, '_')}.pdf`)
 }
 
-export function gerarReceituarioPDF({ paciente, data, idade, medicamentos, observacoes, dentista, cro, clinica }) {
+export function gerarReceituarioPDF({ paciente, data, idade, medicamentos, observacoes, dentista, cro, clinica, clinicaData }) {
+  const headerData = clinicaData ?? { nome_clinica: clinica, nome_dentista: dentista, cro }
+  const dentistaFinal = clinicaData?.nome_dentista || dentista || 'Dentista'
+  const croFinal = clinicaData?.cro || cro || ''
+
   const doc = new jsPDF()
-  cabecalho(doc, clinica, dentista)
+  buildClinicHeader(doc, headerData)
 
   doc.setFontSize(14)
   doc.setFont('helvetica', 'bold')
-  doc.text('RECEITUÁRIO ODONTOLÓGICO', 14, 34)
+  doc.text('RECEITUÁRIO ODONTOLÓGICO', 14, 47)
 
   doc.setDrawColor(13, 148, 136)
-  doc.line(14, 38, 196, 38)
+  doc.line(14, 51, 196, 51)
 
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Paciente: ${paciente}`, 14, 46)
-  if (idade) doc.text(`Idade: ${idade}`, 120, 46)
-  doc.text(`Data: ${data || new Date().toLocaleDateString('pt-BR')}`, 150, 46)
+  doc.text(`Paciente: ${paciente}`, 14, 59)
+  if (idade) doc.text(`Idade: ${idade}`, 120, 59)
+  doc.text(`Data: ${data || new Date().toLocaleDateString('pt-BR')}`, 150, 59)
 
   doc.setDrawColor(220, 220, 220)
-  doc.line(14, 50, 196, 50)
+  doc.line(14, 63, 196, 63)
 
-  let y = 60
+  let y = 73
   medicamentos.forEach((m, i) => {
     const nome = m.nome || m.medicamento || ''
     doc.setFont('helvetica', 'bold')
@@ -186,14 +173,14 @@ export function gerarReceituarioPDF({ paciente, data, idade, medicamentos, obser
     y += linhas.length * 5 + 4
   }
 
-  y = Math.max(y + 20, 230)
+  y = Math.max(y + 20, 243)
   doc.setDrawColor(100, 100, 100)
   doc.line(80, y, 196, y)
   y += 5
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(9)
-  doc.text(dentista, 80, y)
-  if (cro) { y += 5; doc.setFont('helvetica', 'normal'); doc.text(`CRO: ${cro}`, 80, y) }
+  doc.text(dentistaFinal, 80, y)
+  if (croFinal) { y += 5; doc.setFont('helvetica', 'normal'); doc.text(`CRO: ${croFinal}`, 80, y) }
 
   doc.setFontSize(7)
   doc.setTextColor(150, 150, 150)
@@ -204,27 +191,30 @@ export function gerarReceituarioPDF({ paciente, data, idade, medicamentos, obser
   doc.save(`receituario_${paciente.replace(/\s+/g, '_')}.pdf`)
 }
 
-export function gerarAtestadoPDF({ paciente, cpf, periodo, dias, data, cid, observacoes, dentista, cro, clinica }) {
+export function gerarAtestadoPDF({ paciente, cpf, periodo, dias, data, cid, observacoes, dentista, cro, clinica, clinicaData }) {
+  const headerData = clinicaData ?? { nome_clinica: clinica, nome_dentista: dentista, cro }
+  const dentistaFinal = clinicaData?.nome_dentista || dentista || 'Dentista'
+  const croFinal = clinicaData?.cro || cro || ''
+
   const doc = new jsPDF()
-  cabecalho(doc, clinica, dentista)
+  buildClinicHeader(doc, headerData)
 
   doc.setFontSize(14)
   doc.setFont('helvetica', 'bold')
-  doc.text('ATESTADO ODONTOLÓGICO', 14, 34)
+  doc.text('ATESTADO ODONTOLÓGICO', 14, 47)
 
   doc.setDrawColor(13, 148, 136)
-  doc.line(14, 38, 196, 38)
+  doc.line(14, 51, 196, 51)
 
-  // Texto formal
   const periodoTexto = periodo || (dias ? `${dias} dia(s)` : '—')
   const cpfTexto = cpf ? `, portador(a) do CPF ${cpf},` : ','
   const texto = `Atesto para os devidos fins que o(a) paciente ${paciente}${cpfTexto} esteve sob meus cuidados odontológicos no dia ${data}, necessitando de afastamento de suas atividades pelo período de ${periodoTexto}.`
   doc.setFontSize(11)
   doc.setFont('helvetica', 'normal')
   const linhas = doc.splitTextToSize(texto, 170)
-  doc.text(linhas, 14, 55)
+  doc.text(linhas, 14, 68)
 
-  let y = 55 + linhas.length * 7 + 8
+  let y = 68 + linhas.length * 7 + 8
 
   if (cid) {
     doc.setFont('helvetica', 'bold')
@@ -244,8 +234,7 @@ export function gerarAtestadoPDF({ paciente, cpf, periodo, dias, data, cid, obse
     y += obsLinhas.length * 6 + 4
   }
 
-  // Local e data
-  y = Math.max(y + 20, 210)
+  y = Math.max(y + 20, 222)
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
   doc.text(`Local e Data: ___________________________, ${data}`, 14, y)
@@ -256,35 +245,38 @@ export function gerarAtestadoPDF({ paciente, cpf, periodo, dias, data, cid, obse
   y += 5
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(9)
-  doc.text(dentista, 60, y)
-  if (cro) { y += 5; doc.setFont('helvetica', 'normal'); doc.text(`CRO: ${cro}`, 60, y) }
+  doc.text(dentistaFinal, 60, y)
+  if (croFinal) { y += 5; doc.setFont('helvetica', 'normal'); doc.text(`CRO: ${croFinal}`, 60, y) }
   doc.setFont('helvetica', 'normal')
-  doc.text('Assinatura e Carimbo', 60, y + (cro ? 5 : 5))
+  doc.text('Assinatura e Carimbo', 60, y + (croFinal ? 5 : 5))
 
   rodape(doc)
   doc.save(`atestado_${paciente.replace(/\s+/g, '_')}.pdf`)
 }
 
-export function gerarExamesPDF({ paciente, data, exames, obsGeral, dentista, cro, clinica }) {
+export function gerarExamesPDF({ paciente, data, exames, obsGeral, dentista, cro, clinica, clinicaData }) {
+  const headerData = clinicaData ?? { nome_clinica: clinica, nome_dentista: dentista, cro }
+  const dentistaFinal = clinicaData?.nome_dentista || dentista || 'Dentista'
+  const croFinal = clinicaData?.cro || cro || ''
+
   const doc = new jsPDF()
-  cabecalho(doc, clinica, dentista)
+  buildClinicHeader(doc, headerData)
 
   doc.setFontSize(14)
   doc.setFont('helvetica', 'bold')
-  doc.text('SOLICITAÇÃO DE EXAMES', 14, 34)
+  doc.text('SOLICITAÇÃO DE EXAMES', 14, 47)
 
   doc.setDrawColor(13, 148, 136)
-  doc.line(14, 38, 196, 38)
+  doc.line(14, 51, 196, 51)
 
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Paciente: ${paciente}`, 14, 46)
-  doc.text(`Data: ${data || new Date().toLocaleDateString('pt-BR')}`, 150, 46)
+  doc.text(`Paciente: ${paciente}`, 14, 59)
+  doc.text(`Data: ${data || new Date().toLocaleDateString('pt-BR')}`, 150, 59)
 
   doc.setDrawColor(220, 220, 220)
-  doc.line(14, 50, 196, 50)
+  doc.line(14, 63, 196, 63)
 
-  // Agrupar por categoria
   const grupos = {}
   exames.forEach(e => {
     const g = e.grupo || 'Outros'
@@ -292,7 +284,7 @@ export function gerarExamesPDF({ paciente, data, exames, obsGeral, dentista, cro
     grupos[g].push(e)
   })
 
-  let y = 60
+  let y = 73
   let n = 1
   Object.entries(grupos).forEach(([grupo, itens]) => {
     doc.setFont('helvetica', 'bold')
@@ -331,14 +323,14 @@ export function gerarExamesPDF({ paciente, data, exames, obsGeral, dentista, cro
     y += linhas.length * 5 + 4
   }
 
-  y = Math.max(y + 20, 230)
+  y = Math.max(y + 20, 243)
   doc.setDrawColor(100, 100, 100)
   doc.line(80, y, 196, y)
   y += 5
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(9)
-  doc.text(dentista, 80, y)
-  if (cro) { y += 5; doc.setFont('helvetica', 'normal'); doc.text(`CRO: ${cro}`, 80, y) }
+  doc.text(dentistaFinal, 80, y)
+  if (croFinal) { y += 5; doc.setFont('helvetica', 'normal'); doc.text(`CRO: ${croFinal}`, 80, y) }
 
   rodape(doc)
   doc.save(`exames_${paciente.replace(/\s+/g, '_')}.pdf`)

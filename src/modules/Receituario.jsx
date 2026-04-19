@@ -5,6 +5,7 @@ import { useToast } from '../components/Toast'
 import Autocomplete from '../components/Autocomplete'
 import Modal from '../components/Modal'
 import { gerarReceituarioPDF } from '../lib/pdf'
+import { fetchClinicaData } from '../lib/pdfHelper'
 
 const P = {
   primary: '#7c3aed', dark: '#5b21b6', bg: '#faf5ff',
@@ -32,7 +33,7 @@ const MED_VAZIO = { nome: '', posologia: '', via: 'Via oral', quantidade: '' }
 
 export default function Receituario() {
   const { pacientes } = usePacientes()
-  const { profile } = useAuth()
+  const { profile, user } = useAuth()
   const toast = useToast()
 
   const [busca, setBusca] = useState('')
@@ -77,9 +78,10 @@ export default function Receituario() {
     setObservacoes('')
   }
 
-  function gerarPDF() {
+  async function gerarPDF() {
     if (!pacienteSelecionado) { toast('Selecione um paciente.', 'error'); return }
     if (medicamentos.length === 0) { toast('Adicione pelo menos um medicamento.', 'error'); return }
+    const clinicaData = await fetchClinicaData(user?.id)
     gerarReceituarioPDF({
       paciente: pacienteSelecionado.nome,
       data: new Date(data + 'T12:00:00').toLocaleDateString('pt-BR'),
@@ -89,6 +91,7 @@ export default function Receituario() {
       dentista: profile?.nome || 'Dentista',
       cro: profile?.cro || '',
       clinica: profile?.clinica || 'Meu Consultório SorrIA',
+      clinicaData,
     })
     toast('Receituário gerado!', 'success')
   }
