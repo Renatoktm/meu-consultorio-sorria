@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabase'
+import { useGoogleCalendar } from '../hooks/useGoogleCalendar'
 
 const C = { primary: '#1a8a7b', dark: '#136b5e', light: '#f0fdf4', border: '#e8f0ed' }
 
@@ -20,12 +21,15 @@ export default function Dashboard() {
   const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite'
   const nome = profile?.nome?.split(' ')[0] || user?.email?.split('@')[0] || 'Dentista'
 
+  const { isConnected: gcConnected, getEvents } = useGoogleCalendar()
+
   const [resumo, setResumo] = useState({
     pacientes: 0,
     emAnalise: 0, emAnaliseValor: 0,
     aprovados: 0, aprovadosValor: 0,
     documentos: 0,
   })
+  const [consultasMes, setConsultasMes] = useState(null) // null = ainda não carregou
   const [orcamentosAbertos, setOrcamentosAbertos] = useState([])
   const [ultimosPacientes, setUltimosPacientes] = useState([])
   const [carregando, setCarregando] = useState(true)
@@ -33,6 +37,15 @@ export default function Dashboard() {
   useEffect(() => {
     if (user?.id) carregarDados()
   }, [user?.id])
+
+  useEffect(() => {
+    if (!gcConnected) { setConsultasMes(null); return }
+    const agora = new Date()
+    const fimMes = new Date(agora.getFullYear(), agora.getMonth() + 1, 1)
+    getEvents(agora.toISOString(), fimMes.toISOString()).then(evs => {
+      setConsultasMes(evs.length)
+    })
+  }, [gcConnected, getEvents])
 
   async function carregarDados() {
     setCarregando(true)
@@ -122,6 +135,12 @@ export default function Dashboard() {
       icon: '📄', label: 'Documentos Gerados',
       valor: resumo.documentos, sub: `neste mês`,
       cor: '#7c3aed', bg: '#faf5ff',
+    },
+    {
+      icon: '📅', label: 'Consultas Agendadas',
+      valor: gcConnected ? (consultasMes ?? '…') : '—',
+      sub: gcConnected ? 'restantes este mês' : 'Conecte o Google Calendar nas Configurações',
+      cor: '#2563eb', bg: '#eff6ff',
     },
   ]
 
