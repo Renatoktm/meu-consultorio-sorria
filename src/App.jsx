@@ -7,8 +7,9 @@ import Login from './pages/Login'
 import Cadastro from './pages/Cadastro'
 import Dashboard from './pages/Dashboard'
 import Configuracoes from './pages/Configuracoes'
+import Pacientes from './pages/Pacientes'
+import PacienteDetalhe from './pages/PacienteDetalhe'
 import Agenda from './modules/Agenda'
-import Prontuario from './modules/Prontuario'
 import Orcamento from './modules/Orcamento'
 import Receituario from './modules/Receituario'
 import Atestado from './modules/Atestado'
@@ -29,14 +30,17 @@ export default function App() {
                 <Layout />
               </RotaProtegida>
             }>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/agenda" element={<Agenda />} />
-              <Route path="/prontuario" element={<Prontuario />} />
-              <Route path="/orcamento" element={<Orcamento />} />
-              <Route path="/configuracoes" element={<Configuracoes />} />
-              <Route path="/receituario" element={<Receituario />} />
-              <Route path="/atestado" element={<Atestado />} />
-              <Route path="/exames" element={<Exames />} />
+              <Route path="/dashboard"       element={<Dashboard />} />
+              <Route path="/agenda"          element={<Agenda />} />
+              <Route path="/pacientes"       element={<Pacientes />} />
+              <Route path="/pacientes/:id"   element={<PacienteDetalhe />} />
+              <Route path="/orcamento"       element={<Orcamento />} />
+              <Route path="/configuracoes"   element={<Configuracoes />} />
+              {/* Rotas legadas mantidas */}
+              <Route path="/prontuario"      element={<Navigate to="/pacientes" replace />} />
+              <Route path="/receituario"     element={<Receituario />} />
+              <Route path="/atestado"        element={<Atestado />} />
+              <Route path="/exames"          element={<Exames />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/login" replace />} />

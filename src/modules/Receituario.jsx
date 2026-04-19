@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { usePacientes } from '../hooks/usePacientes'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../components/Toast'
@@ -35,11 +36,28 @@ export default function Receituario() {
   const { pacientes } = usePacientes()
   const { profile, user } = useAuth()
   const toast = useToast()
+  const location = useLocation()
 
   const [busca, setBusca] = useState('')
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null)
   const [data, setData] = useState(new Date().toISOString().split('T')[0])
   const [idade, setIdade] = useState('')
+
+  useEffect(() => {
+    const p = location.state?.paciente
+    if (p) {
+      setPacienteSelecionado(p)
+      setBusca(p.nome)
+      if (p.data_nascimento) {
+        const nasc = new Date(p.data_nascimento + 'T12:00:00')
+        const hoje = new Date()
+        let a = hoje.getFullYear() - nasc.getFullYear()
+        const m = hoje.getMonth() - nasc.getMonth()
+        if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) a--
+        setIdade(String(a))
+      }
+    }
+  }, [])
   const [medicamentos, setMedicamentos] = useState([])
   const [observacoes, setObservacoes] = useState('')
   const [modalAberto, setModalAberto] = useState(false)

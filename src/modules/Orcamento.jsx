@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 import { usePacientes } from '../hooks/usePacientes'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../components/Toast'
@@ -144,6 +145,7 @@ export default function Orcamento() {
   const { pacientes } = usePacientes()
   const { profile, user } = useAuth()
   const toast = useToast()
+  const location = useLocation()
 
   // ── Tabs ────────────────────────────────────────────────────────────────────
   const [aba, setAba] = useState('novo')
@@ -417,6 +419,16 @@ export default function Orcamento() {
     const cfg = STATUS_CONFIG[novoStatus]
     toast(`Status atualizado para "${cfg?.label}"`, 'success')
   }
+
+  // ── Auto-edição via location.state (vindo de PacienteDetalhe) ───────────────
+  useEffect(() => {
+    const editarId = location.state?.editarId
+    if (editarId) {
+      window.history.replaceState({}, '')
+      supabase.from('orcamentos').select('*, pacientes(nome)').eq('id', editarId).single()
+        .then(({ data: orc }) => { if (orc) editarOrcamento(orc) })
+    }
+  }, [])
 
   // ── Style helpers ───────────────────────────────────────────────────────────
   const abaStyle = id => ({

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { usePacientes } from '../hooks/usePacientes'
 import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../components/Toast'
@@ -58,9 +59,15 @@ export default function Exames() {
   const { pacientes } = usePacientes()
   const { profile, user } = useAuth()
   const toast = useToast()
+  const location = useLocation()
 
   const [busca, setBusca] = useState('')
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null)
+
+  useEffect(() => {
+    const p = location.state?.paciente
+    if (p) { setPacienteSelecionado(p); setBusca(p.nome) }
+  }, [])
   const [dataSolicitacao, setDataSolicitacao] = useState(new Date().toISOString().split('T')[0])
   const [selecionados, setSelecionados] = useState(new Set())
   const [obs, setObs] = useState({})

@@ -1,19 +1,21 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const modulos = [
-  { path: '/dashboard', icon: '🏠', label: 'Dashboard' },
-  { path: '/prontuario', icon: '🦷', label: 'Prontuário' },
-  { path: '/agenda', icon: '📅', label: 'Agenda' },
-  { path: '/orcamento', icon: '💰', label: 'Orçamento' },
-  { path: '/receituario', icon: '💊', label: 'Receituário' },
-  { path: '/atestado', icon: '📋', label: 'Atestado' },
-  { path: '/exames', icon: '🔬', label: 'Exames' },
-  { path: '/configuracoes', icon: '⚙️', label: 'Configurações' },
+  { path: '/dashboard',    icon: '🏠', label: 'Dashboard' },
+  { path: '/pacientes',    icon: '👥', label: 'Pacientes' },
+  { path: '/agenda',       icon: '📅', label: 'Agenda' },
+  { path: '/orcamento',    icon: '💰', label: 'Orçamento' },
+  { path: '/configuracoes',icon: '⚙️', label: 'Configurações' },
 ]
 
 export default function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+
+  function isActive(m) {
+    if (m.path === '/pacientes') return location.pathname.startsWith('/pacientes')
+    return location.pathname === m.path
+  }
 
   return (
     <aside className="sidebar">
@@ -21,7 +23,7 @@ export default function Sidebar() {
       {modulos.map(m => (
         <button
           key={m.path}
-          className={`sidebar-item ${location.pathname === m.path ? 'active' : ''}`}
+          className={`sidebar-item ${isActive(m) ? 'active' : ''}`}
           onClick={() => navigate(m.path)}
         >
           <span className="sidebar-icon">{m.icon}</span>
