@@ -17,7 +17,15 @@ export function buildClinicHeader(doc, clinicaData) {
   const cro = clinicaData?.cro || ''
   const telefone = clinicaData?.telefone || ''
   const email = clinicaData?.email_clinica || ''
-  const endereco = clinicaData?.endereco || ''
+  // Suporte aos campos separados (novos) e ao campo antigo (legado)
+  const enderecoPartes = [
+    clinicaData?.logradouro,
+    clinicaData?.bairro,
+    clinicaData?.cidade,
+  ].filter(Boolean)
+  const endereco = enderecoPartes.length > 0
+    ? enderecoPartes.join(' — ')
+    : (clinicaData?.endereco || '')
 
   // Teal filled bar
   doc.setFillColor(26, 138, 123)

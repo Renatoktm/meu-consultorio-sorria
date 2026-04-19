@@ -221,7 +221,7 @@ function Odontograma({ estados, onChange }) {
 }
 
 // ─── Dados iniciais ───────────────────────────────────────────────────────────
-const DADOS_VAZIO    = { nome: '', data_nascimento: '', cpf: '', telefone: '', email: '', endereco: '', convenio: '' }
+const DADOS_VAZIO    = { nome: '', data_nascimento: '', cpf: '', telefone: '', email: '', logradouro: '', bairro: '', cidade: '', convenio: '' }
 const ANAMNESE_VAZIA = { alergias: '', doencas: '', medicamentos: '', fumante: false, alcool: false, gestante: false, anticoagulante: false, bifosfonato: false, observacoes: '' }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
@@ -246,7 +246,7 @@ export default function PacienteDetalhe() {
 
   useEffect(() => {
     if (paciente) {
-      setDados({ nome: paciente.nome || '', data_nascimento: paciente.data_nascimento || '', cpf: paciente.cpf || '', telefone: paciente.telefone || '', email: paciente.email || '', endereco: paciente.endereco || '', convenio: paciente.convenio || '' })
+      setDados({ nome: paciente.nome || '', data_nascimento: paciente.data_nascimento || '', cpf: paciente.cpf || '', telefone: paciente.telefone || '', email: paciente.email || '', logradouro: paciente.logradouro || '', bairro: paciente.bairro || '', cidade: paciente.cidade || '', convenio: paciente.convenio || '' })
       setAnamnese({ ...ANAMNESE_VAZIA, ...(paciente.anamnese || {}) })
       setOdontograma(paciente.odontograma || {})
     }
@@ -469,8 +469,14 @@ export default function PacienteDetalhe() {
             <Campo label="E-mail">
               <FInput type="email" value={dados.email} onChange={setD('email')} placeholder="paciente@email.com" />
             </Campo>
-            <Campo label="Endereço" full>
-              <FInput value={dados.endereco} onChange={setD('endereco')} placeholder="Rua, número, bairro, cidade" />
+            <Campo label="Logradouro (Rua / Av. + Número)" full>
+              <FInput value={dados.logradouro} onChange={setD('logradouro')} placeholder="Ex: Rua das Flores, 123" />
+            </Campo>
+            <Campo label="Bairro">
+              <FInput value={dados.bairro} onChange={setD('bairro')} placeholder="Ex: Centro" />
+            </Campo>
+            <Campo label="Cidade">
+              <FInput value={dados.cidade} onChange={setD('cidade')} placeholder="Ex: Belo Horizonte - MG" />
             </Campo>
             <Campo label="Convênio" full>
               <FInput value={dados.convenio} onChange={setD('convenio')} placeholder="Unimed, Bradesco, particular..." />

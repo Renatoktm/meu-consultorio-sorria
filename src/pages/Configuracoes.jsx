@@ -15,7 +15,9 @@ export default function Configuracoes() {
     nome_clinica: '',
     nome_dentista: '',
     cro: '',
-    endereco: '',
+    logradouro: '',
+    bairro: '',
+    cidade: '',
     telefone: '',
     email_clinica: '',
     desconto_pix_padrao: '',
@@ -32,7 +34,9 @@ export default function Configuracoes() {
             nome_clinica: data.nome_clinica || '',
             nome_dentista: data.nome_dentista || '',
             cro: data.cro || '',
-            endereco: data.endereco || '',
+            logradouro: data.logradouro || '',
+            bairro: data.bairro || '',
+            cidade: data.cidade || '',
             telefone: data.telefone || '',
             email_clinica: data.email_clinica || '',
             desconto_pix_padrao: data.desconto_pix_padrao ?? '',
@@ -54,7 +58,9 @@ export default function Configuracoes() {
       nome_clinica: form.nome_clinica,
       nome_dentista: form.nome_dentista,
       cro: form.cro,
-      endereco: form.endereco,
+      logradouro: form.logradouro,
+      bairro: form.bairro,
+      cidade: form.cidade,
       telefone: form.telefone,
       email_clinica: form.email_clinica,
       desconto_pix_padrao: form.desconto_pix_padrao !== '' ? parseFloat(form.desconto_pix_padrao) : null,
@@ -124,12 +130,30 @@ export default function Configuracoes() {
                 />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={labelStyle}>Endereço Completo</label>
+                <label style={labelStyle}>Logradouro (Rua / Av. + Número)</label>
                 <input
                   className="input"
-                  value={form.endereco}
-                  onChange={set('endereco')}
-                  placeholder="Ex: Rua das Flores, 123, Centro, Belo Horizonte - MG, CEP 30000-000"
+                  value={form.logradouro}
+                  onChange={set('logradouro')}
+                  placeholder="Ex: Rua das Flores, 123"
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Bairro</label>
+                <input
+                  className="input"
+                  value={form.bairro}
+                  onChange={set('bairro')}
+                  placeholder="Ex: Centro"
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Cidade / Estado</label>
+                <input
+                  className="input"
+                  value={form.cidade}
+                  onChange={set('cidade')}
+                  placeholder="Ex: Belo Horizonte - MG"
                 />
               </div>
               <div>
