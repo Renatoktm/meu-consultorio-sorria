@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabase'
 import { useGoogleCalendar } from '../hooks/useGoogleCalendar'
+import { usePlano } from '../hooks/usePlano'
 
 const C = { primary: '#1a8a7b', dark: '#136b5e', light: '#f0fdf4', border: '#e8f0ed' }
 
@@ -16,6 +17,7 @@ const card = {
 export default function Dashboard() {
   const { profile, user } = useAuth()
   const navigate = useNavigate()
+  const { isFree, total, LIMITE_FREE, podeAdicionarPaciente } = usePlano()
 
   const hora = new Date().getHours()
   const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite'
@@ -161,6 +163,41 @@ export default function Dashboard() {
           🔄 Atualizar
         </button>
       </div>
+
+      {/* Banner freemium */}
+      {isFree && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap',
+          background: !podeAdicionarPaciente ? '#fff7ed' : '#f0fdf4',
+          border: `1.5px solid ${!podeAdicionarPaciente ? '#fb923c' : '#86efac'}`,
+          borderRadius: 12, padding: '12px 18px', marginBottom: 20,
+        }}>
+          <div style={{ flex: 1, minWidth: 180 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: !podeAdicionarPaciente ? '#9a3412' : '#166534' }}>
+                {!podeAdicionarPaciente ? '🚫 Limite do plano gratuito atingido' : '👥 Plano Gratuito'}
+              </span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: !podeAdicionarPaciente ? '#ea580c' : C.primary }}>
+                {total}/{LIMITE_FREE} pacientes
+              </span>
+            </div>
+            <div style={{ height: 5, background: '#e5e7eb', borderRadius: 99, overflow: 'hidden' }}>
+              <div style={{
+                height: '100%',
+                width: `${Math.min((total / LIMITE_FREE) * 100, 100)}%`,
+                background: !podeAdicionarPaciente ? 'linear-gradient(90deg, #f97316, #ef4444)' : 'linear-gradient(90deg, #1a8a7b, #34d399)',
+                borderRadius: 99,
+              }} />
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('/pacientes')}
+            style={{ padding: '7px 18px', borderRadius: 8, border: 'none', cursor: 'pointer', background: !podeAdicionarPaciente ? '#ea580c' : C.primary, color: '#fff', fontSize: 13, fontWeight: 700, flexShrink: 0 }}
+          >
+            ⭐ Fazer Upgrade
+          </button>
+        </div>
+      )}
 
       {/* ── SEÇÃO 1: Cards de Resumo ──────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16, marginBottom: 28 }}>
