@@ -162,6 +162,11 @@ export default function Orcamento() {
   const [carregandoHist, setCarregandoHist] = useState(false)
   const [filtroHist, setFiltroHist] = useState('todos')
 
+  // ── Edição de orçamento existente ────────────────────────────────────────────
+  const [orcamentoEditandoId, setOrcamentoEditandoId] = useState(null)
+  const [orcamentoEditandoData, setOrcamentoEditandoData] = useState(null)
+  const [orcamentoEditandoStatus, setOrcamentoEditandoStatus] = useState(null)
+
   // ── Busca inline de procedimento ────────────────────────────────────────────
   const [buscaProc, setBuscaProc] = useState('')
   const [dropdownAberto, setDropdownAberto] = useState(false)
@@ -206,40 +211,146 @@ export default function Orcamento() {
     setItens(prev => prev.map(i => i.id === id ? { ...i, preco: valor } : i))
   }
 
+  // ── Cancelar edição / limpar formulário ─────────────────────────────────────
+  function cancelarEdicao() {
+    setOrcamentoEditandoId(null)
+    setOrcamentoEditandoData(null)
+    setOrcamentoEditandoStatus(null)
+    setBusca('')
+    setPacienteSelecionado(null)
+    setItens([])
+    setFormaPagamento('pix')
+    setDesconto(5)
+    setParcelas(1)
+  }
+
   // ── Salvar Supabase ─────────────────────────────────────────────────────────
   async function salvar() {
     if (!pacienteSelecionado) { toast('Selecione um paciente.', 'error'); return }
     if (itens.length === 0)   { toast('Adicione pelo menos um procedimento.', 'error'); return }
     setSalvando(true)
     try {
-      const { data: orc, error: e1 } = await supabase.from('orcamentos').insert({
-        user_id: user.id,
-        paciente_id: pacienteSelecionado.id,
-        forma_pagamento: formaPagamento,
-        desconto_pct: isPix ? desconto : 0,
-        parcelas: isCartao ? parcelas : 1,
-        valor_total: totalFinal,
-        status: 'pendente',
-      }).select().single()
-      if (e1) throw e1
-
-      const linhas = itens.map(i => ({
-        orcamento_id: orc.id,
+      const linhasItens = itens.map(i => ({
         nome: i.nome,
         codigo: i.codigo || '',
         preco_unitario: parseFloat(i.preco),
         quantidade: i.qtd,
         subtotal: parseFloat(i.preco) * i.qtd,
       }))
-      const { error: e2 } = await supabase.from('orcamento_itens').insert(linhas)
-      if (e2) throw e2
 
-      toast('Orçamento salvo com sucesso!', 'success')
+      if (orcamentoEditandoId) {
+        // ── UPDATE ──────────────────────────────────────────────────────────
+        const { error: e1 } = await supabase.from('orcamentos').update({
+          paciente_id: pacienteSelecionado.id,
+          forma_pagamento: formaPagamento,
+          desconto_pct: isPix ? desconto : 0,
+          parcelas: isCartao ? parcelas : 1,
+          valor_total: totalFinal,
+          created_at: new Date().toISOString(),
+        }).eq('id', orcamentoEditandoId)
+        if (e1) throw e1
+
+        const { error: e2 } = await supabase.from('orcamento_itens').delete().eq('orcamento_id', orcamentoEditandoId)
+        if (e2) throw e2
+
+        const { error: e3 } = await supabase.from('orcamento_itens').insert(
+          linhasItens.map(l => ({ ...l, orcamento_id: orcamentoEditandoId }))
+        )
+        if (e3) throw e3
+
+        toast('Orçamento atualizado com sucesso!', 'success')
+        cancelarEdicao()
+        setAba('historico')
+      } else {
+        // ── INSERT ──────────────────────────────────────────────────────────
+        const { data: orc, error: e1 } = await supabase.from('orcamentos').insert({
+          user_id: user.id,
+          paciente_id: pacienteSelecionado.id,
+          forma_pagamento: formaPagamento,
+          desconto_pct: isPix ? desconto : 0,
+          parcelas: isCartao ? parcelas : 1,
+          valor_total: totalFinal,
+          status: 'pendente',
+        }).select().single()
+        if (e1) throw e1
+
+        const { error: e2 } = await supabase.from('orcamento_itens').insert(
+          linhasItens.map(l => ({ ...l, orcamento_id: orc.id }))
+        )
+        if (e2) throw e2
+
+        toast('Orçamento salvo com sucesso!', 'success')
+      }
     } catch (err) {
       toast('Erro ao salvar: ' + (err.message || 'Tente novamente'), 'error')
     } finally {
       setSalvando(false)
     }
+  }
+
+  // ── Carregar orçamento existente para edição ──────────────────────────────
+  async function editarOrcamento(orc) {
+    const { data: itensData, error } = await supabase
+      .from('orcamento_itens')
+      .select('*')
+      .eq('orcamento_id', orc.id)
+    if (error) { toast('Erro ao carregar itens: ' + error.message, 'error'); return }
+
+    const paciente = pacientes.find(p => p.id === orc.paciente_id)
+      || { id: orc.paciente_id, nome: orc.pacientes?.nome || '—' }
+
+    setPacienteSelecionado(paciente)
+    setBusca(paciente.nome)
+    setItens(itensData.map((item, idx) => ({
+      id: item.id || idx,
+      nome: item.nome,
+      codigo: item.codigo || '',
+      preco: String(item.preco_unitario),
+      qtd: item.quantidade,
+    })))
+    setFormaPagamento(orc.forma_pagamento || 'pix')
+    setDesconto(orc.desconto_pct || 0)
+    setParcelas(orc.parcelas || 1)
+    setOrcamentoEditandoId(orc.id)
+    setOrcamentoEditandoData(orc.created_at)
+    setOrcamentoEditandoStatus(orc.status)
+    setAba('novo')
+  }
+
+  // ── Gerar PDF de orçamento do histórico ──────────────────────────────────
+  async function gerarPDFHistorico(orc) {
+    const { data: itensData, error } = await supabase
+      .from('orcamento_itens')
+      .select('*')
+      .eq('orcamento_id', orc.id)
+    if (error) { toast('Erro ao carregar itens.', 'error'); return }
+
+    const fp    = orc.forma_pagamento || 'pix'
+    const isPx  = fp === 'pix' || fp === 'avista'
+    const isCt  = fp === 'cartao'
+    const disc  = orc.desconto_pct || 0
+    const parc  = orc.parcelas || 1
+    const sub   = itensData.reduce((s, i) => s + parseFloat(i.preco_unitario) * i.quantidade, 0)
+    const vDesc = isPx ? sub * (disc / 100) : 0
+    const vParc = isCt ? calcValorParcela(sub, parc) : 0
+    const total = isCt ? vParc * parc : sub - vDesc
+
+    const clinicaData = await fetchClinicaData(user?.id)
+    gerarOrcamentoPDF({
+      paciente: orc.pacientes?.nome || '—',
+      itens: itensData.map(i => ({ nome: i.nome, codigo: i.codigo || '', preco: String(i.preco_unitario), qtd: i.quantidade })),
+      formaPagamento: fp,
+      desconto: disc,
+      valorDesconto: vDesc,
+      parcelas: parc,
+      valorParcela: vParc,
+      subtotal: sub,
+      totalFinal: total,
+      dentista: profile?.nome || '',
+      clinica: profile?.clinica || 'Meu Consultório SorrIA',
+      clinicaData,
+    })
+    toast('PDF gerado!', 'success')
   }
 
   // ── Gerar PDF ───────────────────────────────────────────────────────────────
@@ -347,7 +458,7 @@ export default function Orcamento() {
               onClick={salvar}
               disabled={salvando}
             >
-              {salvando ? '⏳ Salvando…' : '💾 Salvar'}
+              {salvando ? '⏳ Salvando…' : orcamentoEditandoId ? '💾 Atualizar' : '💾 Salvar'}
             </button>
             <button className="btn btn-success" onClick={gerarPDF}>📄 Gerar PDF</button>
           </div>
@@ -374,6 +485,30 @@ export default function Orcamento() {
       {/* ── ABA NOVO ORÇAMENTO ──────────────────────────────────────────────── */}
       {aba === 'novo' && (
         <div>
+          {/* Banner de edição */}
+          {orcamentoEditandoId && (
+            <div style={{
+              marginBottom: 16, padding: '12px 18px',
+              background: '#fefce8', border: '1.5px solid #fbbf24',
+              borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <span style={{ fontSize: 14, color: '#92400e', fontWeight: 600 }}>
+                ⚠️ Editando orçamento de {orcamentoEditandoData
+                  ? new Date(orcamentoEditandoData).toLocaleDateString('pt-BR')
+                  : '—'} — as alterações vão atualizar este orçamento
+              </span>
+              <button
+                onClick={() => { cancelarEdicao() }}
+                style={{
+                  background: 'none', border: '1.5px solid #fbbf24', borderRadius: 6,
+                  color: '#92400e', fontSize: 13, padding: '4px 12px', cursor: 'pointer', fontWeight: 600,
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+          )}
+
           {/* Paciente */}
           <div style={{ ...card, marginBottom: 16 }}>
             <h3 style={{ fontWeight: 700, fontSize: 15, color: C.dark, marginBottom: 12 }}>👤 Paciente</h3>
@@ -644,7 +779,7 @@ export default function Orcamento() {
                   onClick={salvar}
                   disabled={salvando}
                 >
-                  {salvando ? '⏳ Salvando…' : '💾 Salvar no Supabase'}
+                  {salvando ? '⏳ Salvando…' : orcamentoEditandoId ? '💾 Atualizar Orçamento' : '💾 Salvar no Supabase'}
                 </button>
                 <button
                   style={{
@@ -699,7 +834,7 @@ export default function Orcamento() {
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             {/* Cabeçalho */}
             <div style={{
-              display: 'grid', gridTemplateColumns: '120px 1fr 130px 120px 160px',
+              display: 'grid', gridTemplateColumns: '110px 1fr 110px 100px 150px 120px',
               padding: '10px 18px', background: '#f0fdf4',
               fontSize: 12, fontWeight: 700, color: C.dark,
               borderBottom: '1px solid #e5e7eb',
@@ -709,6 +844,7 @@ export default function Orcamento() {
               <span>Pagamento</span>
               <span style={{ textAlign: 'right' }}>Total</span>
               <span style={{ textAlign: 'center' }}>Status</span>
+              <span style={{ textAlign: 'center' }}>Ações</span>
             </div>
 
             {carregandoHist ? (
@@ -742,7 +878,7 @@ export default function Orcamento() {
                   <div
                     key={orc.id}
                     style={{
-                      display: 'grid', gridTemplateColumns: '120px 1fr 130px 120px 160px',
+                      display: 'grid', gridTemplateColumns: '110px 1fr 110px 100px 150px 120px',
                       alignItems: 'center', padding: '12px 18px',
                       borderBottom: idx < lista.length - 1 ? '1px solid #f1f5f9' : 'none',
                       background: '#fff',
@@ -780,6 +916,31 @@ export default function Orcamento() {
                         <option value="aprovado">Aprovado</option>
                         <option value="recusado">Recusado</option>
                       </select>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+                      <button
+                        onClick={() => editarOrcamento(orc)}
+                        title="Editar orçamento"
+                        style={{
+                          padding: '4px 10px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+                          border: '1.5px solid #fbbf24', background: '#fefce8',
+                          color: '#92400e', cursor: 'pointer',
+                        }}
+                      >
+                        ✏️ Editar
+                      </button>
+                      <button
+                        onClick={() => gerarPDFHistorico(orc)}
+                        title="Gerar PDF"
+                        style={{
+                          padding: '4px 10px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+                          border: '1.5px solid #a7f3d0', background: '#f0fdf4',
+                          color: '#136b5e', cursor: 'pointer',
+                        }}
+                      >
+                        📄 PDF
+                      </button>
                     </div>
                   </div>
                 )
