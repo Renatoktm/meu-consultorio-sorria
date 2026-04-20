@@ -30,7 +30,7 @@ function Navbar({ onLogin }) {
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     }}>
       {/* Logo */}
-      <img src="/assets/logo.png" alt="SorrIA" style={{ height: 42, objectFit: 'contain' }} />
+      <img src="/assets/logo.png" alt="SorrIA" style={{ height: 52, objectFit: 'contain' }} />
 
       {/* Links */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
