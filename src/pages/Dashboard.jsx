@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabase'
 import { useGoogleCalendar } from '../hooks/useGoogleCalendar'
 import { usePlano } from '../hooks/usePlano'
+import ModalUpgrade from '../components/ModalUpgrade'
 
 const C = { primary: '#1a8a7b', dark: '#136b5e', light: '#f0fdf4', border: '#e8f0ed' }
 
@@ -35,6 +36,7 @@ export default function Dashboard() {
   const [orcamentosAbertos, setOrcamentosAbertos] = useState([])
   const [ultimosPacientes, setUltimosPacientes] = useState([])
   const [carregando, setCarregando] = useState(true)
+  const [showUpgrade, setShowUpgrade] = useState(false)
 
   useEffect(() => {
     if (user?.id) carregarDados()
@@ -148,6 +150,7 @@ export default function Dashboard() {
 
   return (
     <div style={{ background: '#f8f9fa', minHeight: '100%' }}>
+      {showUpgrade && <ModalUpgrade motivo={trialExpirado ? 'trial_expirado' : 'upgrade'} onClose={() => setShowUpgrade(false)} />}
       {/* Saudação */}
       <div className="page-header">
         <div>
@@ -182,7 +185,7 @@ export default function Dashboard() {
             </div>
           </div>
           <button
-            onClick={() => navigate('/configuracoes')}
+            onClick={() => setShowUpgrade(true)}
             style={{ padding: '8px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', background: C.primary, color: '#fff', fontSize: 13, fontWeight: 700, flexShrink: 0, boxShadow: '0 2px 8px rgba(26,138,123,.3)' }}
           >
             ⭐ Ver planos
@@ -208,7 +211,7 @@ export default function Dashboard() {
             </div>
           </div>
           <button
-            onClick={() => navigate('/configuracoes')}
+            onClick={() => setShowUpgrade(true)}
             style={{ padding: '8px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', background: '#ea580c', color: '#fff', fontSize: 13, fontWeight: 700, flexShrink: 0 }}
           >
             🔓 Assinar Pro
