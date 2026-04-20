@@ -2,18 +2,59 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 const C = {
-  primary: '#1a8a7b',
-  dark: '#136b5e',
-  darker: '#0d4f46',
-  bright: '#00d4aa',
-  light: '#f0fdf9',
-  navy: '#0a1628',
-  navyMid: '#1a2e2b',
+  primary:  '#1a8a7b',
+  dark:     '#136b5e',
+  darker:   '#0d4f46',
+  bright:   '#00d4aa',
+  light:    '#f0fdf9',
+  navy:     '#0a1628',
+  navyMid:  '#1a2e2b',
 }
 
 const WA_ATENDENTE = 'https://wa.me/5537999722971?text=Olá!%20Tenho%20interesse%20na%20SorrIA%20Atendente%20Virtual%20para%20minha%20clínica.%20Pode%20me%20explicar%20como%20funciona%20a%20implementação%3F'
 
-// ── Navbar ─────────────────────────────────────────────────────────────────────
+/* ── helpers ───────────────────────────────────────────────────────────────── */
+const card = (hover = false) => ({
+  padding: '32px',
+  borderRadius: 16,
+  border: `1.5px solid ${hover ? 'rgba(26,138,123,.28)' : '#e5efec'}`,
+  background: '#fff',
+  boxShadow: hover ? '0 12px 36px rgba(26,138,123,.12)' : '0 4px 24px rgba(0,0,0,.08)',
+  transform: hover ? 'translateY(-4px)' : 'none',
+  transition: 'transform .2s, box-shadow .2s, border-color .2s',
+})
+
+function FeatureCard({ icon, title, desc, accentColor = C.primary, accentBg = '#f0fdf9', hoverShadow = 'rgba(26,138,123,.12)', hoverBorder = 'rgba(26,138,123,.28)' }) {
+  const [hover, setHover] = useState(false)
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        padding: '32px',
+        borderRadius: 16,
+        border: `1.5px solid ${hover ? hoverBorder : '#e5efec'}`,
+        background: '#fff',
+        boxShadow: hover ? `0 12px 36px ${hoverShadow}` : '0 4px 24px rgba(0,0,0,.08)',
+        transform: hover ? 'translateY(-4px)' : 'none',
+        transition: 'transform .2s, box-shadow .2s, border-color .2s',
+      }}
+    >
+      <div style={{
+        width: 52, height: 52, borderRadius: '50%',
+        background: accentBg,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: accentColor, marginBottom: 20, flexShrink: 0,
+      }}>
+        {icon}
+      </div>
+      <h3 style={{ fontSize: 17, fontWeight: 700, color: C.navy, marginBottom: 10, lineHeight: 1.3 }}>{title}</h3>
+      <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6, margin: 0 }}>{desc}</p>
+    </div>
+  )
+}
+
+/* ── Navbar ────────────────────────────────────────────────────────────────── */
 function Navbar({ onLogin }) {
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
@@ -35,7 +76,7 @@ function Navbar({ onLogin }) {
       <img src="/assets/logo.png" alt="SorrIA" style={{ height: 52, objectFit: 'contain' }} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
-        {[['#ecossistema', 'Ecossistema'], ['#consultorio', 'Consultório'], ['#atendente', 'Atendente'], ['#precos', 'Preços']].map(([href, label]) => (
+        {[['#consultorio', 'Consultório'], ['#atendente', 'Atendente'], ['#precos', 'Preços']].map(([href, label]) => (
           <a key={label} href={href} style={{
             fontSize: 14, fontWeight: 500, color: '#374151',
             textDecoration: 'none', transition: 'color .2s',
@@ -65,12 +106,12 @@ function Navbar({ onLogin }) {
   )
 }
 
-// ── Hero ───────────────────────────────────────────────────────────────────────
+/* ── Hero ──────────────────────────────────────────────────────────────────── */
 function Hero({ onLogin }) {
   return (
     <section style={{
       minHeight: '100vh',
-      background: `linear-gradient(160deg, #ffffff 0%, #f0fdf9 50%, #e6f7f4 100%)`,
+      background: 'linear-gradient(160deg, #ffffff 0%, #f0fdf9 50%, #e6f7f4 100%)',
       display: 'flex', alignItems: 'center',
       padding: '100px 5% 60px', gap: 60,
       position: 'relative', overflow: 'hidden',
@@ -78,7 +119,6 @@ function Hero({ onLogin }) {
       <div style={{ position: 'absolute', top: -120, right: -120, width: 500, height: 500, borderRadius: '50%', background: 'rgba(26,138,123,.06)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: -80, left: -80, width: 350, height: 350, borderRadius: '50%', background: 'rgba(26,138,123,.04)', pointerEvents: 'none' }} />
 
-      {/* Texto */}
       <div style={{ flex: 1, maxWidth: 560, position: 'relative', zIndex: 1 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -113,11 +153,9 @@ function Hero({ onLogin }) {
           <a href={WA_ATENDENTE} target="_blank" rel="noopener noreferrer" style={{
             padding: '14px 28px', borderRadius: 12,
             border: '2px solid #e5e7eb', background: '#fff',
-            color: '#374151', fontWeight: 600, fontSize: 15, cursor: 'pointer',
+            color: '#374151', fontWeight: 600, fontSize: 15,
             textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8,
-          }}>
-            💬 Quero a Atendente
-          </a>
+          }}>💬 Quero a Atendente</a>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
@@ -127,7 +165,6 @@ function Hero({ onLogin }) {
         </div>
       </div>
 
-      {/* Avatar */}
       <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'flex-end', position: 'relative', zIndex: 1, minHeight: 520 }}>
         <div style={{
           position: 'absolute', top: 20, left: 0,
@@ -155,10 +192,10 @@ function Hero({ onLogin }) {
           overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,.18)',
           position: 'relative', border: '4px solid rgba(255,255,255,.8)',
         }}>
-          <img src="/assets/sorria-avatar.jpg" alt="SorrIA — Assistente Virtual"
+          <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(transparent, rgba(26,46,43,.6))' }} />
-          <div style={{ position: 'absolute', bottom: 16, left: 16, right: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ position: 'absolute', bottom: 16, left: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80' }} />
             <span style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>SorrIA • Online agora</span>
           </div>
@@ -170,365 +207,114 @@ function Hero({ onLogin }) {
   )
 }
 
-// ── Ecossistema Visual ─────────────────────────────────────────────────────────
-function Ecossistema() {
-  const items = {
-    consultorio: ['Prontuário + Odontograma', 'Orçamentos em PDF', 'Receituário e Atestados', 'Agenda Google Calendar', 'Exames e Documentos'],
-    atendente:   ['WhatsApp 24h automático', 'Agendamentos pelo chat', 'Lembretes de consulta', 'Reativação de pacientes', 'Perguntas frequentes'],
-  }
-
-  return (
-    <section id="ecossistema" style={{
-      padding: '90px 5%',
-      background: `linear-gradient(160deg, ${C.navy} 0%, ${C.navyMid} 100%)`,
-    }}>
-      <div style={{ textAlign: 'center', marginBottom: 60 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: C.bright, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-          ECOSSISTEMA
-        </div>
-        <h2 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em', marginBottom: 14 }}>
-          Dois produtos. Uma clínica que funciona sozinha.
-        </h2>
-        <p style={{ fontSize: 16, color: 'rgba(255,255,255,.55)', maxWidth: 520, margin: '0 auto' }}>
-          O Consultório gerencia o que acontece dentro. A Atendente gerencia o que acontece fora. Juntos, formam um ciclo completo.
-        </p>
-      </div>
-
-      <div style={{ display: 'flex', alignItems: 'stretch', gap: 0, maxWidth: 900, margin: '0 auto', flexWrap: 'wrap' }}>
-
-        {/* Consultório */}
-        <div style={{
-          flex: 1, minWidth: 260,
-          background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)',
-          borderRadius: '20px 0 0 20px', padding: '32px 28px',
-        }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: C.bright, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 10 }}>DENTRO DA CLÍNICA</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 20 }}>Meu Consultório SorrIA</div>
-          {items.consultorio.map(f => (
-            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <span style={{ color: C.bright, fontSize: 14, flexShrink: 0 }}>✓</span>
-              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.75)' }}>{f}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Conector */}
-        <div style={{
-          width: 80, display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          background: `linear-gradient(180deg, rgba(0,212,170,.08) 0%, rgba(0,212,170,.15) 50%, rgba(0,212,170,.08) 100%)`,
-          borderTop: '1px solid rgba(0,212,170,.2)', borderBottom: '1px solid rgba(0,212,170,.2)',
-          padding: '20px 8px', gap: 8,
-        }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: C.bright, textAlign: 'center', letterSpacing: '.04em', textTransform: 'uppercase', lineHeight: 1.4 }}>SINCRONIZADOS</div>
-          <div style={{ color: C.bright, fontSize: 22 }}>⇅</div>
-          <div style={{ fontSize: 10, fontWeight: 700, color: C.bright, textAlign: 'center', letterSpacing: '.04em', textTransform: 'uppercase', lineHeight: 1.4 }}>EM TEMPO REAL</div>
-        </div>
-
-        {/* Atendente */}
-        <div style={{
-          flex: 1, minWidth: 260,
-          background: 'rgba(0,212,170,.06)', border: '1px solid rgba(0,212,170,.2)',
-          borderRadius: '0 20px 20px 0', padding: '32px 28px',
-        }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: C.bright, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 10 }}>FORA DA CLÍNICA</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 20 }}>SorrIA Atendente Virtual</div>
-          {items.atendente.map(f => (
-            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <span style={{ color: C.bright, fontSize: 14, flexShrink: 0 }}>✓</span>
-              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.75)' }}>{f}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Fluxo de integração */}
-      <div style={{ maxWidth: 800, margin: '48px auto 0', display: 'flex', gap: 0, flexWrap: 'wrap', justifyContent: 'center' }}>
-        {[
-          { emoji: '💬', text: 'Paciente agenda pelo WhatsApp' },
-          { emoji: '→', text: null },
-          { emoji: '📋', text: 'Aparece no Consultório automaticamente' },
-          { emoji: '→', text: null },
-          { emoji: '🦷', text: 'Dentista atende com prontuário aberto' },
-          { emoji: '→', text: null },
-          { emoji: '📲', text: 'SorrIA envia retorno e follow-up' },
-        ].map((item, i) => item.text ? (
-          <div key={i} style={{
-            background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.1)',
-            borderRadius: 12, padding: '12px 16px', textAlign: 'center', minWidth: 150,
-          }}>
-            <div style={{ fontSize: 22, marginBottom: 6 }}>{item.emoji}</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,.65)', lineHeight: 1.4 }}>{item.text}</div>
-          </div>
-        ) : (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '0 6px', color: 'rgba(255,255,255,.25)', fontSize: 20 }}>→</div>
-        ))}
-      </div>
-    </section>
-  )
+/* ── SVG Icons ─────────────────────────────────────────────────────────────── */
+const Ico = {
+  prontuario: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
+  orcamento:  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>,
+  docs:       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>,
+  agenda:     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+  ia:         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>,
+  whatsapp:   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+  clock:      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+  bell:       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+  users:      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  chart:      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
+  persona:    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
 }
 
-// ── Produtos ───────────────────────────────────────────────────────────────────
-function Produtos({ onLogin }) {
-  const produtos = [
-    {
-      id: 'consultorio',
-      badge: 'GESTÃO INTERNA',
-      nome: 'Meu Consultório',
-      tagline: 'Organize sua clínica por completo',
-      preco: 'R$ 87/mês',
-      detalhe: 'ou R$ 870/ano — equivale a R$ 72/mês',
-      trial: '14 dias grátis, sem cartão',
-      cta: 'Começar teste grátis',
-      ctaAction: 'login',
-      cor: C.primary,
-      features: ['Prontuário + Odontograma FDI', 'Orçamentos em PDF', 'Receituário e Atestados', 'Agenda Google Calendar', 'Pacientes ilimitados (Pro)'],
-      destaque: false,
-    },
-    {
-      id: 'bundle',
-      badge: '⭐ MAIS COMPLETO',
-      nome: 'Clínica Conectada',
-      tagline: 'Consultório + Atendente integrados',
-      preco: 'R$ 247/mês',
-      detalhe: 'Consultório + Atendente com integração nativa',
-      trial: 'Fale com um especialista',
-      cta: 'Quero a Clínica Conectada',
-      ctaAction: 'bundle',
-      cor: C.bright,
-      features: ['Tudo do Consultório Pro', 'SorrIA Atendente configurada', 'Agenda sincronizada bidirecional', 'Orçamento aprovado → WhatsApp auto', 'Suporte dedicado na implementação'],
-      destaque: true,
-    },
-    {
-      id: 'atendente',
-      badge: 'ATENDIMENTO EXTERNO',
-      nome: 'SorrIA Atendente',
-      tagline: 'WhatsApp 24h para sua clínica',
-      preco: 'A partir de R$ 197/mês',
-      detalhe: '+ taxa de implementação (consulte)',
-      trial: 'Solicite uma demonstração',
-      cta: 'Solicitar implementação',
-      ctaAction: 'whatsapp',
-      cor: '#25d366',
-      features: ['Persona personalizada para sua clínica', 'Agendamento automático pelo WhatsApp', 'Lembretes de consulta automáticos', 'Reativação de pacientes inativos', 'Relatórios de atendimento mensais'],
-      destaque: false,
-    },
-  ]
-
-  function handleCta(action) {
-    if (action === 'login') window.location.href = '/login'
-    else if (action === 'whatsapp' || action === 'bundle') window.open(WA_ATENDENTE, '_blank')
-  }
-
-  return (
-    <section id="consultorio" style={{ padding: '90px 5%', background: '#fff' }}>
-      <div style={{ textAlign: 'center', marginBottom: 56 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: C.primary, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-          PRODUTOS
-        </div>
-        <h2 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 14 }}>
-          Escolha como a SorrIA vai trabalhar com você
-        </h2>
-        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 500, margin: '0 auto' }}>
-          Comece pela gestão, adicione o atendimento, ou assine o ecossistema completo de uma vez.
-        </p>
-      </div>
-
-      <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', maxWidth: 1100, margin: '0 auto', alignItems: 'stretch' }}>
-        {produtos.map(p => (
-          <div key={p.id} style={{
-            flex: 1, minWidth: 280, maxWidth: 340,
-            borderRadius: 20, padding: '32px 28px',
-            background: p.destaque ? `linear-gradient(160deg, ${C.navy} 0%, ${C.navyMid} 100%)` : '#fff',
-            border: p.destaque ? 'none' : '1.5px solid #e5e7eb',
-            boxShadow: p.destaque ? '0 20px 60px rgba(10,22,40,.35)' : '0 4px 20px rgba(0,0,0,.05)',
-            position: 'relative', overflow: 'hidden',
-            display: 'flex', flexDirection: 'column',
-            transform: p.destaque ? 'scale(1.03)' : 'none',
-          }}>
-            {p.destaque && (
-              <div style={{ position: 'absolute', top: -60, right: -60, width: 180, height: 180, borderRadius: '50%', background: 'rgba(0,212,170,.07)', pointerEvents: 'none' }} />
-            )}
-
-            <div style={{
-              display: 'inline-flex', alignItems: 'center',
-              background: p.destaque ? 'rgba(0,212,170,.15)' : `${p.cor}15`,
-              border: `1px solid ${p.destaque ? 'rgba(0,212,170,.3)' : p.cor + '30'}`,
-              borderRadius: 99, padding: '4px 12px', marginBottom: 16, alignSelf: 'flex-start',
-            }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: p.destaque ? C.bright : p.cor }}>{p.badge}</span>
-            </div>
-
-            <div style={{ fontSize: 22, fontWeight: 800, color: p.destaque ? '#fff' : C.navy, marginBottom: 6 }}>{p.nome}</div>
-            <div style={{ fontSize: 14, color: p.destaque ? 'rgba(255,255,255,.6)' : '#6b7280', marginBottom: 24 }}>{p.tagline}</div>
-
-            <div style={{ fontSize: 28, fontWeight: 900, color: p.destaque ? '#fff' : C.navy, marginBottom: 4 }}>{p.preco}</div>
-            <div style={{ fontSize: 12, color: p.destaque ? 'rgba(255,255,255,.45)' : '#9ca3af', marginBottom: 24 }}>{p.detalhe}</div>
-
-            <div style={{ flex: 1, marginBottom: 24 }}>
-              {p.features.map(f => (
-                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
-                  <span style={{ color: p.destaque ? C.bright : p.cor, fontWeight: 700, flexShrink: 0, fontSize: 13 }}>✓</span>
-                  <span style={{ fontSize: 13, color: p.destaque ? 'rgba(255,255,255,.8)' : '#4b5563', lineHeight: 1.4 }}>{f}</span>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ fontSize: 12, color: p.destaque ? 'rgba(255,255,255,.4)' : '#9ca3af', marginBottom: 12, textAlign: 'center' }}>
-              {p.trial}
-            </div>
-
-            <button onClick={() => handleCta(p.ctaAction)} style={{
-              width: '100%', padding: '13px 0', borderRadius: 12, border: 'none', cursor: 'pointer',
-              background: p.destaque ? `linear-gradient(135deg, ${C.primary}, ${C.bright})` : p.id === 'atendente' ? '#25d366' : C.primary,
-              color: '#fff', fontWeight: 700, fontSize: 14,
-              boxShadow: p.destaque ? '0 6px 20px rgba(0,212,170,.3)' : 'none',
-              transition: 'opacity .15s',
-            }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
-            >{p.cta}</button>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-// ── Features Consultório ───────────────────────────────────────────────────────
-const FeatIcons = {
-  prontuario: (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>),
-  orcamento:  (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>),
-  documentos: (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>),
-  agenda:     (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>),
-  ia:         (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>),
-  whatsapp:   (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>),
-}
-
-const FEATURES_CONSULTORIO = [
-  { icon: FeatIcons.prontuario, title: 'Prontuário + Odontograma', desc: 'Histórico completo com odontograma FDI interativo e anamnese digital.' },
-  { icon: FeatIcons.orcamento,  title: 'Orçamentos profissionais', desc: 'PDF com 70+ procedimentos, desconto PIX e parcelamento configurável.' },
-  { icon: FeatIcons.documentos, title: 'Receituário e Atestados',  desc: 'Documentos com cabeçalho da clínica prontos para impressão.' },
-  { icon: FeatIcons.agenda,     title: 'Agenda Google Calendar',   desc: 'Consultas sincronizadas com seu Google Calendar em tempo real.' },
-  { icon: FeatIcons.ia,         title: 'SorrIA integrada',         desc: 'A mesma IA que atende fora organiza tudo dentro da clínica.' },
-  { icon: FeatIcons.whatsapp,   title: 'WhatsApp com 1 clique',    desc: 'Acesse o WhatsApp do paciente diretamente do prontuário.' },
+/* ── Features Consultório ──────────────────────────────────────────────────── */
+const FEATS_CONSULTORIO = [
+  { icon: Ico.prontuario, title: 'Prontuário + Odontograma', desc: 'Histórico completo com odontograma FDI interativo e anamnese digital.' },
+  { icon: Ico.orcamento,  title: 'Orçamentos profissionais', desc: 'PDF com 70+ procedimentos, desconto PIX e parcelamento configurável.' },
+  { icon: Ico.docs,       title: 'Receituário e Atestados',  desc: 'Documentos com cabeçalho da clínica prontos para impressão em 1 clique.' },
+  { icon: Ico.agenda,     title: 'Agenda Google Calendar',   desc: 'Consultas sincronizadas com seu Google Calendar em tempo real.' },
+  { icon: Ico.ia,         title: 'SorrIA integrada',         desc: 'A mesma IA que atende fora organiza tudo dentro da clínica.' },
+  { icon: Ico.whatsapp,   title: 'WhatsApp com 1 clique',    desc: 'Acesse o WhatsApp do paciente diretamente do prontuário.' },
 ]
 
 function FeaturesConsultorio() {
   return (
-    <section id="consultorio-features" style={{ padding: '90px 5%', background: C.light }}>
-      <div style={{ textAlign: 'center', marginBottom: 56 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: C.primary, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
+    <section id="consultorio" style={{ padding: '100px 5%', background: C.light }}>
+      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: C.primary, letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 14 }}>
           MEU CONSULTÓRIO
         </div>
-        <h2 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 14 }}>
+        <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 16 }}>
           Tudo que você precisa dentro da clínica
         </h2>
-        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 500, margin: '0 auto' }}>
+        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 500, margin: '0 auto', lineHeight: 1.65 }}>
           Sem as complicações dos concorrentes. Só o essencial, funcionando.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 20, maxWidth: 1100, margin: '0 auto' }}>
-        {FEATURES_CONSULTORIO.map((f, i) => (
-          <div key={i} style={{
-            padding: '26px 22px', borderRadius: 18,
-            border: '1.5px solid #e5efec', background: '#fff',
-            transition: 'transform .2s, box-shadow .2s, border-color .2s',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(26,138,123,.1)'; e.currentTarget.style.borderColor = 'rgba(26,138,123,.25)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e5efec' }}
-          >
-            <div style={{
-              width: 52, height: 52, borderRadius: 14, marginBottom: 18,
-              background: 'linear-gradient(135deg, #d4f5ee 0%, #a8e8d8 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: C.primary, boxShadow: '0 4px 14px rgba(26,138,123,.15)',
-            }}>{f.icon}</div>
-            <h3 style={{ fontSize: 15, fontWeight: 700, color: C.navy, marginBottom: 8 }}>{f.title}</h3>
-            <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.65 }}>{f.desc}</p>
-          </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 24, maxWidth: 1100, margin: '0 auto' }}>
+        {FEATS_CONSULTORIO.map((f, i) => (
+          <FeatureCard key={i} {...f} />
         ))}
       </div>
     </section>
   )
 }
 
-// ── Features Atendente ─────────────────────────────────────────────────────────
-const AtendenteIcons = {
-  whats:   (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>),
-  clock:   (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>),
-  bell:    (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>),
-  users:   (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>),
-  chart:   (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>),
-  persona: (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>),
-}
-
-const FEATURES_ATENDENTE = [
-  { icon: AtendenteIcons.persona, title: 'Persona exclusiva da sua clínica', desc: 'A atendente fala com a identidade, o tom e as informações da sua clínica. Não é uma IA genérica.' },
-  { icon: AtendenteIcons.clock,   title: 'Atendimento 24h, 7 dias por semana', desc: 'Responde em menos de 5 segundos, mesmo de madrugada. Sua recepção nunca dorme.' },
-  { icon: AtendenteIcons.whats,   title: 'Agendamento direto pelo WhatsApp', desc: 'O paciente escolhe data e horário no chat. A consulta aparece direto na sua agenda.' },
-  { icon: AtendenteIcons.bell,    title: 'Lembretes automáticos de consulta', desc: 'Reduz até 70% das faltas com lembretes enviados 24h e 1h antes do atendimento.' },
-  { icon: AtendenteIcons.users,   title: 'Reativação de pacientes inativos', desc: 'Identifica quem não volta há meses e dispara campanhas personalizadas de retorno.' },
-  { icon: AtendenteIcons.chart,   title: 'Relatórios mensais de atendimento', desc: 'Veja quantos pacientes foram atendidos, agendados e convertidos pela IA todo mês.' },
+/* ── Features Atendente ────────────────────────────────────────────────────── */
+const FEATS_ATENDENTE = [
+  { icon: Ico.persona, title: 'Persona exclusiva da sua clínica',    desc: 'A atendente fala com a identidade e o tom da sua clínica — não é uma IA genérica.' },
+  { icon: Ico.clock,   title: 'Atendimento 24h, 7 dias por semana',  desc: 'Responde em menos de 5 segundos, mesmo de madrugada. Sua recepção nunca dorme.' },
+  { icon: Ico.whatsapp,title: 'Agendamento direto pelo WhatsApp',    desc: 'O paciente escolhe data e horário no chat. Aparece direto na sua agenda.' },
+  { icon: Ico.bell,    title: 'Lembretes automáticos de consulta',   desc: 'Reduz até 70% das faltas com lembretes enviados 24h e 1h antes do atendimento.' },
+  { icon: Ico.users,   title: 'Reativação de pacientes inativos',    desc: 'Identifica quem não volta há meses e dispara campanhas personalizadas de retorno.' },
+  { icon: Ico.chart,   title: 'Relatórios mensais de atendimento',   desc: 'Veja quantos pacientes foram atendidos, agendados e convertidos pela IA.' },
 ]
 
 function FeaturesAtendente() {
   return (
-    <section id="atendente" style={{ padding: '90px 5%', background: '#fff' }}>
-      <div style={{ textAlign: 'center', marginBottom: 56 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: '#16a34a', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
+    <section id="atendente" style={{ padding: '100px 5%', background: '#fff' }}>
+      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#16a34a', letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 14 }}>
           SORRIA ATENDENTE VIRTUAL
         </div>
-        <h2 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 14 }}>
-          Sua recepcionista virtual, <span style={{ color: C.primary }}>24 horas por dia</span>
+        <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 16 }}>
+          Sua recepcionista virtual,{' '}
+          <span style={{ color: C.primary }}>24 horas por dia</span>
         </h2>
-        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 520, margin: '0 auto' }}>
-          Configurada especificamente para a sua clínica, com sua persona, seus horários e seus procedimentos.
+        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 520, margin: '0 auto', lineHeight: 1.65 }}>
+          Configurada especificamente para a sua clínica — com sua persona, seus horários e seus procedimentos.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 20, maxWidth: 1100, margin: '0 auto 48px' }}>
-        {FEATURES_ATENDENTE.map((f, i) => (
-          <div key={i} style={{
-            padding: '26px 22px', borderRadius: 18,
-            border: '1.5px solid #e5efec', background: '#fff',
-            transition: 'transform .2s, box-shadow .2s, border-color .2s',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(37,211,102,.1)'; e.currentTarget.style.borderColor = 'rgba(37,211,102,.3)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e5efec' }}
-          >
-            <div style={{
-              width: 52, height: 52, borderRadius: 14, marginBottom: 18,
-              background: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#16a34a', boxShadow: '0 4px 14px rgba(22,163,74,.12)',
-            }}>{f.icon}</div>
-            <h3 style={{ fontSize: 15, fontWeight: 700, color: C.navy, marginBottom: 8 }}>{f.title}</h3>
-            <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.65 }}>{f.desc}</p>
-          </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 24, maxWidth: 1100, margin: '0 auto 64px' }}>
+        {FEATS_ATENDENTE.map((f, i) => (
+          <FeatureCard
+            key={i} {...f}
+            accentColor="#16a34a"
+            accentBg="#f0fdf4"
+            hoverShadow="rgba(22,163,74,.12)"
+            hoverBorder="rgba(22,163,74,.3)"
+          />
         ))}
       </div>
 
       {/* CTA Atendente */}
       <div style={{
-        maxWidth: 680, margin: '0 auto', textAlign: 'center',
+        maxWidth: 700, margin: '0 auto', textAlign: 'center',
         background: `linear-gradient(160deg, ${C.navy} 0%, ${C.navyMid} 100%)`,
-        borderRadius: 24, padding: '44px 40px',
+        borderRadius: 24, padding: '48px 44px',
         boxShadow: '0 20px 60px rgba(10,22,40,.25)',
+        position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: C.bright, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 12 }}>
+        <div style={{ position: 'absolute', top: -60, right: -60, width: 220, height: 220, borderRadius: '50%', background: 'rgba(0,212,170,.06)', pointerEvents: 'none' }} />
+        <div style={{ fontSize: 12, fontWeight: 700, color: C.bright, textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 14 }}>
           IMPLEMENTAÇÃO SOB MEDIDA
         </div>
         <h3 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 14, letterSpacing: '-0.02em' }}>
           A SorrIA Atendente não é um produto de prateleira
         </h3>
-        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.6)', marginBottom: 28, lineHeight: 1.7 }}>
-          Cada implementação inclui uma entrevista para configurar a persona, integrar o WhatsApp Business e treinar a IA com os dados reais da sua clínica. Me manda uma mensagem e vamos conversar.
+        <p style={{ fontSize: 15, color: 'rgba(255,255,255,.6)', marginBottom: 32, lineHeight: 1.7, maxWidth: 500, margin: '0 auto 32px' }}>
+          Cada implementação inclui entrevista, configuração da persona, integração WhatsApp Business e treinamento com os dados da sua clínica.
         </p>
         <a href={WA_ATENDENTE} target="_blank" rel="noopener noreferrer" style={{
           display: 'inline-flex', alignItems: 'center', gap: 10,
-          padding: '14px 36px', borderRadius: 12, border: 'none', cursor: 'pointer',
+          padding: '14px 36px', borderRadius: 12, cursor: 'pointer',
           background: '#25d366', color: '#fff', fontWeight: 700, fontSize: 16,
           textDecoration: 'none', boxShadow: '0 6px 20px rgba(37,211,102,.4)',
           transition: 'transform .15s, box-shadow .15s',
@@ -537,9 +323,9 @@ function FeaturesAtendente() {
           onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(37,211,102,.4)' }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-          Solicitar implementação pelo WhatsApp
+          Solicitar pelo WhatsApp
         </a>
-        <div style={{ marginTop: 14, fontSize: 12, color: 'rgba(255,255,255,.35)' }}>
+        <div style={{ marginTop: 16, fontSize: 12, color: 'rgba(255,255,255,.3)' }}>
           Resposta em até 24h • Sem compromisso
         </div>
       </div>
@@ -547,181 +333,256 @@ function FeaturesAtendente() {
   )
 }
 
-// ── Preços Consultório ─────────────────────────────────────────────────────────
-const FEATURES_PRO = [
+/* ── Preços ────────────────────────────────────────────────────────────────── */
+const FEATS_PRO = [
   'Pacientes ilimitados',
   'Prontuário + Odontograma FDI',
-  'Orçamentos em PDF com 70+ procedimentos',
+  'Orçamentos em PDF (70+ procedimentos)',
   'Receituário, Atestados e Exames',
   'Agenda Google Calendar',
   'SorrIA assistente integrada',
-  'Compartilhamento via WhatsApp',
   'Dados seguros na nuvem (LGPD)',
   'Suporte por e-mail',
+]
+
+const FEATS_ATENDENTE_PRECO = [
+  'Persona exclusiva da sua clínica',
+  'Agendamento automático pelo WhatsApp',
+  'Lembretes automáticos (reduz 70% das faltas)',
+  'Reativação de pacientes inativos',
+  'Relatórios mensais de atendimento',
 ]
 
 function Precos({ onLogin }) {
   const [periodo, setPeriodo] = useState('anual')
   const anual = periodo === 'anual'
-  const mensal = 87
-  const anualTotal = 870
-  const anualMes = (anualTotal / 12).toFixed(0)
-  const economia = mensal * 12 - anualTotal
+  const precoMensal = 87
+  const precoAnualTotal = 870
+  const precoAnualMes = Math.round(precoAnualTotal / 12) // 72
+  const economia = precoMensal * 12 - precoAnualTotal    // 174
 
   return (
-    <section id="precos" style={{ padding: '90px 5%', background: C.light }}>
+    <section id="precos" style={{ padding: '100px 5%', background: C.light }}>
       <div style={{ textAlign: 'center', marginBottom: 48 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: C.primary, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
-          PREÇOS — CONSULTÓRIO
+        <div style={{ fontSize: 12, fontWeight: 700, color: C.primary, letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 14 }}>
+          PREÇOS
         </div>
-        <h2 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 12 }}>
-          Um plano. Preço fixo. Sem surpresas.
+        <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 14 }}>
+          Escolha seu produto
         </h2>
-        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 480, margin: '0 auto' }}>
-          Preço fixo, sem surpresas — sem reajuste após 3 meses como os concorrentes.
+        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 460, margin: '0 auto' }}>
+          Preço fixo, sem surpresas — sem reajuste surpresa como os concorrentes.
         </p>
       </div>
 
       {/* Toggle */}
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 40 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
         <div style={{
           display: 'inline-flex', background: '#fff', borderRadius: 99, padding: 4,
           border: '1.5px solid #e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,.06)',
         }}>
           <button onClick={() => setPeriodo('mensal')} style={{
-            padding: '9px 24px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600,
-            background: !anual ? C.primary : 'transparent', color: !anual ? '#fff' : '#6b7280', transition: 'all .2s',
+            padding: '9px 28px', borderRadius: 99, border: 'none', cursor: 'pointer',
+            fontSize: 14, fontWeight: 600, transition: 'all .2s',
+            background: !anual ? C.primary : 'transparent',
+            color: !anual ? '#fff' : '#6b7280',
           }}>Mensal</button>
           <button onClick={() => setPeriodo('anual')} style={{
-            padding: '9px 24px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600,
+            padding: '9px 28px', borderRadius: 99, border: 'none', cursor: 'pointer',
+            fontSize: 14, fontWeight: 600, transition: 'all .2s',
             display: 'flex', alignItems: 'center', gap: 8,
-            background: anual ? C.primary : 'transparent', color: anual ? '#fff' : '#6b7280', transition: 'all .2s',
+            background: anual ? C.primary : 'transparent',
+            color: anual ? '#fff' : '#6b7280',
           }}>
             Anual
             <span style={{
-              background: anual ? 'rgba(255,255,255,.25)' : '#dcfce7',
+              background: anual ? 'rgba(255,255,255,.22)' : '#dcfce7',
               color: anual ? '#fff' : '#16a34a',
-              fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 99,
-            }}>ECONOMIZE 2 MESES</span>
+              fontSize: 11, fontWeight: 700, padding: '2px 9px', borderRadius: 99,
+            }}>Economize 17%</span>
           </button>
         </div>
       </div>
 
-      {/* Card */}
-      <div style={{ maxWidth: 480, margin: '0 auto' }}>
+      {/* Cards */}
+      <div style={{ display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap', maxWidth: 920, margin: '0 auto', alignItems: 'stretch' }}>
+
+        {/* Card 1 — Consultório */}
         <div style={{
+          flex: 1, minWidth: 300, maxWidth: 420,
           background: `linear-gradient(160deg, ${C.navy} 0%, ${C.navyMid} 100%)`,
-          borderRadius: 24, padding: '40px 40px 36px',
+          borderRadius: 20, padding: '40px 36px',
           boxShadow: '0 20px 60px rgba(10,22,40,.35)',
           position: 'relative', overflow: 'hidden',
+          display: 'flex', flexDirection: 'column',
         }}>
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 220, height: 220, borderRadius: '50%', background: 'rgba(0,212,170,.06)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: -60, right: -60, width: 200, height: 200, borderRadius: '50%', background: 'rgba(0,212,170,.07)', pointerEvents: 'none' }} />
 
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             background: 'rgba(0,212,170,.15)', border: '1px solid rgba(0,212,170,.3)',
-            borderRadius: 99, padding: '5px 14px', marginBottom: 20,
+            borderRadius: 99, padding: '5px 14px', marginBottom: 24, alignSelf: 'flex-start',
           }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: C.bright, display: 'inline-block' }} />
-            <span style={{ fontSize: 12, fontWeight: 700, color: C.bright }}>SorrIA Consultório Pro</span>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: C.bright, display: 'inline-block' }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: C.bright, letterSpacing: '.04em' }}>MEU CONSULTÓRIO SORRIA</span>
           </div>
 
           <div style={{ marginBottom: 6 }}>
-            <span style={{ fontSize: 18, fontWeight: 600, color: 'rgba(255,255,255,.5)', verticalAlign: 'top', lineHeight: '52px' }}>R$</span>
-            <span style={{ fontSize: 72, fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.03em' }}>
-              {anual ? anualMes : mensal}
+            <span style={{ fontSize: 16, fontWeight: 600, color: 'rgba(255,255,255,.45)', verticalAlign: 'top', lineHeight: '60px' }}>R$</span>
+            <span style={{ fontSize: 68, fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.03em' }}>
+              {anual ? precoAnualMes : precoMensal}
             </span>
-            <span style={{ fontSize: 16, fontWeight: 500, color: 'rgba(255,255,255,.5)', marginLeft: 4 }}>/mês</span>
+            <span style={{ fontSize: 16, color: 'rgba(255,255,255,.45)', marginLeft: 4 }}>/mês</span>
           </div>
 
-          <div style={{ marginBottom: 4 }}>
-            {anual ? (
-              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.5)' }}>
-                cobrado anualmente — <strong style={{ color: 'rgba(255,255,255,.75)' }}>R$ {anualTotal}/ano</strong>
-              </span>
-            ) : (
-              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.5)' }}>cobrado mensalmente, cancele quando quiser</span>
-            )}
+          <div style={{ marginBottom: 6, fontSize: 13, color: 'rgba(255,255,255,.45)' }}>
+            {anual
+              ? <>cobrado anualmente — <strong style={{ color: 'rgba(255,255,255,.7)' }}>R$ {precoAnualTotal}/ano</strong></>
+              : 'cobrado mensalmente'}
           </div>
 
           {anual && (
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
-              background: 'rgba(74,222,128,.12)', borderRadius: 8,
-              padding: '6px 12px', marginBottom: 28, marginTop: 8,
+              background: 'rgba(74,222,128,.1)', borderRadius: 8,
+              padding: '6px 12px', marginBottom: 4,
             }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: '#4ade80' }}>
-                ✓ Você economiza R$ {economia}/ano — 2 meses grátis
+                ✓ Você economiza R$ {economia}/ano
               </span>
             </div>
           )}
-          {!anual && <div style={{ marginBottom: 28 }} />}
 
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 8,
+          <div style={{ marginBottom: 28, marginTop: 16,
             background: 'rgba(255,255,255,.05)', borderRadius: 10,
-            padding: '10px 14px', marginBottom: 28,
+            padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8,
           }}>
-            <span style={{ fontSize: 16 }}>🔒</span>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,.6)' }}>
-              Preço fixo, sem surpresas — sem reajuste após 3 meses
-            </span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,.5)' }}>Preço fixo — sem reajuste surpresa</span>
           </div>
 
           <button onClick={onLogin} style={{
-            width: '100%', padding: '15px 0', borderRadius: 12, border: 'none', cursor: 'pointer',
+            width: '100%', padding: '14px 0', borderRadius: 12, border: 'none', cursor: 'pointer',
             background: `linear-gradient(135deg, ${C.primary}, ${C.bright})`,
             color: '#fff', fontWeight: 800, fontSize: 16,
-            boxShadow: '0 6px 24px rgba(0,212,170,.35)', transition: 'transform .15s, box-shadow .15s',
-            marginBottom: 14,
+            boxShadow: '0 6px 24px rgba(0,212,170,.3)', transition: 'transform .15s, box-shadow .15s',
+            marginBottom: 10,
           }}
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(0,212,170,.45)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,212,170,.35)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,212,170,.3)' }}
           >Começar 14 dias grátis →</button>
-          <div style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,.35)' }}>
+          <div style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,.3)', marginBottom: 28 }}>
             Sem cartão de crédito • Cancele quando quiser
           </div>
 
-          <div style={{ borderTop: '1px solid rgba(255,255,255,.08)', marginTop: 28, paddingTop: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.4)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 14 }}>O QUE ESTÁ INCLUÍDO</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 8px' }}>
-              {FEATURES_PRO.map(f => (
-                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                  <span style={{ color: C.bright, fontWeight: 700, flexShrink: 0, marginTop: 1 }}>✓</span>
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,.75)', lineHeight: 1.4 }}>{f}</span>
+          <div style={{ borderTop: '1px solid rgba(255,255,255,.08)', paddingTop: 22 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.35)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 14 }}>O que está incluído</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {FEATS_PRO.map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <span style={{ color: C.bright, fontWeight: 700, flexShrink: 0, fontSize: 13, marginTop: 1 }}>✓</span>
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,.7)', lineHeight: 1.45 }}>{f}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: 20 }}>
-          <span style={{ fontSize: 13, color: '#9ca3af' }}>
-            Concorrentes cobram{' '}
-            <span style={{ textDecoration: 'line-through', color: '#d1d5db' }}>R$ 149–169/mês</span>
-            {' '}pelo mesmo.
-          </span>
+        {/* Card 2 — Atendente */}
+        <div style={{
+          flex: 1, minWidth: 300, maxWidth: 420,
+          background: '#fff',
+          borderRadius: 20, padding: '40px 36px',
+          border: '1.5px solid #e5efec',
+          boxShadow: '0 4px 24px rgba(0,0,0,.08)',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'rgba(37,211,102,.1)', border: '1px solid rgba(37,211,102,.25)',
+            borderRadius: 99, padding: '5px 14px', marginBottom: 24, alignSelf: 'flex-start',
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#25d366', display: 'inline-block' }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', letterSpacing: '.04em' }}>SORRIA ATENDENTE VIRTUAL</span>
+          </div>
+
+          <div style={{ marginBottom: 6 }}>
+            <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 4 }}>A partir de</div>
+            <span style={{ fontSize: 42, fontWeight: 900, color: C.navy, lineHeight: 1, letterSpacing: '-0.03em' }}>R$ 197</span>
+            <span style={{ fontSize: 16, color: '#9ca3af', marginLeft: 4 }}>/mês</span>
+          </div>
+
+          <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 32 }}>
+            + taxa de setup (consulte o valor)
+          </div>
+
+          <div style={{ flex: 1, marginBottom: 28 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 16 }}>O que está incluído</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {FEATS_ATENDENTE_PRECO.map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <span style={{ color: '#25d366', fontWeight: 700, flexShrink: 0, fontSize: 13, marginTop: 1 }}>✓</span>
+                  <span style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.45 }}>{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{
+            background: '#f0fdf4', borderRadius: 10, padding: '12px 14px', marginBottom: 24,
+            display: 'flex', alignItems: 'flex-start', gap: 8,
+          }}>
+            <span style={{ fontSize: 15, flexShrink: 0 }}>💡</span>
+            <span style={{ fontSize: 12, color: '#4b5563', lineHeight: 1.55 }}>
+              Implementação personalizada com entrevista, configuração completa e integração ao WhatsApp Business da sua clínica.
+            </span>
+          </div>
+
+          <a href={WA_ATENDENTE} target="_blank" rel="noopener noreferrer" style={{
+            width: '100%', padding: '14px 0', borderRadius: 12,
+            background: '#25d366', color: '#fff', fontWeight: 700, fontSize: 15,
+            textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            boxShadow: '0 6px 20px rgba(37,211,102,.35)', transition: 'transform .15s, box-shadow .15s',
+            marginBottom: 10,
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 28px rgba(37,211,102,.45)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(37,211,102,.35)' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            Solicitar pelo WhatsApp
+          </a>
+          <div style={{ textAlign: 'center', fontSize: 12, color: '#9ca3af' }}>
+            Resposta em até 24h • Sem compromisso
+          </div>
         </div>
+      </div>
+
+      <div style={{ textAlign: 'center', marginTop: 28 }}>
+        <span style={{ fontSize: 13, color: '#9ca3af' }}>
+          Concorrentes cobram{' '}
+          <span style={{ textDecoration: 'line-through', color: '#d1d5db' }}>R$ 149–169/mês</span>
+          {' '}pelo Consultório.
+        </span>
       </div>
     </section>
   )
 }
 
-// ── Depoimentos ────────────────────────────────────────────────────────────────
+/* ── Depoimentos ───────────────────────────────────────────────────────────── */
 const DEPOIMENTOS = [
-  { nome: 'Dra. Fernanda Lima', clinica: 'Clínica Odonto Smile · Belo Horizonte', texto: 'A agenda lotou em 3 semanas após ativar a SorrIA. Os pacientes adoram a praticidade de marcar pelo WhatsApp a qualquer hora.', produto: 'Atendente' },
-  { nome: 'Dr. Ricardo Souza', clinica: 'OdontoPrime · Divinópolis', texto: 'Reduzi 70% das faltas com os lembretes automáticos. Antes eu perdia consultas toda semana — hoje quase não acontece mais.', produto: 'Atendente' },
-  { nome: 'Dra. Patricia Nunes', clinica: 'Studio Dental · Pará de Minas', texto: 'O retorno veio em menos de 1 mês. O sistema de orçamentos em PDF impressiona os pacientes e o Consultório organizou tudo que eu tinha no papel.', produto: 'Clínica Conectada' },
+  { nome: 'Dra. Fernanda Lima',  clinica: 'Clínica Odonto Smile · Belo Horizonte', produto: 'Atendente',        texto: 'A agenda lotou em 3 semanas após ativar a SorrIA. Os pacientes adoram a praticidade de marcar pelo WhatsApp a qualquer hora.' },
+  { nome: 'Dr. Ricardo Souza',   clinica: 'OdontoPrime · Divinópolis',              produto: 'Atendente',        texto: 'Reduzi 70% das faltas com os lembretes automáticos. Antes eu perdia consultas toda semana — hoje quase não acontece mais.' },
+  { nome: 'Dra. Patricia Nunes', clinica: 'Studio Dental · Pará de Minas',          produto: 'Consultório Pro',  texto: 'O retorno veio em menos de 1 mês. Os orçamentos em PDF impressionam os pacientes e o sistema organizou tudo que eu tinha no papel.' },
 ]
 
 function Depoimentos() {
   return (
-    <section style={{ padding: '90px 5%', background: C.navy }}>
-      <div style={{ textAlign: 'center', marginBottom: 56 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: C.bright, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
+    <section style={{ padding: '100px 5%', background: C.navy }}>
+      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: C.bright, letterSpacing: '.1em', textTransform: 'uppercase', marginBottom: 14 }}>
           DEPOIMENTOS
         </div>
-        <h2 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em' }}>
+        <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em' }}>
           Dentistas que já usam o ecossistema
         </h2>
       </div>
@@ -730,25 +591,26 @@ function Depoimentos() {
         {DEPOIMENTOS.map((d, i) => (
           <div key={i} style={{
             flex: 1, minWidth: 280, maxWidth: 340,
-            background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)',
-            borderRadius: 20, padding: '28px 24px',
+            background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.09)',
+            borderRadius: 20, padding: '32px 28px',
           }}>
             <div style={{
-              display: 'inline-flex', alignItems: 'center',
+              display: 'inline-flex', alignItems: 'center', gap: 6,
               background: d.produto === 'Atendente' ? 'rgba(37,211,102,.15)' : 'rgba(0,212,170,.15)',
               border: `1px solid ${d.produto === 'Atendente' ? 'rgba(37,211,102,.3)' : 'rgba(0,212,170,.3)'}`,
-              borderRadius: 99, padding: '3px 10px', marginBottom: 16,
+              borderRadius: 99, padding: '4px 12px', marginBottom: 20,
             }}>
               <span style={{ fontSize: 11, fontWeight: 700, color: d.produto === 'Atendente' ? '#4ade80' : C.bright }}>
                 {d.produto}
               </span>
             </div>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,.75)', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>
-              "{d.texto}"
+            <div style={{ color: C.bright, fontSize: 22, marginBottom: 12, lineHeight: 1 }}>❝</div>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,.75)', lineHeight: 1.7, marginBottom: 24 }}>
+              {d.texto}
             </p>
             <div>
               <div style={{ fontWeight: 700, fontSize: 14, color: '#fff' }}>{d.nome}</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,.45)', marginTop: 3 }}>{d.clinica}</div>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', marginTop: 4 }}>{d.clinica}</div>
             </div>
           </div>
         ))}
@@ -757,34 +619,36 @@ function Depoimentos() {
   )
 }
 
-// ── Footer ────────────────────────────────────────────────────────────────────
+/* ── Footer ────────────────────────────────────────────────────────────────── */
 function Footer() {
   return (
-    <footer style={{ background: '#060f1c', padding: '48px 5% 32px', color: 'rgba(255,255,255,.5)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20, marginBottom: 32 }}>
+    <footer style={{ background: '#060f1c', padding: '52px 5% 32px', color: 'rgba(255,255,255,.5)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 32, marginBottom: 40 }}>
         <img src="/assets/logo.png" alt="SorrIA" style={{ height: 38, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.3)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 8 }}>Produtos</div>
-            {['Meu Consultório', 'SorrIA Atendente', 'Clínica Conectada'].map(p => (
-              <div key={p} style={{ fontSize: 13, color: 'rgba(255,255,255,.5)', marginBottom: 6 }}>{p}</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.28)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 12 }}>Produtos</div>
+            {['Meu Consultório SorrIA', 'SorrIA Atendente Virtual'].map(p => (
+              <div key={p} style={{ fontSize: 13, color: 'rgba(255,255,255,.45)', marginBottom: 8 }}>{p}</div>
             ))}
           </div>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.3)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 8 }}>Contato</div>
-            <div style={{ fontSize: 13, marginBottom: 6 }}>consultoriosorria.com.br</div>
-            <a href={WA_ATENDENTE} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: '#4ade80', textDecoration: 'none' }}>WhatsApp (37) 99972-2971</a>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.28)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 12 }}>Contato</div>
+            <div style={{ fontSize: 13, marginBottom: 8 }}>consultoriosorria.com.br</div>
+            <a href={WA_ATENDENTE} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: '#4ade80', textDecoration: 'none' }}>
+              WhatsApp (37) 99972-2971
+            </a>
           </div>
         </div>
       </div>
-      <div style={{ borderTop: '1px solid rgba(255,255,255,.08)', paddingTop: 24, textAlign: 'center', fontSize: 12 }}>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,.07)', paddingTop: 24, textAlign: 'center', fontSize: 12 }}>
         © {new Date().getFullYear()} SorrIA — Ecossistema Odontológico Inteligente · Divinópolis, MG · Todos os direitos reservados.
       </div>
     </footer>
   )
 }
 
-// ── Página principal ──────────────────────────────────────────────────────────
+/* ── Page ──────────────────────────────────────────────────────────────────── */
 export default function LandingPage() {
   const navigate = useNavigate()
   function irParaLogin() { navigate('/login') }
@@ -793,8 +657,6 @@ export default function LandingPage() {
     <div style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
       <Navbar onLogin={irParaLogin} />
       <Hero onLogin={irParaLogin} />
-      <Ecossistema />
-      <Produtos onLogin={irParaLogin} />
       <FeaturesConsultorio />
       <FeaturesAtendente />
       <Precos onLogin={irParaLogin} />
