@@ -195,7 +195,7 @@ function Hero({ onLogin }) {
           overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,.18)',
           position: 'relative', border: '4px solid rgba(255,255,255,.8)',
         }}>
-          <img src="/assets/sorria-polo.png" alt="SorrIA"
+          <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(transparent, rgba(26,46,43,.6))' }} />
           <div style={{ position: 'absolute', bottom: 16, left: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
