@@ -322,69 +322,194 @@ function Features() {
 }
 
 // ── Preços ────────────────────────────────────────────────────────────────────
+const FEATURES_PRO = [
+  'Pacientes ilimitados',
+  'Prontuário + Odontograma FDI',
+  'Orçamentos em PDF com 70+ procedimentos',
+  'Receituário, Atestados e Exames',
+  'Agenda sincronizada com Google Calendar',
+  'SorrIA — assistente virtual IA',
+  'Compartilhamento via WhatsApp',
+  'Dados seguros na nuvem (LGPD)',
+  'Suporte por e-mail',
+]
+
 function Precos({ onLogin }) {
+  const [periodo, setPeriodo] = useState('anual')
+  const anual = periodo === 'anual'
+
+  // Preços
+  const mensal = 87
+  const anualTotal = 870          // pague 10, use 12
+  const anualMes = (anualTotal / 12).toFixed(0) // 72
+  const economia = mensal * 12 - anualTotal      // 174
+
   return (
     <section id="preços" style={{ padding: '100px 5%', background: C.light }}>
-      <div style={{ textAlign: 'center', marginBottom: 56 }}>
+
+      {/* Cabeçalho */}
+      <div style={{ textAlign: 'center', marginBottom: 48 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: C.primary, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 12 }}>
           PREÇOS
         </div>
-        <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em' }}>
-          Simples e transparente
+        <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 12 }}>
+          Um plano. Preço fixo. Sem surpresas.
         </h2>
+        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 480, margin: '0 auto' }}>
+          Preço fixo para sempre — sem reajuste após 3 meses como os concorrentes.
+        </p>
       </div>
 
-      <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', maxWidth: 800, margin: '0 auto' }}>
-        {/* Free */}
+      {/* Toggle Mensal / Anual */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 40 }}>
         <div style={{
-          flex: 1, minWidth: 280, maxWidth: 340,
-          background: '#fff', borderRadius: 20, padding: '36px 32px',
-          border: '1.5px solid #e5e7eb', boxShadow: '0 4px 20px rgba(0,0,0,.05)',
+          display: 'inline-flex', background: '#fff',
+          borderRadius: 99, padding: 4,
+          border: '1.5px solid #e5e7eb',
+          boxShadow: '0 2px 8px rgba(0,0,0,.06)',
         }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#374151', marginBottom: 8 }}>Gratuito</div>
-          <div style={{ fontSize: 42, fontWeight: 900, color: C.navy, marginBottom: 4 }}>7 dias</div>
-          <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 28 }}>grátis, sem cartão</div>
-          {['Acesso completo ao sistema', 'Todos os módulos liberados', 'Geração de PDF', 'Agenda Google Calendar'].map(f => (
-            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <span style={{ color: C.primary, fontWeight: 700 }}>✓</span>
-              <span style={{ fontSize: 14, color: '#4b5563' }}>{f}</span>
-            </div>
-          ))}
-          <button onClick={onLogin} style={{
-            width: '100%', marginTop: 28, padding: '12px 0', borderRadius: 10,
-            border: '2px solid #e5e7eb', background: '#fff',
-            color: '#374151', fontWeight: 600, fontSize: 14, cursor: 'pointer',
-          }}>Começar teste grátis</button>
+          <button
+            onClick={() => setPeriodo('mensal')}
+            style={{
+              padding: '9px 24px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600,
+              background: !anual ? C.primary : 'transparent',
+              color: !anual ? '#fff' : '#6b7280',
+              transition: 'all .2s',
+            }}
+          >Mensal</button>
+          <button
+            onClick={() => setPeriodo('anual')}
+            style={{
+              padding: '9px 24px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600,
+              display: 'flex', alignItems: 'center', gap: 8,
+              background: anual ? C.primary : 'transparent',
+              color: anual ? '#fff' : '#6b7280',
+              transition: 'all .2s',
+            }}
+          >
+            Anual
+            <span style={{
+              background: anual ? 'rgba(255,255,255,.25)' : '#dcfce7',
+              color: anual ? '#fff' : '#16a34a',
+              fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 99,
+            }}>
+              ECONOMIZE 2 MESES
+            </span>
+          </button>
         </div>
+      </div>
 
-        {/* Pro */}
+      {/* Card principal */}
+      <div style={{ maxWidth: 480, margin: '0 auto' }}>
         <div style={{
-          flex: 1, minWidth: 280, maxWidth: 340,
-          background: `linear-gradient(160deg, ${C.navy}, ${C.darker})`,
-          borderRadius: 20, padding: '36px 32px',
-          boxShadow: '0 12px 40px rgba(26,46,43,.35)',
+          background: `linear-gradient(160deg, ${C.navy} 0%, ${C.darker} 100%)`,
+          borderRadius: 24, padding: '40px 40px 36px',
+          boxShadow: '0 20px 60px rgba(10,22,40,.35)',
           position: 'relative', overflow: 'hidden',
         }}>
+          {/* Círculo decorativo */}
           <div style={{
-            position: 'absolute', top: 18, right: 18,
-            background: C.primary, color: '#fff',
-            fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 99,
-          }}>RECOMENDADO</div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,.7)', marginBottom: 8 }}>Pro</div>
-          <div style={{ fontSize: 42, fontWeight: 900, color: '#fff', marginBottom: 4 }}>R$ 59</div>
-          <div style={{ fontSize: 13, color: 'rgba(255,255,255,.5)', marginBottom: 28 }}>por mês</div>
-          {['Pacientes ilimitados', 'Tudo do plano gratuito', 'SorrIA IA receptora', 'Suporte por e-mail', 'Histórico ilimitado'].map(f => (
-            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <span style={{ color: '#4ade80', fontWeight: 700 }}>✓</span>
-              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.85)' }}>{f}</span>
+            position: 'absolute', top: -60, right: -60, width: 220, height: 220,
+            borderRadius: '50%', background: 'rgba(0,212,170,.06)', pointerEvents: 'none',
+          }} />
+
+          {/* Badge */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'rgba(0,212,170,.15)', border: '1px solid rgba(0,212,170,.3)',
+            borderRadius: 99, padding: '5px 14px', marginBottom: 20,
+          }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#00d4aa', display: 'inline-block' }} />
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#00d4aa' }}>SorrIA Pro — Acesso completo</span>
+          </div>
+
+          {/* Preço */}
+          <div style={{ marginBottom: 6 }}>
+            <span style={{ fontSize: 18, fontWeight: 600, color: 'rgba(255,255,255,.5)', verticalAlign: 'top', lineHeight: '52px' }}>R$</span>
+            <span style={{ fontSize: 72, fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.03em' }}>
+              {anual ? anualMes : mensal}
+            </span>
+            <span style={{ fontSize: 16, fontWeight: 500, color: 'rgba(255,255,255,.5)', marginLeft: 4 }}>/mês</span>
+          </div>
+
+          {/* Detalhe de cobrança */}
+          <div style={{ marginBottom: 4 }}>
+            {anual ? (
+              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.5)' }}>
+                cobrado anualmente — <strong style={{ color: 'rgba(255,255,255,.75)' }}>R$ {anualTotal}/ano</strong>
+              </span>
+            ) : (
+              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.5)' }}>cobrado mensalmente, cancele quando quiser</span>
+            )}
+          </div>
+
+          {/* Economia */}
+          {anual && (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'rgba(74,222,128,.12)', borderRadius: 8,
+              padding: '6px 12px', marginBottom: 28, marginTop: 8,
+            }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#4ade80' }}>
+                ✓ Você economiza R$ {economia}/ano — equivale a 2 meses grátis
+              </span>
             </div>
-          ))}
+          )}
+          {!anual && <div style={{ marginBottom: 28 }} />}
+
+          {/* Trust badge */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: 'rgba(255,255,255,.05)', borderRadius: 10,
+            padding: '10px 14px', marginBottom: 28,
+          }}>
+            <span style={{ fontSize: 16 }}>🔒</span>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,.6)' }}>
+              Preço fixo para sempre — sem reajuste surpresa após 3 meses
+            </span>
+          </div>
+
+          {/* CTA */}
           <button onClick={onLogin} style={{
-            width: '100%', marginTop: 28, padding: '12px 0', borderRadius: 10,
-            border: 'none', background: C.primary,
-            color: '#fff', fontWeight: 700, fontSize: 14, cursor: 'pointer',
-            boxShadow: '0 4px 16px rgba(26,138,123,.5)',
-          }}>Assinar Pro</button>
+            width: '100%', padding: '15px 0', borderRadius: 12, border: 'none', cursor: 'pointer',
+            background: 'linear-gradient(135deg, #1a8a7b, #00d4aa)',
+            color: '#fff', fontWeight: 800, fontSize: 16,
+            boxShadow: '0 6px 24px rgba(0,212,170,.35)',
+            transition: 'transform .15s, box-shadow .15s',
+            marginBottom: 14,
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(0,212,170,.45)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,212,170,.35)' }}
+          >
+            Começar 7 dias grátis →
+          </button>
+          <div style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,.35)' }}>
+            Sem cartão de crédito • Cancele quando quiser
+          </div>
+
+          {/* Features */}
+          <div style={{ borderTop: '1px solid rgba(255,255,255,.08)', marginTop: 28, paddingTop: 24 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.4)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 14 }}>
+              O QUE ESTÁ INCLUÍDO
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 8px' }}>
+              {FEATURES_PRO.map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                  <span style={{ color: '#00d4aa', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>✓</span>
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,.75)', lineHeight: 1.4 }}>{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Comparativo âncora */}
+        <div style={{ textAlign: 'center', marginTop: 20 }}>
+          <span style={{ fontSize: 13, color: '#9ca3af' }}>
+            Concorrentes cobram{' '}
+            <span style={{ textDecoration: 'line-through', color: '#d1d5db' }}>R$ 149–169/mês</span>
+            {' '}pelo mesmo.
+          </span>
         </div>
       </div>
     </section>
