@@ -334,32 +334,63 @@ function FeaturesAtendente() {
 }
 
 /* ── Preços ────────────────────────────────────────────────────────────────── */
-const FEATS_PRO = [
-  'Pacientes ilimitados',
-  'Prontuário + Odontograma FDI',
-  'Orçamentos em PDF (70+ procedimentos)',
-  'Receituário, Atestados e Exames',
-  'Agenda Google Calendar',
-  'SorrIA assistente integrada',
-  'Dados seguros na nuvem (LGPD)',
-  'Suporte por e-mail',
-]
-
-const FEATS_ATENDENTE_PRECO = [
-  'Persona exclusiva da sua clínica',
-  'Agendamento automático pelo WhatsApp',
-  'Lembretes automáticos (reduz 70% das faltas)',
-  'Reativação de pacientes inativos',
-  'Relatórios mensais de atendimento',
-]
+const WA_SVG = <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
 
 function Precos({ onLogin }) {
   const [periodo, setPeriodo] = useState('anual')
   const anual = periodo === 'anual'
   const precoMensal = 87
   const precoAnualTotal = 870
-  const precoAnualMes = Math.round(precoAnualTotal / 12) // 72
-  const economia = precoMensal * 12 - precoAnualTotal    // 174
+  const precoAnualMes = Math.round(precoAnualTotal / 12)
+  const economia = precoMensal * 12 - precoAnualTotal
+
+  const produtos = [
+    {
+      id: 'consultorio',
+      badge: 'GESTÃO INTERNA',
+      nome: 'Meu Consultório',
+      tagline: 'Organize sua clínica por completo',
+      trial: '14 dias grátis, sem cartão',
+      cta: 'Começar teste grátis',
+      ctaAction: 'login',
+      cor: C.primary,
+      destaque: false,
+      features: ['Prontuário + Odontograma FDI', 'Orçamentos em PDF', 'Receituário e Atestados', 'Agenda Google Calendar', 'Pacientes ilimitados (Pro)'],
+    },
+    {
+      id: 'bundle',
+      badge: '⭐ MAIS COMPLETO',
+      nome: 'Clínica Conectada',
+      tagline: 'Consultório + Atendente integrados',
+      preco: 'R$ 247/mês',
+      detalhe: 'Consultório + Atendente com integração nativa',
+      trial: 'Fale com um especialista',
+      cta: 'Quero a Clínica Conectada',
+      ctaAction: 'bundle',
+      cor: C.bright,
+      destaque: true,
+      features: ['Tudo do Consultório Pro', 'SorrIA Atendente configurada', 'Agenda sincronizada bidirecional', 'Orçamento aprovado → WhatsApp auto', 'Suporte dedicado na implementação'],
+    },
+    {
+      id: 'atendente',
+      badge: 'ATENDIMENTO EXTERNO',
+      nome: 'SorrIA Atendente',
+      tagline: 'WhatsApp 24h para sua clínica',
+      preco: 'A partir de R$ 197/mês',
+      detalhe: '+ taxa de implementação (consulte)',
+      trial: 'Solicite uma demonstração',
+      cta: 'Solicitar implementação',
+      ctaAction: 'whatsapp',
+      cor: '#25d366',
+      destaque: false,
+      features: ['Persona personalizada para sua clínica', 'Agendamento automático pelo WhatsApp', 'Lembretes de consulta automáticos', 'Reativação de pacientes inativos', 'Relatórios de atendimento mensais'],
+    },
+  ]
+
+  function handleCta(action) {
+    if (action === 'login') window.location.href = '/login'
+    else window.open(WA_ATENDENTE, '_blank')
+  }
 
   return (
     <section id="precos" style={{ padding: '100px 5%', background: C.light }}>
@@ -368,14 +399,14 @@ function Precos({ onLogin }) {
           PREÇOS
         </div>
         <h2 style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 900, color: C.navy, letterSpacing: '-0.02em', marginBottom: 14 }}>
-          Escolha seu produto
+          Escolha como a SorrIA vai trabalhar com você
         </h2>
-        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 460, margin: '0 auto' }}>
-          Preço fixo, sem surpresas — sem reajuste surpresa como os concorrentes.
+        <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 500, margin: '0 auto' }}>
+          Comece pela gestão, adicione o atendimento, ou assine o ecossistema completo de uma vez.
         </p>
       </div>
 
-      {/* Toggle */}
+      {/* Toggle mensal/anual */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
         <div style={{
           display: 'inline-flex', background: '#fff', borderRadius: 99, padding: 4,
@@ -404,160 +435,108 @@ function Precos({ onLogin }) {
         </div>
       </div>
 
-      {/* Cards */}
-      <div style={{ display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap', maxWidth: 920, margin: '0 auto', alignItems: 'stretch' }}>
-
-        {/* Card 1 — Consultório */}
-        <div style={{
-          flex: 1, minWidth: 300, maxWidth: 420,
-          background: `linear-gradient(160deg, ${C.navy} 0%, ${C.navyMid} 100%)`,
-          borderRadius: 20, padding: '40px 36px',
-          boxShadow: '0 20px 60px rgba(10,22,40,.35)',
-          position: 'relative', overflow: 'hidden',
-          display: 'flex', flexDirection: 'column',
-        }}>
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 200, height: 200, borderRadius: '50%', background: 'rgba(0,212,170,.07)', pointerEvents: 'none' }} />
-
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            background: 'rgba(0,212,170,.15)', border: '1px solid rgba(0,212,170,.3)',
-            borderRadius: 99, padding: '5px 14px', marginBottom: 24, alignSelf: 'flex-start',
+      {/* 3 cards */}
+      <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', maxWidth: 1100, margin: '0 auto', alignItems: 'stretch' }}>
+        {produtos.map(p => (
+          <div key={p.id} style={{
+            flex: 1, minWidth: 280, maxWidth: 340,
+            borderRadius: 20, padding: '32px 28px',
+            background: p.destaque ? `linear-gradient(160deg, ${C.navy} 0%, ${C.navyMid} 100%)` : '#fff',
+            border: p.destaque ? 'none' : '1.5px solid #e5e7eb',
+            boxShadow: p.destaque ? '0 20px 60px rgba(10,22,40,.35)' : '0 4px 24px rgba(0,0,0,.08)',
+            position: 'relative', overflow: 'hidden',
+            display: 'flex', flexDirection: 'column',
+            transform: p.destaque ? 'scale(1.03)' : 'none',
           }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: C.bright, display: 'inline-block' }} />
-            <span style={{ fontSize: 11, fontWeight: 700, color: C.bright, letterSpacing: '.04em' }}>MEU CONSULTÓRIO SORRIA</span>
-          </div>
+            {p.destaque && (
+              <div style={{ position: 'absolute', top: -60, right: -60, width: 180, height: 180, borderRadius: '50%', background: 'rgba(0,212,170,.07)', pointerEvents: 'none' }} />
+            )}
 
-          <div style={{ marginBottom: 6 }}>
-            <span style={{ fontSize: 16, fontWeight: 600, color: 'rgba(255,255,255,.45)', verticalAlign: 'top', lineHeight: '60px' }}>R$</span>
-            <span style={{ fontSize: 68, fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.03em' }}>
-              {anual ? precoAnualMes : precoMensal}
-            </span>
-            <span style={{ fontSize: 16, color: 'rgba(255,255,255,.45)', marginLeft: 4 }}>/mês</span>
-          </div>
-
-          <div style={{ marginBottom: 6, fontSize: 13, color: 'rgba(255,255,255,.45)' }}>
-            {anual
-              ? <>cobrado anualmente — <strong style={{ color: 'rgba(255,255,255,.7)' }}>R$ {precoAnualTotal}/ano</strong></>
-              : 'cobrado mensalmente'}
-          </div>
-
-          {anual && (
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              background: 'rgba(74,222,128,.1)', borderRadius: 8,
-              padding: '6px 12px', marginBottom: 4,
+              display: 'inline-flex', alignItems: 'center',
+              background: p.destaque ? 'rgba(0,212,170,.15)' : `${p.cor}18`,
+              border: `1px solid ${p.destaque ? 'rgba(0,212,170,.3)' : p.cor + '35'}`,
+              borderRadius: 99, padding: '4px 12px', marginBottom: 16, alignSelf: 'flex-start',
             }}>
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#4ade80' }}>
-                ✓ Você economiza R$ {economia}/ano
-              </span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: p.destaque ? C.bright : p.cor }}>{p.badge}</span>
             </div>
-          )}
 
-          <div style={{ marginBottom: 28, marginTop: 16,
-            background: 'rgba(255,255,255,.05)', borderRadius: 10,
-            padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8,
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,.5)' }}>Preço fixo — sem reajuste surpresa</span>
-          </div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: p.destaque ? '#fff' : C.navy, marginBottom: 6 }}>{p.nome}</div>
+            <div style={{ fontSize: 14, color: p.destaque ? 'rgba(255,255,255,.6)' : '#6b7280', marginBottom: 20 }}>{p.tagline}</div>
 
-          <button onClick={onLogin} style={{
-            width: '100%', padding: '14px 0', borderRadius: 12, border: 'none', cursor: 'pointer',
-            background: `linear-gradient(135deg, ${C.primary}, ${C.bright})`,
-            color: '#fff', fontWeight: 800, fontSize: 16,
-            boxShadow: '0 6px 24px rgba(0,212,170,.3)', transition: 'transform .15s, box-shadow .15s',
-            marginBottom: 10,
-          }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(0,212,170,.45)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,212,170,.3)' }}
-          >Começar 14 dias grátis →</button>
-          <div style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,.3)', marginBottom: 28 }}>
-            Sem cartão de crédito • Cancele quando quiser
-          </div>
+            {/* Preço dinâmico para Consultório, fixo para os outros */}
+            {p.id === 'consultorio' ? (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: C.muted ?? '#6b7280' }}>R$</span>
+                  <span style={{ fontSize: 40, fontWeight: 900, color: C.navy, lineHeight: 1, letterSpacing: '-0.03em' }}>
+                    {anual ? precoAnualMes : precoMensal}
+                  </span>
+                  <span style={{ fontSize: 14, color: '#9ca3af', marginLeft: 2 }}>/mês</span>
+                </div>
+                <div style={{ fontSize: 12, color: '#9ca3af' }}>
+                  {anual
+                    ? <>cobrado anualmente — <strong style={{ color: '#6b7280' }}>R$ {precoAnualTotal}/ano</strong></>
+                    : 'cobrado mensalmente'}
+                </div>
+                {anual && (
+                  <div style={{ marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6, background: '#f0fdf4', borderRadius: 8, padding: '5px 10px' }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: '#16a34a' }}>✓ Economize R$ {economia}/ano</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 26, fontWeight: 900, color: p.destaque ? '#fff' : C.navy, marginBottom: 4 }}>{p.preco}</div>
+                <div style={{ fontSize: 12, color: p.destaque ? 'rgba(255,255,255,.45)' : '#9ca3af' }}>{p.detalhe}</div>
+              </div>
+            )}
 
-          <div style={{ borderTop: '1px solid rgba(255,255,255,.08)', paddingTop: 22 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.35)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 14 }}>O que está incluído</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {FEATS_PRO.map(f => (
-                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                  <span style={{ color: C.bright, fontWeight: 700, flexShrink: 0, fontSize: 13, marginTop: 1 }}>✓</span>
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,.7)', lineHeight: 1.45 }}>{f}</span>
+            <div style={{ flex: 1, marginBottom: 20 }}>
+              {p.features.map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                  <span style={{ color: p.destaque ? C.bright : p.cor, fontWeight: 700, flexShrink: 0, fontSize: 13 }}>✓</span>
+                  <span style={{ fontSize: 13, color: p.destaque ? 'rgba(255,255,255,.8)' : '#4b5563', lineHeight: 1.4 }}>{f}</span>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
 
-        {/* Card 2 — Atendente */}
-        <div style={{
-          flex: 1, minWidth: 300, maxWidth: 420,
-          background: '#fff',
-          borderRadius: 20, padding: '40px 36px',
-          border: '1.5px solid #e5efec',
-          boxShadow: '0 4px 24px rgba(0,0,0,.08)',
-          display: 'flex', flexDirection: 'column',
-        }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            background: 'rgba(37,211,102,.1)', border: '1px solid rgba(37,211,102,.25)',
-            borderRadius: 99, padding: '5px 14px', marginBottom: 24, alignSelf: 'flex-start',
-          }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#25d366', display: 'inline-block' }} />
-            <span style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', letterSpacing: '.04em' }}>SORRIA ATENDENTE VIRTUAL</span>
-          </div>
-
-          <div style={{ marginBottom: 6 }}>
-            <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 4 }}>A partir de</div>
-            <span style={{ fontSize: 42, fontWeight: 900, color: C.navy, lineHeight: 1, letterSpacing: '-0.03em' }}>R$ 197</span>
-            <span style={{ fontSize: 16, color: '#9ca3af', marginLeft: 4 }}>/mês</span>
-          </div>
-
-          <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 32 }}>
-            + taxa de setup (consulte o valor)
-          </div>
-
-          <div style={{ flex: 1, marginBottom: 28 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 16 }}>O que está incluído</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {FEATS_ATENDENTE_PRECO.map(f => (
-                <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                  <span style={{ color: '#25d366', fontWeight: 700, flexShrink: 0, fontSize: 13, marginTop: 1 }}>✓</span>
-                  <span style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.45 }}>{f}</span>
-                </div>
-              ))}
+            <div style={{ fontSize: 12, color: p.destaque ? 'rgba(255,255,255,.4)' : '#9ca3af', marginBottom: 12, textAlign: 'center' }}>
+              {p.trial}
             </div>
-          </div>
 
-          <div style={{
-            background: '#f0fdf4', borderRadius: 10, padding: '12px 14px', marginBottom: 24,
-            display: 'flex', alignItems: 'flex-start', gap: 8,
-          }}>
-            <span style={{ fontSize: 15, flexShrink: 0 }}>💡</span>
-            <span style={{ fontSize: 12, color: '#4b5563', lineHeight: 1.55 }}>
-              Implementação personalizada com entrevista, configuração completa e integração ao WhatsApp Business da sua clínica.
-            </span>
+            {p.ctaAction === 'whatsapp' || p.ctaAction === 'bundle' ? (
+              <a href={WA_ATENDENTE} target="_blank" rel="noopener noreferrer" style={{
+                width: '100%', padding: '13px 0', borderRadius: 12, border: 'none', cursor: 'pointer',
+                background: p.destaque ? `linear-gradient(135deg, ${C.primary}, ${C.bright})` : '#25d366',
+                color: '#fff', fontWeight: 700, fontSize: 14,
+                textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                boxShadow: p.destaque ? '0 6px 20px rgba(0,212,170,.3)' : '0 4px 14px rgba(37,211,102,.3)',
+                transition: 'opacity .15s',
+              }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                {p.ctaAction === 'whatsapp' && WA_SVG}
+                {p.cta}
+              </a>
+            ) : (
+              <button onClick={() => handleCta(p.ctaAction)} style={{
+                width: '100%', padding: '13px 0', borderRadius: 12, border: 'none', cursor: 'pointer',
+                background: `linear-gradient(135deg, ${C.primary}, ${C.dark})`,
+                color: '#fff', fontWeight: 700, fontSize: 14,
+                boxShadow: '0 4px 14px rgba(26,138,123,.3)',
+                transition: 'opacity .15s',
+              }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >{p.cta}</button>
+            )}
           </div>
-
-          <a href={WA_ATENDENTE} target="_blank" rel="noopener noreferrer" style={{
-            width: '100%', padding: '14px 0', borderRadius: 12,
-            background: '#25d366', color: '#fff', fontWeight: 700, fontSize: 15,
-            textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            boxShadow: '0 6px 20px rgba(37,211,102,.35)', transition: 'transform .15s, box-shadow .15s',
-            marginBottom: 10,
-          }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 28px rgba(37,211,102,.45)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(37,211,102,.35)' }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-            Solicitar pelo WhatsApp
-          </a>
-          <div style={{ textAlign: 'center', fontSize: 12, color: '#9ca3af' }}>
-            Resposta em até 24h • Sem compromisso
-          </div>
-        </div>
+        ))}
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: 28 }}>
+      <div style={{ textAlign: 'center', marginTop: 32 }}>
         <span style={{ fontSize: 13, color: '#9ca3af' }}>
           Concorrentes cobram{' '}
           <span style={{ textDecoration: 'line-through', color: '#d1d5db' }}>R$ 149–169/mês</span>
