@@ -339,10 +339,18 @@ const WA_SVG = <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColo
 function Precos({ onLogin }) {
   const [periodo, setPeriodo] = useState('anual')
   const anual = periodo === 'anual'
+
+  // Consultório
   const precoMensal = 87
   const precoAnualTotal = 870
   const precoAnualMes = Math.round(precoAnualTotal / 12)
   const economia = precoMensal * 12 - precoAnualTotal
+
+  // Clínica Conectada
+  const bundleMensal = 247
+  const bundleAnualTotal = 2470
+  const bundleAnualMes = Math.round(bundleAnualTotal / 12)
+  const bundleEconomia = bundleMensal * 12 - bundleAnualTotal
 
   const produtos = [
     {
@@ -464,11 +472,11 @@ function Precos({ onLogin }) {
             <div style={{ fontSize: 22, fontWeight: 800, color: p.destaque ? '#fff' : C.navy, marginBottom: 6 }}>{p.nome}</div>
             <div style={{ fontSize: 14, color: p.destaque ? 'rgba(255,255,255,.6)' : '#6b7280', marginBottom: 20 }}>{p.tagline}</div>
 
-            {/* Preço dinâmico para Consultório, fixo para os outros */}
+            {/* Preço dinâmico para Consultório e Clínica Conectada */}
             {p.id === 'consultorio' ? (
               <div style={{ marginBottom: 20 }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: C.muted ?? '#6b7280' }}>R$</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: '#6b7280' }}>R$</span>
                   <span style={{ fontSize: 40, fontWeight: 900, color: C.navy, lineHeight: 1, letterSpacing: '-0.03em' }}>
                     {anual ? precoAnualMes : precoMensal}
                   </span>
@@ -485,10 +493,30 @@ function Precos({ onLogin }) {
                   </div>
                 )}
               </div>
+            ) : p.id === 'bundle' ? (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.6)' }}>R$</span>
+                  <span style={{ fontSize: 40, fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.03em' }}>
+                    {anual ? bundleAnualMes : bundleMensal}
+                  </span>
+                  <span style={{ fontSize: 14, color: 'rgba(255,255,255,.5)', marginLeft: 2 }}>/mês</span>
+                </div>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.4)' }}>
+                  {anual
+                    ? <>cobrado anualmente — <strong style={{ color: 'rgba(255,255,255,.65)' }}>R$ {bundleAnualTotal}/ano</strong></>
+                    : 'Consultório + Atendente com integração nativa'}
+                </div>
+                {anual && (
+                  <div style={{ marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(0,212,170,.15)', border: '1px solid rgba(0,212,170,.25)', borderRadius: 8, padding: '5px 10px' }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: C.bright }}>✓ Economize R$ {bundleEconomia}/ano</span>
+                  </div>
+                )}
+              </div>
             ) : (
               <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 26, fontWeight: 900, color: p.destaque ? '#fff' : C.navy, marginBottom: 4 }}>{p.preco}</div>
-                <div style={{ fontSize: 12, color: p.destaque ? 'rgba(255,255,255,.45)' : '#9ca3af' }}>{p.detalhe}</div>
+                <div style={{ fontSize: 26, fontWeight: 900, color: C.navy, marginBottom: 4 }}>{p.preco}</div>
+                <div style={{ fontSize: 12, color: '#9ca3af' }}>{p.detalhe}</div>
               </div>
             )}
 
