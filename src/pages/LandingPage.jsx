@@ -586,9 +586,9 @@ function Precos({ onLogin }) {
 
 /* ── Depoimentos ───────────────────────────────────────────────────────────── */
 const DEPOIMENTOS = [
-  { nome: 'Dra. Fernanda Lima',  clinica: 'Clínica Odonto Smile · Belo Horizonte', produto: 'Atendente',        texto: 'A agenda lotou em 3 semanas após ativar a SorrIA. Os pacientes adoram a praticidade de marcar pelo WhatsApp a qualquer hora.' },
-  { nome: 'Dr. Ricardo Souza',   clinica: 'OdontoPrime · Divinópolis',              produto: 'Atendente',        texto: 'Reduzi 70% das faltas com os lembretes automáticos. Antes eu perdia consultas toda semana — hoje quase não acontece mais.' },
-  { nome: 'Dra. Patricia Nunes', clinica: 'Studio Dental · Pará de Minas',          produto: 'Consultório Pro',  texto: 'O retorno veio em menos de 1 mês. Os orçamentos em PDF impressionam os pacientes e o sistema organizou tudo que eu tinha no papel.' },
+  { nome: 'Dra. Fernanda Lima',  produto: 'Atendente',       texto: 'Sério, achei que ia ser complicado. Mas a SorrIA começou a responder pacientes no WhatsApp no mesmo dia da implementação. Agendou 4 consultas enquanto eu estava atendendo.' },
+  { nome: 'Dr. Ricardo Souza',   produto: 'Atendente',       texto: 'Minha recepcionista entrou de férias e eu quase entrei em pânico. Aí lembrei que a SorrIA tava lá. Nenhum paciente ficou sem resposta. Voltei até mais tranquilo rs' },
+  { nome: 'Dra. Patricia Nunes', produto: 'Consultório Pro', texto: 'Eu vivia com caderno e post-it. Hoje gero receita, atestado e orçamento em menos de 2 minutos. Os pacientes ficam impressionados com o PDF. Parece clínica grande.' },
 ]
 
 function Depoimentos() {
@@ -626,7 +626,6 @@ function Depoimentos() {
             </p>
             <div>
               <div style={{ fontWeight: 700, fontSize: 14, color: '#fff' }}>{d.nome}</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', marginTop: 4 }}>{d.clinica}</div>
             </div>
           </div>
         ))}
