@@ -220,16 +220,18 @@ const Ico = {
   users:      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
   chart:      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
   persona:    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+  mic:        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>,
+  spark:      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
 }
 
 /* ── Features Consultório ──────────────────────────────────────────────────── */
 const FEATS_CONSULTORIO = [
-  { icon: Ico.prontuario, title: 'Prontuário + Odontograma', desc: 'Histórico completo com odontograma FDI interativo e anamnese digital.' },
-  { icon: Ico.orcamento,  title: 'Orçamentos profissionais', desc: 'PDF com 70+ procedimentos, desconto PIX e parcelamento configurável.' },
-  { icon: Ico.docs,       title: 'Receituário e Atestados',  desc: 'Documentos com cabeçalho da clínica prontos para impressão em 1 clique.' },
-  { icon: Ico.agenda,     title: 'Agenda Google Calendar',   desc: 'Consultas sincronizadas com seu Google Calendar em tempo real.' },
-  { icon: Ico.ia,         title: 'SorrIA integrada',         desc: 'A mesma IA que atende fora organiza tudo dentro da clínica.' },
-  { icon: Ico.whatsapp,   title: 'WhatsApp com 1 clique',    desc: 'Acesse o WhatsApp do paciente diretamente do prontuário.' },
+  { icon: Ico.prontuario, title: 'Prontuário + Odontograma FDI',          desc: 'Histórico completo com odontograma interativo, anamnese digital e evolução por consulta.' },
+  { icon: Ico.orcamento,  title: 'Orçamentos profissionais em PDF',        desc: 'Gere orçamentos com 70+ procedimentos, desconto PIX e parcelamento — prontos para enviar.' },
+  { icon: Ico.docs,       title: 'Receituário e Atestados',                desc: 'Documentos com cabeçalho da clínica gerados em 1 clique. Prontos para imprimir e assinar.' },
+  { icon: Ico.agenda,     title: 'Agenda com confirmações pelo WhatsApp',  desc: 'Consultas no Google Calendar com confirmações e lembretes automáticos enviados ao paciente.' },
+  { icon: Ico.spark,      title: 'Inteligência Artificial integrada',      desc: 'IA que conecta o atendimento externo com a gestão interna — tudo sincronizado em tempo real.' },
+  { icon: Ico.whatsapp,   title: 'WhatsApp direto do prontuário',          desc: 'Abra a conversa com o paciente no WhatsApp sem sair do sistema, com 1 clique.' },
 ]
 
 function FeaturesConsultorio() {
@@ -258,12 +260,12 @@ function FeaturesConsultorio() {
 
 /* ── Features Atendente ────────────────────────────────────────────────────── */
 const FEATS_ATENDENTE = [
-  { icon: Ico.persona, title: 'Persona exclusiva da sua clínica',    desc: 'A atendente fala com a identidade e o tom da sua clínica — não é uma IA genérica.' },
-  { icon: Ico.clock,   title: 'Atendimento 24h, 7 dias por semana',  desc: 'Responde em menos de 5 segundos, mesmo de madrugada. Sua recepção nunca dorme.' },
-  { icon: Ico.whatsapp,title: 'Agendamento direto pelo WhatsApp',    desc: 'O paciente escolhe data e horário no chat. Aparece direto na sua agenda.' },
-  { icon: Ico.bell,    title: 'Lembretes automáticos de consulta',   desc: 'Reduz até 70% das faltas com lembretes enviados 24h e 1h antes do atendimento.' },
-  { icon: Ico.users,   title: 'Reativação de pacientes inativos',    desc: 'Identifica quem não volta há meses e dispara campanhas personalizadas de retorno.' },
-  { icon: Ico.chart,   title: 'Relatórios mensais de atendimento',   desc: 'Veja quantos pacientes foram atendidos, agendados e convertidos pela IA.' },
+  { icon: Ico.persona,  title: 'Persona exclusiva da sua clínica',         desc: 'A atendente fala com a identidade e o tom da sua clínica — não é uma IA genérica.' },
+  { icon: Ico.clock,    title: 'Atendimento 24h, 7 dias por semana',       desc: 'Responde em menos de 5 segundos, mesmo de madrugada. Sua recepção nunca dorme.' },
+  { icon: Ico.whatsapp, title: 'Agendamento + confirmações automáticas',   desc: 'O paciente agenda pelo chat, recebe confirmação na hora e lembrete antes da consulta.' },
+  { icon: Ico.mic,      title: 'Entende mensagens de voz',                 desc: 'A SorrIA lê áudios do WhatsApp e responde normalmente — o paciente pode falar em vez de digitar.' },
+  { icon: Ico.spark,    title: 'IA que aprende com a sua clínica',         desc: 'Quanto mais usa, mais precisa fica. Aprende seus procedimentos, preços e horários disponíveis.' },
+  { icon: Ico.users,    title: 'Reativação de pacientes inativos',         desc: 'Identifica quem não volta há meses e dispara campanhas personalizadas de retorno.' },
 ]
 
 function FeaturesAtendente() {
