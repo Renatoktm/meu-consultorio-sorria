@@ -502,14 +502,23 @@ function Precos({ onLogin }) {
                   </span>
                   <span style={{ fontSize: 14, color: 'rgba(255,255,255,.5)', marginLeft: 2 }}>/mês</span>
                 </div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.4)' }}>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', marginBottom: 6 }}>
                   {anual
                     ? <>cobrado anualmente — <strong style={{ color: 'rgba(255,255,255,.65)' }}>R$ {bundleAnualTotal}/ano</strong></>
                     : 'Consultório + Atendente com integração nativa'}
                 </div>
-                {anual && (
-                  <div style={{ marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(0,212,170,.15)', border: '1px solid rgba(0,212,170,.25)', borderRadius: 8, padding: '5px 10px' }}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: C.bright }}>✓ Economize R$ {bundleEconomia}/ano</span>
+                {anual ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(0,212,170,.15)', border: '1px solid rgba(0,212,170,.25)', borderRadius: 8, padding: '5px 10px' }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: C.bright }}>✓ Economize R$ {bundleEconomia}/ano</span>
+                    </div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(0,212,170,.12)', border: '1px solid rgba(0,212,170,.22)', borderRadius: 8, padding: '5px 10px' }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: C.bright }}>🎁 Setup e implementação GRÁTIS</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: '5px 10px' }}>
+                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,.5)' }}>+ taxa de implementação (consulte)</span>
                   </div>
                 )}
               </div>
