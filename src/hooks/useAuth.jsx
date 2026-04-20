@@ -48,16 +48,24 @@ export function AuthProvider({ children }) {
   }
 
   async function signUp(email, password, nome, clinica, cro) {
-    const { data, error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nome, clinica, cro }
+      }
+    })
     if (error) throw error
+    // Garante o perfil mesmo se o trigger não disparar
     if (data.user) {
       await supabase.from('profiles').upsert({
         id: data.user.id,
         nome,
         clinica,
         cro,
-        plano: 'free'
-      })
+        plano: 'trial',
+        trial_ends_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      }, { onConflict: 'id', ignoreDuplicates: false })
     }
   }
 

@@ -17,7 +17,7 @@ const card = {
 export default function Dashboard() {
   const { profile, user } = useAuth()
   const navigate = useNavigate()
-  const { isFree, total, LIMITE_FREE, podeAdicionarPaciente } = usePlano()
+  const { isFree, isBlocked, trialAtivo, trialExpirado, diasTrial, total, LIMITE_FREE, podeAdicionarPaciente } = usePlano()
 
   const hora = new Date().getHours()
   const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite'
@@ -164,7 +164,59 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* Banner freemium */}
+      {/* Banner trial ativo */}
+      {trialAtivo && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap',
+          background: 'linear-gradient(135deg, #f0fdf9, #e6f7f4)',
+          border: '1.5px solid #a7f3d0',
+          borderRadius: 12, padding: '14px 20px', marginBottom: 20,
+        }}>
+          <div style={{ fontSize: 22 }}>⏳</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 14, color: '#065f46' }}>
+              Teste gratuito — {diasTrial} dia{diasTrial !== 1 ? 's' : ''} restante{diasTrial !== 1 ? 's' : ''}
+            </div>
+            <div style={{ fontSize: 13, color: '#047857', marginTop: 2 }}>
+              Você tem acesso completo a todos os recursos. Assine o Pro para continuar após o período de teste.
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('/configuracoes')}
+            style={{ padding: '8px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', background: C.primary, color: '#fff', fontSize: 13, fontWeight: 700, flexShrink: 0, boxShadow: '0 2px 8px rgba(26,138,123,.3)' }}
+          >
+            ⭐ Ver planos
+          </button>
+        </div>
+      )}
+
+      {/* Banner trial expirado */}
+      {trialExpirado && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap',
+          background: '#fff7ed',
+          border: '1.5px solid #fb923c',
+          borderRadius: 12, padding: '14px 20px', marginBottom: 20,
+        }}>
+          <div style={{ fontSize: 22 }}>🔒</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 14, color: '#9a3412' }}>
+              Seu período de teste encerrou
+            </div>
+            <div style={{ fontSize: 13, color: '#c2410c', marginTop: 2 }}>
+              Assine o plano Pro por R$ 59/mês para continuar usando o sistema completo.
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('/configuracoes')}
+            style={{ padding: '8px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', background: '#ea580c', color: '#fff', fontSize: 13, fontWeight: 700, flexShrink: 0 }}
+          >
+            🔓 Assinar Pro
+          </button>
+        </div>
+      )}
+
+      {/* Banner plano free (legado) */}
       {isFree && (
         <div style={{
           display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap',
@@ -175,7 +227,7 @@ export default function Dashboard() {
           <div style={{ flex: 1, minWidth: 180 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: !podeAdicionarPaciente ? '#9a3412' : '#166534' }}>
-                {!podeAdicionarPaciente ? '🚫 Limite do plano gratuito atingido' : '👥 Plano Gratuito'}
+                {!podeAdicionarPaciente ? '🚫 Limite atingido' : '👥 Plano Gratuito'}
               </span>
               <span style={{ fontSize: 13, fontWeight: 700, color: !podeAdicionarPaciente ? '#ea580c' : C.primary }}>
                 {total}/{LIMITE_FREE} pacientes
@@ -191,7 +243,7 @@ export default function Dashboard() {
             </div>
           </div>
           <button
-            onClick={() => navigate('/pacientes')}
+            onClick={() => navigate('/configuracoes')}
             style={{ padding: '7px 18px', borderRadius: 8, border: 'none', cursor: 'pointer', background: !podeAdicionarPaciente ? '#ea580c' : C.primary, color: '#fff', fontSize: 13, fontWeight: 700, flexShrink: 0 }}
           >
             ⭐ Fazer Upgrade

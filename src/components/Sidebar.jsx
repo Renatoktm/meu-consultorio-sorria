@@ -99,7 +99,9 @@ export default function Sidebar() {
         <div className="sidebar-footer-avatar">{iniciais}</div>
         <div className="sidebar-footer-info">
           <div className="sidebar-footer-name">{profile?.clinica || profile?.nome || 'Minha Clínica'}</div>
-          <div className="sidebar-footer-plan">Plano {plano === 'free' ? 'Gratuito' : 'Pro'}</div>
+          <div className="sidebar-footer-plan">
+            {plano === 'pro' ? '⭐ Pro' : plano === 'trial' ? '🕐 Trial' : 'Gratuito'}
+          </div>
         </div>
         <button
           onClick={handleLogout}
