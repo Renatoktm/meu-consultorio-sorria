@@ -23,6 +23,7 @@ export default function App() {
         <ToastProvider>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/app" element={<Navigate to="/dashboard" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
 
