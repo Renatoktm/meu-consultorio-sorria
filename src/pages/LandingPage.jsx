@@ -219,14 +219,56 @@ function Hero({ onLogin }) {
   )
 }
 
-// ── Features ───────────────────────────────────────────────────────────────────
+// ── SVG Icons para features ────────────────────────────────────────────────────
+const FeatIcons = {
+  prontuario: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      <polyline points="10 9 9 9 8 9"/>
+    </svg>
+  ),
+  orcamento: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="5" width="20" height="14" rx="2"/>
+      <line x1="2" y1="10" x2="22" y2="10"/>
+    </svg>
+  ),
+  documentos: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+    </svg>
+  ),
+  agenda: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+    </svg>
+  ),
+  ia: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+      <circle cx="7.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/>
+      <circle cx="16.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/>
+    </svg>
+  ),
+  whatsapp: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  ),
+}
+
 const FEATURES = [
-  { icon: '🦷', title: 'Prontuário + Odontograma', desc: 'Histórico completo do paciente com odontograma interativo FDI e anamnese digital.' },
-  { icon: '💰', title: 'Orçamentos profissionais', desc: 'Gere orçamentos em PDF com 70+ procedimentos, desconto PIX e parcelamento.' },
-  { icon: '📋', title: 'Receituário e Atestados', desc: 'Documentos odontológicos completos com cabeçalho da clínica e PDF para impressão.' },
-  { icon: '📅', title: 'Agenda integrada', desc: 'Sincronize consultas com Google Calendar e veja sua agenda direto no sistema.' },
-  { icon: '🤖', title: 'SorrIA — IA receptora', desc: 'Assistente virtual que confirma consultas, responde pacientes e organiza sua rotina.' },
-  { icon: '📱', title: 'WhatsApp integrado', desc: 'Acesse o WhatsApp do paciente com um clique diretamente do prontuário.' },
+  { icon: FeatIcons.prontuario, title: 'Prontuário + Odontograma', desc: 'Histórico completo do paciente com odontograma interativo FDI e anamnese digital.' },
+  { icon: FeatIcons.orcamento,  title: 'Orçamentos profissionais', desc: 'Gere orçamentos em PDF com 70+ procedimentos, desconto PIX e parcelamento.' },
+  { icon: FeatIcons.documentos, title: 'Receituário e Atestados',  desc: 'Documentos odontológicos completos com cabeçalho da clínica e PDF para impressão.' },
+  { icon: FeatIcons.agenda,     title: 'Agenda integrada',         desc: 'Sincronize consultas com Google Calendar e veja sua agenda direto no sistema.' },
+  { icon: FeatIcons.ia,         title: 'SorrIA — IA receptora',   desc: 'Assistente virtual que confirma consultas, responde pacientes e organiza sua rotina.' },
+  { icon: FeatIcons.whatsapp,   title: 'WhatsApp integrado',       desc: 'Acesse o WhatsApp do paciente com um clique diretamente do prontuário.' },
 ]
 
 function Features() {
@@ -247,30 +289,31 @@ function Features() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 24, maxWidth: 1100, margin: '0 auto' }}>
         {FEATURES.map((f, i) => (
           <div key={i} style={{
-            padding: '28px 24px', borderRadius: 16,
-            border: '1.5px solid #f1f5f9',
-            background: '#fafafa',
+            padding: '28px 24px', borderRadius: 18,
+            border: '1.5px solid #edf2f0',
+            background: '#fff',
             transition: 'transform .2s, box-shadow .2s, border-color .2s',
           }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = 'translateY(-4px)'
-              e.currentTarget.style.boxShadow = '0 12px 32px rgba(26,138,123,.12)'
-              e.currentTarget.style.borderColor = 'rgba(26,138,123,.3)'
+              e.currentTarget.style.boxShadow = '0 16px 40px rgba(26,138,123,.1)'
+              e.currentTarget.style.borderColor = 'rgba(26,138,123,.25)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = 'none'
               e.currentTarget.style.boxShadow = 'none'
-              e.currentTarget.style.borderColor = '#f1f5f9'
+              e.currentTarget.style.borderColor = '#edf2f0'
             }}
           >
             <div style={{
-              width: 52, height: 52, borderRadius: 14,
-              background: 'rgba(26,138,123,.1)',
+              width: 56, height: 56, borderRadius: 16, marginBottom: 20,
+              background: 'linear-gradient(135deg, #d4f5ee 0%, #a8e8d8 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 24, marginBottom: 18,
+              color: C.primary,
+              boxShadow: '0 4px 14px rgba(26,138,123,.15)',
             }}>{f.icon}</div>
             <h3 style={{ fontSize: 16, fontWeight: 700, color: C.navy, marginBottom: 8 }}>{f.title}</h3>
-            <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6 }}>{f.desc}</p>
+            <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.65 }}>{f.desc}</p>
           </div>
         ))}
       </div>
