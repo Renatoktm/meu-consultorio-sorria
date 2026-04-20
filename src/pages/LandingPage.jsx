@@ -195,7 +195,7 @@ function Hero({ onLogin }) {
           overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,.18)',
           position: 'relative', border: '4px solid rgba(255,255,255,.8)',
         }}>
-          <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+          <img src="/assets/sorria-polo.png" alt="SorrIA"
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(transparent, rgba(26,46,43,.6))' }} />
           <div style={{ position: 'absolute', bottom: 16, left: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -740,7 +740,7 @@ function ChatWidget() {
               onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(26,138,123,.6)' }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(26,138,123,.5)' }}
             >
-              <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+              <img src="/assets/sorria-polo.png" alt="SorrIA"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
             </button>
           </div>
@@ -765,7 +765,7 @@ function ChatWidget() {
               flexShrink: 0,
             }}>
               <div style={{ width: 40, height: 40, borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,.4)', flexShrink: 0 }}>
-                <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+                <img src="/assets/sorria-polo.png" alt="SorrIA"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
               </div>
               <div style={{ flex: 1 }}>
@@ -788,7 +788,7 @@ function ChatWidget() {
                 <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-end', flexDirection: m.role === 'user' ? 'row-reverse' : 'row' }}>
                   {m.role === 'assistant' && (
                     <div style={{ width: 28, height: 28, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: `1.5px solid ${C.primary}` }}>
-                      <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+                      <img src="/assets/sorria-polo.png" alt="SorrIA"
                         style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
                     </div>
                   )}
@@ -808,7 +808,7 @@ function ChatWidget() {
               {loading && (
                 <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
                   <div style={{ width: 28, height: 28, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: `1.5px solid ${C.primary}` }}>
-                    <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+                    <img src="/assets/sorria-polo.png" alt="SorrIA"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
                   </div>
                   <div style={{ background: '#fff', borderRadius: '16px 16px 16px 4px', padding: '12px 16px', boxShadow: '0 2px 8px rgba(0,0,0,.07)', display: 'flex', gap: 4, alignItems: 'center' }}>
