@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+
+const SUPABASE_URL = 'https://nfkhnjglkvyduhzauavh.supabase.co'
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/sorria-chat`
 
 const C = {
   primary:  '#1a8a7b',
@@ -665,6 +668,205 @@ function Footer() {
   )
 }
 
+/* ── Chat Widget ───────────────────────────────────────────────────────────── */
+function ChatWidget() {
+  const [open, setOpen] = useState(false)
+  const [messages, setMessages] = useState([
+    { role: 'assistant', content: 'Olá! 😊 Sou a SorrIA, sua assistente virtual. Posso te ajudar a entender como o nosso ecossistema pode transformar sua clínica. O que você gostaria de saber?' }
+  ])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [pulse, setPulse] = useState(true)
+  const bottomRef = useRef(null)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 100)
+      setTimeout(() => inputRef.current?.focus(), 150)
+      setPulse(false)
+    }
+  }, [open, messages])
+
+  async function send() {
+    const text = input.trim()
+    if (!text || loading) return
+    const userMsg = { role: 'user', content: text }
+    const nextMessages = [...messages, userMsg]
+    setMessages(nextMessages)
+    setInput('')
+    setLoading(true)
+    try {
+      const res = await fetch(CHAT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: nextMessages.map(m => ({ role: m.role, content: m.content })) }),
+      })
+      const data = await res.json()
+      setMessages(prev => [...prev, { role: 'assistant', content: data.reply || 'Desculpe, tente novamente!' }])
+    } catch {
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Ops, tive um problema de conexão 😅 Tenta de novo ou chama pelo WhatsApp: (37) 99972-2971' }])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <>
+      {/* Botão flutuante */}
+      <div style={{ position: 'fixed', bottom: 28, right: 28, zIndex: 999 }}>
+        {!open && (
+          <div style={{ position: 'relative' }}>
+            {pulse && (
+              <div style={{
+                position: 'absolute', top: -4, right: -4,
+                width: 16, height: 16, borderRadius: '50%',
+                background: '#4ade80',
+                boxShadow: '0 0 0 0 rgba(74,222,128,.4)',
+                animation: 'chatPulse 2s infinite',
+                zIndex: 2,
+              }} />
+            )}
+            <button
+              onClick={() => setOpen(true)}
+              title="Fale com a SorrIA"
+              style={{
+                width: 62, height: 62, borderRadius: '50%', border: 'none', cursor: 'pointer',
+                background: `linear-gradient(135deg, ${C.primary}, ${C.dark})`,
+                boxShadow: '0 6px 24px rgba(26,138,123,.5)',
+                padding: 0, overflow: 'hidden',
+                transition: 'transform .2s, box-shadow .2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(26,138,123,.6)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(26,138,123,.5)' }}
+            >
+              <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
+            </button>
+          </div>
+        )}
+
+        {/* Painel do chat */}
+        {open && (
+          <div style={{
+            width: 360, height: 520,
+            borderRadius: 20, overflow: 'hidden',
+            background: '#fff',
+            boxShadow: '0 24px 64px rgba(0,0,0,.18)',
+            display: 'flex', flexDirection: 'column',
+            border: '1px solid #e5e7eb',
+            animation: 'chatSlide .25s ease-out',
+          }}>
+            {/* Header */}
+            <div style={{
+              background: `linear-gradient(135deg, ${C.primary}, ${C.dark})`,
+              padding: '14px 16px',
+              display: 'flex', alignItems: 'center', gap: 12,
+              flexShrink: 0,
+            }}>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,.4)', flexShrink: 0 }}>
+                <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>SorrIA</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 6px #4ade80' }} />
+                  <span style={{ fontSize: 12, color: 'rgba(255,255,255,.8)' }}>Online agora</span>
+                </div>
+              </div>
+              <button onClick={() => setOpen(false)} style={{
+                background: 'rgba(255,255,255,.15)', border: 'none', borderRadius: '50%',
+                width: 28, height: 28, cursor: 'pointer', color: '#fff', fontSize: 16,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>×</button>
+            </div>
+
+            {/* Mensagens */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', display: 'flex', flexDirection: 'column', gap: 12, background: '#f9fafb' }}>
+              {messages.map((m, i) => (
+                <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-end', flexDirection: m.role === 'user' ? 'row-reverse' : 'row' }}>
+                  {m.role === 'assistant' && (
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: `1.5px solid ${C.primary}` }}>
+                      <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
+                    </div>
+                  )}
+                  <div style={{
+                    maxWidth: '75%', padding: '10px 13px', borderRadius: m.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                    background: m.role === 'user' ? `linear-gradient(135deg, ${C.primary}, ${C.dark})` : '#fff',
+                    color: m.role === 'user' ? '#fff' : '#1a2e2b',
+                    fontSize: 13.5, lineHeight: 1.55,
+                    boxShadow: '0 2px 8px rgba(0,0,0,.07)',
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    whiteSpace: 'pre-wrap',
+                  }}>
+                    {m.content}
+                  </div>
+                </div>
+              ))}
+              {loading && (
+                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: `1.5px solid ${C.primary}` }}>
+                    <img src="/assets/sorria-avatar.jpg" alt="SorrIA"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
+                  </div>
+                  <div style={{ background: '#fff', borderRadius: '16px 16px 16px 4px', padding: '12px 16px', boxShadow: '0 2px 8px rgba(0,0,0,.07)', display: 'flex', gap: 4, alignItems: 'center' }}>
+                    {[0,1,2].map(i => (
+                      <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: C.primary, animation: `chatDot 1.2s ${i * 0.2}s infinite ease-in-out` }} />
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div ref={bottomRef} />
+            </div>
+
+            {/* Input */}
+            <div style={{ padding: '12px 14px', borderTop: '1px solid #f0f0f0', background: '#fff', display: 'flex', gap: 8, flexShrink: 0 }}>
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+                placeholder="Escreva sua dúvida..."
+                disabled={loading}
+                style={{
+                  flex: 1, padding: '10px 14px', borderRadius: 12, border: '1.5px solid #e5e7eb',
+                  fontSize: 13.5, outline: 'none', fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  background: loading ? '#f9fafb' : '#fff', color: '#1a2e2b',
+                  transition: 'border-color .2s',
+                }}
+                onFocus={e => e.target.style.borderColor = C.primary}
+                onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+              />
+              <button
+                onClick={send}
+                disabled={loading || !input.trim()}
+                style={{
+                  width: 40, height: 40, borderRadius: 12, border: 'none', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
+                  background: loading || !input.trim() ? '#e5e7eb' : `linear-gradient(135deg, ${C.primary}, ${C.dark})`,
+                  color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'background .2s', flexShrink: 0,
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes chatPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:.6} }
+        @keyframes chatSlide { from{opacity:0;transform:translateY(16px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes chatDot { 0%,80%,100%{transform:scale(0.6);opacity:.4} 40%{transform:scale(1);opacity:1} }
+      `}</style>
+    </>
+  )
+}
+
 /* ── Page ──────────────────────────────────────────────────────────────────── */
 export default function LandingPage() {
   const navigate = useNavigate()
@@ -679,6 +881,7 @@ export default function LandingPage() {
       <Precos onLogin={irParaLogin} />
       <Depoimentos />
       <Footer />
+      <ChatWidget />
     </div>
   )
 }
