@@ -30,18 +30,7 @@ function Navbar({ onLogin }) {
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     }}>
       {/* Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{
-          width: 38, height: 38, borderRadius: 10,
-          background: `linear-gradient(135deg, ${C.primary}, ${C.dark})`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 20, boxShadow: '0 4px 12px rgba(26,138,123,.3)',
-        }}>🦷</div>
-        <div>
-          <div style={{ fontSize: 17, fontWeight: 800, color: C.navy, lineHeight: 1.1 }}>SorrIA</div>
-          <div style={{ fontSize: 10, color: '#6b7280', fontWeight: 500, letterSpacing: '.04em' }}>MEU CONSULTÓRIO</div>
-        </div>
-      </div>
+      <img src="/assets/logo.png" alt="SorrIA" style={{ height: 42, objectFit: 'contain' }} />
 
       {/* Links */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
@@ -152,7 +141,7 @@ function Hero({ onLogin }) {
 
         {/* Social proof */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-          {['✅ Sem cartão de crédito', '✅ 3 pacientes grátis', '✅ Cancele quando quiser'].map(t => (
+          {['✅ Sem cartão de crédito', '✅ 7 dias grátis', '✅ Cancele quando quiser'].map(t => (
             <span key={t} style={{ fontSize: 13, color: '#6b7280', fontWeight: 500 }}>{t}</span>
           ))}
         </div>
@@ -310,9 +299,9 @@ function Precos({ onLogin }) {
           border: '1.5px solid #e5e7eb', boxShadow: '0 4px 20px rgba(0,0,0,.05)',
         }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: '#374151', marginBottom: 8 }}>Gratuito</div>
-          <div style={{ fontSize: 42, fontWeight: 900, color: C.navy, marginBottom: 4 }}>R$ 0</div>
-          <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 28 }}>para sempre</div>
-          {['Até 3 pacientes', 'Todos os módulos', 'Geração de PDF', 'Agenda Google Calendar'].map(f => (
+          <div style={{ fontSize: 42, fontWeight: 900, color: C.navy, marginBottom: 4 }}>7 dias</div>
+          <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 28 }}>grátis, sem cartão</div>
+          {['Acesso completo ao sistema', 'Todos os módulos liberados', 'Geração de PDF', 'Agenda Google Calendar'].map(f => (
             <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <span style={{ color: C.primary, fontWeight: 700 }}>✓</span>
               <span style={{ fontSize: 14, color: '#4b5563' }}>{f}</span>
@@ -322,7 +311,7 @@ function Precos({ onLogin }) {
             width: '100%', marginTop: 28, padding: '12px 0', borderRadius: 10,
             border: '2px solid #e5e7eb', background: '#fff',
             color: '#374151', fontWeight: 600, fontSize: 14, cursor: 'pointer',
-          }}>Começar grátis</button>
+          }}>Começar teste grátis</button>
         </div>
 
         {/* Pro */}
@@ -364,17 +353,7 @@ function Footer() {
   return (
     <footer style={{ background: C.navy, padding: '48px 5% 32px', color: 'rgba(255,255,255,.6)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20, marginBottom: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 34, height: 34, borderRadius: 9,
-            background: `linear-gradient(135deg, ${C.primary}, ${C.dark})`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
-          }}>🦷</div>
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>SorrIA</div>
-            <div style={{ fontSize: 10, letterSpacing: '.05em' }}>MEU CONSULTÓRIO</div>
-          </div>
-        </div>
+        <img src="/assets/logo.png" alt="SorrIA" style={{ height: 38, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
         <p style={{ fontSize: 13, margin: 0 }}>Sistema odontológico inteligente para dentistas brasileiros.</p>
         <p style={{ fontSize: 13, margin: 0 }}>consultoriosorria.com.br</p>
       </div>

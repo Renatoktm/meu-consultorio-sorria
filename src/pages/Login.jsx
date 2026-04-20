@@ -220,11 +220,7 @@ export default function Login() {
 
         <div className="lr-left-top">
           <Link to="/" className="lr-logo">
-            <div className="lr-logo-mark">{ToothSVG}</div>
-            <div>
-              <div className="lr-logo-name">SorrIA</div>
-              <div className="lr-logo-sub">Meu Consultório</div>
-            </div>
+            <img src="/assets/logo.png" alt="SorrIA" style={{ height: 40, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
           </Link>
         </div>
 

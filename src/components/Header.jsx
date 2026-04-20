@@ -20,8 +20,7 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header-logo">
-        <div className="header-logo-icon">🦷</div>
-        <span>Meu Consultório SorrIA</span>
+        <img src="/assets/logo.png" alt="SorrIA" style={{ height: 36, objectFit: 'contain' }} />
       </div>
       <div className="header-user">
         <span className="header-user-name">
