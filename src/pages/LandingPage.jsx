@@ -356,7 +356,7 @@ function Precos({ onLogin }) {
           Um plano. Preço fixo. Sem surpresas.
         </h2>
         <p style={{ fontSize: 16, color: '#6b7280', maxWidth: 480, margin: '0 auto' }}>
-          Preço fixo para sempre — sem reajuste após 3 meses como os concorrentes.
+          Preço fixo, sem surpresas — sem reajuste após 3 meses como os concorrentes.
         </p>
       </div>
 
@@ -465,7 +465,7 @@ function Precos({ onLogin }) {
           }}>
             <span style={{ fontSize: 16 }}>🔒</span>
             <span style={{ fontSize: 13, color: 'rgba(255,255,255,.6)' }}>
-              Preço fixo para sempre — sem reajuste surpresa após 3 meses
+              Preço fixo, sem surpresas — sem reajuste após 3 meses
             </span>
           </div>
 
