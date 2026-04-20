@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
+import { useAuth } from './hooks/useAuth'
 import { ToastProvider } from './components/Toast'
 import RotaProtegida from './components/RotaProtegida'
 import Layout from './pages/Layout'
@@ -16,15 +17,31 @@ import Receituario from './modules/Receituario'
 import Atestado from './modules/Atestado'
 import Exames from './modules/Exames'
 
+// Rota raiz: redireciona para dashboard se já logado
+function HomeRoute() {
+  const { user, loading } = useAuth()
+  if (loading) return null
+  if (user) return <Navigate to="/dashboard" replace />
+  return <LandingPage />
+}
+
+// Rota de login: redireciona para dashboard se já logado
+function LoginRoute() {
+  const { user, loading } = useAuth()
+  if (loading) return null
+  if (user) return <Navigate to="/dashboard" replace />
+  return <Login />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <ToastProvider>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<HomeRoute />} />
             <Route path="/app" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginRoute />} />
             <Route path="/cadastro" element={<Cadastro />} />
 
             <Route element={
