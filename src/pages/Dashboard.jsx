@@ -144,7 +144,8 @@ export default function Dashboard() {
           .select('*, pacientes(nome, telefone)')
           .eq('user_id', user.id)
           .in('status', ['em_analise', 'pendente'])
-          .order('created_at', { ascending: true }),
+          .order('created_at', { ascending: false })
+          .limit(5),
         supabase
           .from('pacientes')
           .select('id, nome, created_at, convenio')
@@ -228,6 +229,9 @@ export default function Dashboard() {
       : 'Hoje voce esta com a fila limpa e pode focar no atendimento.'
 
   const limitProgress = Math.min((total / LIMITE_FREE) * 100, 100)
+  const followUpsUrgentes = orcamentosAbertos.filter(item => diasEmAberto(item.created_at) > 7).length
+  const ticketMedioAprovado = resumo.aprovados > 0 ? resumo.aprovadosValor / resumo.aprovados : 0
+  const ticketMedioEmAnalise = resumo.emAnalise > 0 ? resumo.emAnaliseValor / resumo.emAnalise : 0
 
   const cards = [
     {
@@ -334,26 +338,64 @@ export default function Dashboard() {
         </div>
 
         <div className="db-hero-side">
-          <div className="db-hero-side-label">Pulso do mes</div>
+          <div className="db-hero-side-label">Resumo executivo</div>
           <div className="db-hero-side-value">
             {carregando ? '...' : moneyFormatter.format(resumo.aprovadosValor)}
           </div>
-          <p className="db-hero-side-text">{pulseText}</p>
+          <p className="db-hero-side-text">
+            Valor aprovado em {mesAtual}. O quadro abaixo resume pipeline, urgencias e ticket medio sem repetir os cards do painel.
+          </p>
 
-          <div className="db-signal-list">
-            <div className="db-signal-item">
-              <span className="db-signal-label">Aprovados</span>
-              <strong>{carregando ? '...' : resumo.aprovados}</strong>
+          <div className="db-summary-grid">
+            <div className="db-summary-card">
+              <span className="db-summary-label">Pipeline aberto</span>
+              <strong>{carregando ? '...' : moneyFormatter.format(resumo.emAnaliseValor)}</strong>
+              <small>{resumo.emAnalise} proposta{resumo.emAnalise === 1 ? '' : 's'} em analise</small>
             </div>
-            <div className="db-signal-item">
-              <span className="db-signal-label">Documentos</span>
-              <strong>{carregando ? '...' : resumo.documentos}</strong>
+
+            <div className="db-summary-card">
+              <span className="db-summary-label">Follow-ups urgentes</span>
+              <strong>{carregando ? '...' : followUpsUrgentes}</strong>
+              <small>{followUpsUrgentes === 0 ? 'Nenhum contato atrasado' : 'Precisam de acao imediata'}</small>
             </div>
-            <div className="db-signal-item">
-              <span className="db-signal-label">Agenda</span>
-              <strong>{gcConnected ? (consultasMes ?? '...') : 'off'}</strong>
+
+            <div className="db-summary-card">
+              <span className="db-summary-label">Ticket medio aprovado</span>
+              <strong>{carregando ? '...' : moneyFormatter.format(ticketMedioAprovado)}</strong>
+              <small>{resumo.aprovados > 0 ? 'Media das aprovacoes do mes' : 'Ainda sem aprovacoes neste mes'}</small>
+            </div>
+
+            <div className="db-summary-card">
+              <span className="db-summary-label">Ticket medio em analise</span>
+              <strong>{carregando ? '...' : moneyFormatter.format(ticketMedioEmAnalise)}</strong>
+              <small>{resumo.emAnalise > 0 ? 'Media do pipeline atual' : 'Sem pipeline em aberto agora'}</small>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="db-quick-strip-panel db-panel">
+        <div className="db-panel-head">
+          <div>
+            <span className="db-panel-kicker">Acesso rapido</span>
+            <h2>Entradas mais usadas do dia</h2>
+            <p>Os atalhos principais ficam no topo para acelerar a rotina da recepcao e do dentista.</p>
+          </div>
+        </div>
+
+        <div className="db-actions-grid db-actions-grid--top">
+          {quickActions.map(action => (
+            <button
+              key={action.path}
+              type="button"
+              className={`db-action-card is-${action.tone}`}
+              onClick={() => navigate(action.path)}
+            >
+              <span className="db-action-label">{action.label}</span>
+              <span className="db-action-caption">{action.caption}</span>
+              <span className="db-inline-icon">{Icons.arrow}</span>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -479,25 +521,10 @@ export default function Dashboard() {
           <article className="db-panel">
             <div className="db-panel-head">
               <div>
-                <span className="db-panel-kicker">Execucao rapida</span>
-                <h2>Acoes do dia</h2>
-                <p>Atalhos para entrar em fluxo sem navegar pelo sistema todo.</p>
+                <span className="db-panel-kicker">Status do sistema</span>
+                <h2>Operacao auxiliar</h2>
+                <p>Informacoes de integracao e capacidade ficam separadas do acesso rapido para manter o topo mais objetivo.</p>
               </div>
-            </div>
-
-            <div className="db-actions-grid">
-              {quickActions.map(action => (
-                <button
-                  key={action.path}
-                  type="button"
-                  className={`db-action-card is-${action.tone}`}
-                  onClick={() => navigate(action.path)}
-                >
-                  <span className="db-action-label">{action.label}</span>
-                  <span className="db-action-caption">{action.caption}</span>
-                  <span className="db-inline-icon">{Icons.arrow}</span>
-                </button>
-              ))}
             </div>
 
             <div className="db-status-card">
