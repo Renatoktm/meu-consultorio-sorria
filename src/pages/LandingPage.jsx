@@ -8,47 +8,47 @@ const CHAT_URL = `${SUPABASE_URL}/functions/v1/sorria-chat`
 const WA_ATENDENTE = 'https://wa.me/5537999722971?text=Ol%C3%A1!%20Tenho%20interesse%20na%20SorrIA%20Atendente%20Virtual%20para%20minha%20cl%C3%ADnica.%20Pode%20me%20explicar%20como%20funciona%20a%20implementa%C3%A7%C3%A3o%3F'
 
 const NAV_ITEMS = [
-  ['#consultorio', 'Consultorio'],
+  ['#consultorio', 'Consultório'],
   ['#atendente', 'Atendente'],
-  ['#precos', 'Precos'],
+  ['#precos', 'Preços'],
 ]
 
 const HERO_PROMISES = [
-  '14 dias gratis no Consultorio',
-  'Implementacao sob consulta',
+  '14 dias grátis no Consultório',
+  'Implementação sob consulta',
   'Sem fidelidade',
 ]
 
 const SHOWCASE_SUMMARY = [
   {
-    label: 'Consultorio',
-    title: 'Prontuario, agenda e documentos com cara de clinica organizada.',
+    label: 'Consultório',
+    title: 'Prontuário, agenda e documentos com cara de clínica organizada.',
   },
   {
     label: 'Atendente',
-    title: 'Confirmacoes, reativacao e WhatsApp trabalhando no mesmo fluxo.',
+    title: 'Confirmações, reativação e WhatsApp trabalhando no mesmo fluxo.',
   },
 ]
 
 const OPERATION_PILLARS = [
   {
-    title: 'Dentro da clinica',
-    eyebrow: 'Meu Consultorio',
-    description: 'Prontuario, agenda, orcamentos e documentos em uma rotina mais limpa e rapida.',
-    bullets: ['Prontuario com odontograma', 'PDFs profissionais', 'Agenda integrada ao Google Calendar'],
+    title: 'Dentro da clínica',
+    eyebrow: 'Meu Consultório',
+    description: 'Prontuário, agenda, orçamentos e documentos em uma rotina mais limpa e rápida.',
+    bullets: ['Prontuário com odontograma', 'PDFs profissionais', 'Agenda integrada ao Google Calendar'],
   },
   {
-    title: 'Fora da clinica',
+    title: 'Fora da clínica',
     eyebrow: 'SorrIA Atendente',
     description: 'WhatsApp ativo 24h para responder, confirmar, lembrar e reativar pacientes automaticamente.',
-    bullets: ['Agendamento automatico', 'Confirmacoes e lembretes', 'Persona configurada para sua clinica'],
+    bullets: ['Agendamento automático', 'Confirmações e lembretes', 'Persona configurada para sua clínica'],
   },
 ]
 
 const CONSULTORIO_FEATURES = [
   {
-    title: 'Prontuario com odontograma',
-    description: 'Historico clinico centralizado com anamnese, evolucao de atendimento e mapa dentario interativo.',
+    title: 'Prontuário com odontograma',
+    description: 'Histórico clínico centralizado com anamnese, evolução de atendimento e mapa dentário interativo.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -59,7 +59,7 @@ const CONSULTORIO_FEATURES = [
     ),
   },
   {
-    title: 'Orcamentos que parecem de clinica grande',
+    title: 'Orçamentos que parecem de clínica grande',
     description: 'Monte propostas com procedimentos, parcelamento e desconto PIX em PDF pronto para enviar.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -71,8 +71,8 @@ const CONSULTORIO_FEATURES = [
     ),
   },
   {
-    title: 'Receituario, atestado e exames',
-    description: 'Documentos clinicos em um fluxo muito mais rapido, com cabecalho da clinica e menos retrabalho.',
+    title: 'Receituário, atestado e exames',
+    description: 'Documentos clínicos em um fluxo muito mais rápido, com cabeçalho da clínica e menos retrabalho.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M9 11l3 3 8-8" />
@@ -82,7 +82,7 @@ const CONSULTORIO_FEATURES = [
   },
   {
     title: 'Agenda integrada de verdade',
-    description: 'Visualize consultas, confirmacoes e sincronizacao com Google Calendar sem depender de planilhas.',
+    description: 'Visualize consultas, confirmações e sincronização com Google Calendar sem depender de planilhas.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -94,7 +94,7 @@ const CONSULTORIO_FEATURES = [
   },
   {
     title: 'WhatsApp direto do sistema',
-    description: 'Abra a conversa com o paciente a partir do prontuario ou dos orcamentos em analise com um clique.',
+    description: 'Abra a conversa com o paciente a partir do prontuário ou dos orçamentos em análise com um clique.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -103,7 +103,7 @@ const CONSULTORIO_FEATURES = [
   },
   {
     title: 'Ecossistema pronto para crescer',
-    description: 'A SorrIA conecta atendimento externo e gestao interna para a clinica operar com mais previsibilidade.',
+    description: 'A SorrIA conecta atendimento externo e gestão interna para a clínica operar com mais previsibilidade.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="m13 2-9 12h7l-1 8 10-12h-7l0-8Z" />
@@ -113,29 +113,29 @@ const CONSULTORIO_FEATURES = [
 ]
 
 const ATENDENTE_FEATURES = [
-  'Persona configurada para sua clinica',
+  'Persona configurada para sua clínica',
   'Atendimento 24h pelo WhatsApp',
-  'Agendamento e confirmacao automatica',
+  'Agendamento e confirmação automática',
   'Lembretes antes da consulta',
-  'Reativacao de pacientes inativos',
-  'Relatorios e acompanhamento de atendimento',
+  'Reativação de pacientes inativos',
+  'Relatórios e acompanhamento de atendimento',
 ]
 
 const WORKFLOW_STEPS = [
   {
     step: '01',
     title: 'Paciente chama no WhatsApp',
-    description: 'A SorrIA responde em segundos, apresenta a clinica e conduz o atendimento inicial.',
+    description: 'A SorrIA responde em segundos, apresenta a clínica e conduz o atendimento inicial.',
   },
   {
     step: '02',
     title: 'Agenda e confirma automaticamente',
-    description: 'A consulta entra no fluxo certo, com menos faltas e menos dependencia de recepcao humana.',
+    description: 'A consulta entra no fluxo certo, com menos faltas e menos dependência de recepção humana.',
   },
   {
     step: '03',
-    title: 'Clinica opera com tudo sincronizado',
-    description: 'No Consultorio, voce continua o atendimento com historico, orcamento e documentos em ordem.',
+    title: 'Clínica opera com tudo sincronizado',
+    description: 'No Consultório, você continua o atendimento com histórico, orçamento e documentos em ordem.',
   },
 ]
 
@@ -143,17 +143,17 @@ const TESTIMONIALS = [
   {
     name: 'Dra. Fernanda Lima',
     product: 'Atendente',
-    text: 'A SorrIA comecou a responder pacientes no WhatsApp no mesmo dia da implementacao. Agendou consultas enquanto eu estava atendendo.',
+    text: 'A SorrIA começou a responder pacientes no WhatsApp no mesmo dia da implementação. Agendou consultas enquanto eu estava atendendo.',
   },
   {
     name: 'Dr. Ricardo Souza',
     product: 'Atendente',
-    text: 'Minha recepcionista entrou de ferias e a clinica nao parou. Nenhum paciente ficou sem resposta.',
+    text: 'Minha recepcionista entrou de férias e a clínica não parou. Nenhum paciente ficou sem resposta.',
   },
   {
     name: 'Dra. Patricia Nunes',
-    product: 'Consultorio Pro',
-    text: 'Hoje gero receita, atestado e orcamento em poucos minutos. A percepcao profissional da clinica mudou muito.',
+    product: 'Consultório Pro',
+    text: 'Hoje gero receita, atestado e orçamento em poucos minutos. A percepção profissional da clínica mudou muito.',
   },
 ]
 
@@ -186,7 +186,7 @@ function Navbar({ onLogin }) {
             Entrar
           </button>
           <button type="button" className="lp-button lp-button--primary" onClick={onLogin}>
-            Comecar gratis
+            Começar grátis
           </button>
         </div>
       </div>
@@ -199,9 +199,9 @@ function Hero({ onLogin }) {
     <section className="lp-hero" id="topo">
       <div className="lp-container lp-hero-grid">
         <div className="lp-hero-copy">
-          <span className="lp-hero-badge">O ecossistema odontologico completo</span>
+          <span className="lp-hero-badge">O ecossistema odontológico completo</span>
           <h1>
-            Dentro e fora da clinica,{' '}
+            Dentro e fora da clínica,{' '}
             <span className="lp-brand-word">
               <span className="lp-brand-sorr">a Sorr</span>
               <span className="lp-brand-ia">IA</span>
@@ -209,13 +209,13 @@ function Hero({ onLogin }) {
             cuida de tudo
           </h1>
           <p className="lp-hero-text">
-            Gestao interna completa + atendimento 24h pelo WhatsApp. Dois produtos integrados, uma clinica que
+            Gestão interna completa + atendimento 24h pelo WhatsApp. Dois produtos integrados, uma clínica que
             funciona com mais previsibilidade, mais velocidade e menos improviso.
           </p>
 
           <div className="lp-hero-actions">
             <button type="button" className="lp-button lp-button--primary" onClick={onLogin}>
-              Comecar gratis
+              Começar grátis
             </button>
             <a className="lp-button lp-button--secondary" href={WA_ATENDENTE} target="_blank" rel="noreferrer">
               Quero a Atendente
@@ -235,7 +235,7 @@ function Hero({ onLogin }) {
         <div className="lp-hero-visual">
           <div className="lp-hero-chat-card">
             <span>SorrIA diz:</span>
-            <strong>"Confirmei 3 consultas e gerei o orcamento enquanto voce atendia."</strong>
+            <strong>"Confirmei 3 consultas e gerei o orçamento enquanto você atendia."</strong>
           </div>
 
           <div className="lp-hero-avatar-shell">
@@ -248,7 +248,7 @@ function Hero({ onLogin }) {
 
           <div className="lp-hero-impact-card">
             <strong>-70%</strong>
-            <span>de faltas na clinica</span>
+            <span>de faltas na clínica</span>
           </div>
         </div>
       </div>
@@ -261,11 +261,11 @@ function ShowcaseSection() {
     <section className="lp-section lp-section--showcase">
       <div className="lp-container lp-showcase-layout">
         <div className="lp-showcase-copy">
-          <span className="lp-section-kicker">Painel da clinica</span>
-          <h2>Gestao e atendimento no mesmo ecossistema, sem perder a cara humana da SorrIA.</h2>
+          <span className="lp-section-kicker">Painel da clínica</span>
+          <h2>Gestão e atendimento no mesmo ecossistema, sem perder a cara humana da SorrIA.</h2>
           <p>
-            O painel entra como reforco da proposta: mais organizacao, mais clareza e uma operacao que conecta
-            consultorio, agenda, documentos e WhatsApp no mesmo fluxo.
+            O painel entra como reforço da proposta: mais organização, mais clareza e uma operação que conecta
+            consultório, agenda, documentos e WhatsApp no mesmo fluxo.
           </p>
 
           <div className="lp-showcase-notes">
@@ -282,8 +282,8 @@ function ShowcaseSection() {
           <div className="lp-app-preview">
             <div className="lp-app-preview-top">
               <div>
-                <span className="lp-app-chip">Painel da clinica</span>
-                <h2>Operacao centralizada</h2>
+                <span className="lp-app-chip">Painel da clínica</span>
+                <h2>Operação centralizada</h2>
               </div>
               <span className="lp-app-status">Online</span>
             </div>
@@ -294,7 +294,7 @@ function ShowcaseSection() {
                 <strong>128</strong>
               </article>
               <article>
-                <span>Orcamentos em analise</span>
+                <span>Orçamentos em análise</span>
                 <strong>7</strong>
               </article>
               <article>
@@ -308,16 +308,16 @@ function ShowcaseSection() {
                 <span className="lp-preview-kicker">Agenda de hoje</span>
                 <ul>
                   <li>09:30 Clareamento - confirmado</li>
-                  <li>11:00 Avaliacao - lembrete enviado</li>
-                  <li>15:40 Revisao - em andamento</li>
+                  <li>11:00 Avaliação - lembrete enviado</li>
+                  <li>15:40 Revisão - em andamento</li>
                 </ul>
               </div>
               <div className="lp-preview-card">
                 <span className="lp-preview-kicker">SorrIA Atendente</span>
                 <ul>
-                  <li>3 consultas confirmadas enquanto voce atendia</li>
+                  <li>3 consultas confirmadas enquanto você atendia</li>
                   <li>2 pacientes reativados no WhatsApp</li>
-                  <li>1 orcamento encaminhado para fechamento</li>
+                  <li>1 orçamento encaminhado para fechamento</li>
                 </ul>
               </div>
             </div>
@@ -334,9 +334,9 @@ function EcosystemSection() {
       <div className="lp-container">
         <div className="lp-section-heading">
           <span className="lp-section-kicker">Uma proposta clara</span>
-          <h2>Dois produtos, uma experiencia de clinica muito mais madura.</h2>
+          <h2>Dois produtos, uma experiência de clínica muito mais madura.</h2>
           <p>
-            A SorrIA nao vende so "mais uma IA" ou "mais um sistema". Ela organiza o que acontece dentro e fora da clinica.
+            A SorrIA não vende só "mais uma IA" ou "mais um sistema". Ela organiza o que acontece dentro e fora da clínica.
           </p>
         </div>
 
@@ -374,10 +374,10 @@ function ConsultorioSection() {
     <section className="lp-section" id="consultorio">
       <div className="lp-container">
         <div className="lp-section-heading">
-          <span className="lp-section-kicker">Meu Consultorio</span>
-          <h2>O sistema interno precisa parecer uma extensao da sua rotina, nao um obstaculo.</h2>
+          <span className="lp-section-kicker">Meu Consultório</span>
+          <h2>O sistema interno precisa parecer uma extensão da sua rotina, não um obstáculo.</h2>
           <p>
-            A interface foi pensada para dentistas que precisam de velocidade, clareza e apresentacao profissional sem excesso de complexidade.
+            A interface foi pensada para dentistas que precisam de velocidade, clareza e apresentação profissional sem excesso de complexidade.
           </p>
         </div>
 
@@ -397,14 +397,14 @@ function AtendenteSection() {
       <div className="lp-container lp-atendente-layout">
         <div className="lp-atendente-copy">
           <span className="lp-section-kicker lp-section-kicker--dark">SorrIA Atendente</span>
-          <h2>Sua recepcao virtual trabalha enquanto voce foca em atendimento clinico.</h2>
+          <h2>Sua recepção virtual trabalha enquanto você foca em atendimento clínico.</h2>
           <p>
-            Ela responde, confirma, relembra, reage a objecoes e ajuda a recuperar pacientes sem deixar sua operacao depender de horario comercial.
+            Ela responde, confirma, relembra, reage a objeções e ajuda a recuperar pacientes sem deixar sua operação depender de horário comercial.
           </p>
 
           <div className="lp-atendente-cta">
             <a className="lp-button lp-button--primary-bright" href={WA_ATENDENTE} target="_blank" rel="noreferrer">
-              Falar sobre implementacao
+              Falar sobre implementação
             </a>
           </div>
         </div>
@@ -465,36 +465,36 @@ function PricingSection({ onLogin }) {
   const plans = [
     {
       id: 'consultorio',
-      label: 'Gestao interna',
-      title: 'Meu Consultorio',
-      description: 'Organize a clinica por completo com a rotina interna em um painel so.',
-      cta: 'Comecar teste gratis',
+      label: 'Gestão interna',
+      title: 'Meu Consultório',
+      description: 'Organize a clínica por completo com a rotina interna em um painel só.',
+      cta: 'Começar teste grátis',
       ctaAction: 'login',
-      trial: '14 dias gratis, sem cartao',
-      notes: ['Prontuario + odontograma FDI', 'Orcamentos em PDF', 'Receituario e atestados', 'Agenda Google Calendar', 'Pacientes ilimitados no Pro'],
+      trial: '14 dias grátis, sem cartão',
+      notes: ['Prontuário + odontograma FDI', 'Orçamentos em PDF', 'Receituário e atestados', 'Agenda Google Calendar', 'Pacientes ilimitados no Pro'],
     },
     {
       id: 'bundle',
       label: 'Mais completo',
-      title: 'Clinica Conectada',
-      description: 'Consultorio + Atendente integrados no mesmo ecossistema.',
-      cta: 'Quero a Clinica Conectada',
+      title: 'Clínica Conectada',
+      description: 'Consultório + Atendente integrados no mesmo ecossistema.',
+      cta: 'Quero a Clínica Conectada',
       ctaAction: 'whatsapp',
       trial: 'Fale com um especialista',
       highlight: true,
-      notes: ['Tudo do Consultorio Pro', 'SorrIA Atendente configurada', 'Agenda sincronizada bidirecional', 'Acompanhamento de implementacao', 'Fluxo comercial e operacional conectados'],
+      notes: ['Tudo do Consultório Pro', 'SorrIA Atendente configurada', 'Agenda sincronizada bidirecional', 'Acompanhamento de implementação', 'Fluxo comercial e operacional conectados'],
     },
     {
       id: 'atendente',
       label: 'Atendimento externo',
       title: 'SorrIA Atendente',
-      description: 'WhatsApp 24h para sua clinica com configuracao personalizada.',
-      customPrice: 'A partir de R$ 197/mes',
-      detail: '+ taxa de implementacao (consulte)',
-      badge: 'Solicite uma demonstracao',
-      cta: 'Solicitar implementacao',
+      description: 'WhatsApp 24h para sua clínica com configuração personalizada.',
+      customPrice: 'A partir de R$ 197/mês',
+      detail: '+ taxa de implementação (consulte)',
+      badge: 'Solicite uma demonstração',
+      cta: 'Solicitar implementação',
       ctaAction: 'whatsapp',
-      notes: ['Persona personalizada para a clinica', 'Agendamento automatico no WhatsApp', 'Lembretes de consulta', 'Reativacao de pacientes inativos', 'Relatorios de atendimento'],
+      notes: ['Persona personalizada para a clínica', 'Agendamento automático no WhatsApp', 'Lembretes de consulta', 'Reativação de pacientes inativos', 'Relatórios de atendimento'],
     },
   ]
 
@@ -511,10 +511,10 @@ function PricingSection({ onLogin }) {
     <section className="lp-section lp-section--pricing" id="precos">
       <div className="lp-container">
         <div className="lp-section-heading">
-          <span className="lp-section-kicker">Precos</span>
-          <h2>Escolha como a SorrIA vai trabalhar com voce.</h2>
+          <span className="lp-section-kicker">Preços</span>
+          <h2>Escolha como a SorrIA vai trabalhar com você.</h2>
           <p>
-            Comece pela gestao, adicione o atendimento, ou assine o ecossistema completo de uma vez.
+            Comece pela gestão, adicione o atendimento, ou assine o ecossistema completo de uma vez.
           </p>
         </div>
 
@@ -549,7 +549,7 @@ function PricingSection({ onLogin }) {
                     <div className="lp-pricing-price-line">
                       <span>R$</span>
                       <strong>{anual ? precoAnualMes : precoMensal}</strong>
-                      <em>/mes</em>
+                      <em>/mês</em>
                     </div>
                     <p>{anual ? `cobrado anualmente - R$ ${precoAnualTotal}/ano` : 'cobrado mensalmente'}</p>
                     {anual && <span className="lp-pricing-badge">Economize R$ {economia}/ano</span>}
@@ -559,16 +559,16 @@ function PricingSection({ onLogin }) {
                     <div className="lp-pricing-price-line">
                       <span>R$</span>
                       <strong>{anual ? bundleAnualMes : bundleMensal}</strong>
-                      <em>/mes</em>
+                      <em>/mês</em>
                     </div>
-                    <p>{anual ? `cobrado anualmente - R$ ${bundleAnualTotal}/ano` : 'Consultorio + Atendente com integracao nativa'}</p>
+                    <p>{anual ? `cobrado anualmente - R$ ${bundleAnualTotal}/ano` : 'Consultório + Atendente com integração nativa'}</p>
                     {anual ? (
                       <div className="lp-pricing-badge-stack">
                         <span className="lp-pricing-badge">Economize R$ {bundleEconomia}/ano</span>
-                        <span className="lp-pricing-badge lp-pricing-badge--gift">Bonus de implementacao para clinica integrada</span>
+                        <span className="lp-pricing-badge lp-pricing-badge--gift">Bônus de implementação para clínica integrada</span>
                       </div>
                     ) : (
-                      <span className="lp-pricing-badge lp-pricing-badge--muted">+ taxa de implementacao (consulte)</span>
+                      <span className="lp-pricing-badge lp-pricing-badge--muted">+ taxa de implementação (consulte)</span>
                     )}
                   </>
                 ) : plan.customPrice ? (
@@ -608,7 +608,7 @@ function PricingSection({ onLogin }) {
         </div>
 
         <p className="lp-pricing-footnote">
-          Concorrentes cobram mais pela parte interna. Aqui a proposta e organizar o ecossistema inteiro da clinica.
+          Concorrentes cobram mais pela parte interna. Aqui a proposta é organizar o ecossistema inteiro da clínica.
         </p>
       </div>
     </section>
@@ -644,13 +644,13 @@ function Footer() {
       <div className="lp-container lp-footer-inner">
         <div className="lp-footer-brand">
           <img src="/assets/logo.png" alt="SorrIA" />
-          <p>Ecossistema odontologico inteligente para clinicas que querem operar com mais clareza.</p>
+          <p>Ecossistema odontológico inteligente para clínicas que querem operar com mais clareza.</p>
         </div>
 
         <div className="lp-footer-links">
           <div>
             <span>Produtos</span>
-            <a href="#consultorio">Meu Consultorio</a>
+            <a href="#consultorio">Meu Consultório</a>
             <a href="#atendente">SorrIA Atendente</a>
           </div>
           <div>
@@ -661,7 +661,7 @@ function Footer() {
         </div>
       </div>
       <div className="lp-footer-bottom">
-        © {new Date().getFullYear()} SorrIA - Divinopolis, MG - Todos os direitos reservados.
+        © {new Date().getFullYear()} SorrIA - Divinópolis, MG - Todos os direitos reservados.
       </div>
     </footer>
   )
@@ -672,7 +672,7 @@ function ChatWidget() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Ola! Sou a SorrIA. Posso te ajudar a entender como o ecossistema pode transformar a sua clinica.',
+      content: 'Olá! Sou a SorrIA. Posso te ajudar a entender como o ecossistema pode transformar a sua clínica.',
     },
   ])
   const [input, setInput] = useState('')
@@ -728,7 +728,7 @@ function ChatWidget() {
         ...current,
         {
           role: 'assistant',
-          content: 'Tive um problema de conexao. Se preferir, me chame direto no WhatsApp: (37) 99972-2971.',
+          content: 'Tive um problema de conexão. Se preferir, me chame direto no WhatsApp: (37) 99972-2971.',
         },
       ])
     } finally {
@@ -807,7 +807,7 @@ function ChatWidget() {
                   send()
                 }
               }}
-              placeholder="Escreva sua duvida..."
+              placeholder="Escreva sua dúvida..."
               disabled={loading}
             />
             <button type="button" className="lp-chat-send" onClick={send} disabled={loading || !input.trim()}>
