@@ -19,6 +19,17 @@ const HERO_PROMISES = [
   'Sem fidelidade',
 ]
 
+const SHOWCASE_SUMMARY = [
+  {
+    label: 'Consultorio',
+    title: 'Prontuario, agenda e documentos com cara de clinica organizada.',
+  },
+  {
+    label: 'Atendente',
+    title: 'Confirmacoes, reativacao e WhatsApp trabalhando no mesmo fluxo.',
+  },
+]
+
 const OPERATION_PILLARS = [
   {
     title: 'Dentro da clinica',
@@ -188,18 +199,18 @@ function Hero({ onLogin }) {
     <section className="lp-hero" id="topo">
       <div className="lp-container lp-hero-grid">
         <div className="lp-hero-copy">
-          <span className="lp-eyebrow">Ecossistema odontologico integrado</span>
+          <span className="lp-hero-badge">O ecossistema odontologico completo</span>
           <h1>
-            Dentro e fora da clinica, a <span>SorrIA</span> organiza a operacao inteira.
+            Dentro e fora da clinica, <span>a SorrIA cuida de tudo</span>
           </h1>
           <p className="lp-hero-text">
-            Um produto cuida da gestao clinica. O outro atende no WhatsApp 24h.
-            Juntos, eles deixam a sua clinica mais rapida, mais profissional e menos dependente de improviso.
+            Gestao interna completa + atendimento 24h pelo WhatsApp. Dois produtos integrados, uma clinica que
+            funciona com mais previsibilidade, mais velocidade e menos improviso.
           </p>
 
           <div className="lp-hero-actions">
             <button type="button" className="lp-button lp-button--primary" onClick={onLogin}>
-              Testar o Consultorio
+              Comecar gratis
             </button>
             <a className="lp-button lp-button--secondary" href={WA_ATENDENTE} target="_blank" rel="noreferrer">
               Quero a Atendente
@@ -214,81 +225,96 @@ function Hero({ onLogin }) {
             ))}
           </div>
 
-          <div className="lp-hero-stats">
-            <article>
-              <strong>+ agilidade</strong>
-              <span>documentos, agenda e orcamentos em um fluxo so</span>
-            </article>
-            <article>
-              <strong>24h online</strong>
-              <span>WhatsApp ativo enquanto voce atende pacientes</span>
-            </article>
-          </div>
         </div>
 
         <div className="lp-hero-visual">
-          <div className="lp-hero-stage">
-            <div className="lp-app-preview">
-              <div className="lp-app-preview-top">
-                <div>
-                  <span className="lp-app-chip">Painel da clinica</span>
-                  <h2>Operacao centralizada</h2>
-                </div>
-                <span className="lp-app-status">Online</span>
-              </div>
+          <div className="lp-hero-chat-card">
+            <span>SorrIA diz:</span>
+            <strong>"Confirmei 3 consultas e gerei o orcamento enquanto voce atendia."</strong>
+          </div>
 
-              <div className="lp-app-preview-grid">
-                <article>
-                  <span>Pacientes ativos</span>
-                  <strong>128</strong>
-                </article>
-                <article>
-                  <span>Orcamentos em analise</span>
-                  <strong>7</strong>
-                </article>
-                <article>
-                  <span>Consultas confirmadas</span>
-                  <strong>19</strong>
-                </article>
-              </div>
+          <div className="lp-hero-avatar-shell">
+            <img src="/assets/sorria-avatar.jpg" alt="SorrIA em atendimento" />
+            <div className="lp-hero-avatar-footer">
+              <i />
+              <span>SorrIA - Online agora</span>
+            </div>
+          </div>
 
-              <div className="lp-app-preview-panels">
-                <div className="lp-preview-card">
-                  <span className="lp-preview-kicker">Agenda de hoje</span>
-                  <ul>
-                    <li>09:30 Clareamento - confirmado</li>
-                    <li>11:00 Avaliacao - lembrete enviado</li>
-                    <li>15:40 Revisao - em andamento</li>
-                  </ul>
-                </div>
-                <div className="lp-preview-card">
-                  <span className="lp-preview-kicker">SorrIA Atendente</span>
-                  <ul>
-                    <li>3 consultas confirmadas enquanto voce atendia</li>
-                    <li>2 pacientes reativados no WhatsApp</li>
-                    <li>1 orcamento encaminhado para fechamento</li>
-                  </ul>
-                </div>
+          <div className="lp-hero-impact-card">
+            <strong>-70%</strong>
+            <span>de faltas na clinica</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function ShowcaseSection() {
+  return (
+    <section className="lp-section lp-section--showcase">
+      <div className="lp-container lp-showcase-layout">
+        <div className="lp-showcase-copy">
+          <span className="lp-section-kicker">Painel da clinica</span>
+          <h2>O sistema aparece no momento certo: depois que a proposta humana ja convenceu.</h2>
+          <p>
+            A cara da SorrIA continua sendo atendimento, proximidade e resultado. Mais abaixo, o software entra em
+            cena com o painel que passa seguranca, organizacao e operacao centralizada.
+          </p>
+
+          <div className="lp-showcase-notes">
+            {SHOWCASE_SUMMARY.map((item) => (
+              <article key={item.label} className="lp-showcase-note">
+                <span>{item.label}</span>
+                <strong>{item.title}</strong>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="lp-showcase-panel">
+          <div className="lp-app-preview">
+            <div className="lp-app-preview-top">
+              <div>
+                <span className="lp-app-chip">Painel da clinica</span>
+                <h2>Operacao centralizada</h2>
               </div>
+              <span className="lp-app-status">Online</span>
             </div>
 
-            <div className="lp-avatar-card">
-              <div className="lp-avatar-copy">
-                <span className="lp-eyebrow lp-eyebrow--mini">Atendente virtual</span>
-                <strong>SorrIA em atendimento ao vivo</strong>
-                <p>"Confirmei 3 consultas e preparei o retorno do paciente sem parar sua rotina."</p>
+            <div className="lp-app-preview-grid">
+              <article>
+                <span>Pacientes ativos</span>
+                <strong>128</strong>
+              </article>
+              <article>
+                <span>Orcamentos em analise</span>
+                <strong>7</strong>
+              </article>
+              <article>
+                <span>Consultas confirmadas</span>
+                <strong>19</strong>
+              </article>
+            </div>
+
+            <div className="lp-app-preview-panels">
+              <div className="lp-preview-card">
+                <span className="lp-preview-kicker">Agenda de hoje</span>
+                <ul>
+                  <li>09:30 Clareamento - confirmado</li>
+                  <li>11:00 Avaliacao - lembrete enviado</li>
+                  <li>15:40 Revisao - em andamento</li>
+                </ul>
               </div>
-              <img src="/assets/sorria-avatar.jpg" alt="Avatar da SorrIA" />
-            </div>
-
-            <div className="lp-floating-note lp-floating-note--left">
-              <span>Consultorio</span>
-              <strong>PDFs, agenda e prontuario em uma interface so.</strong>
-            </div>
-
-            <div className="lp-floating-note lp-floating-note--right">
-              <span>Atendente</span>
-              <strong>WhatsApp, confirmacoes e reativacao no mesmo ecossistema.</strong>
+              <div className="lp-preview-card">
+                <span className="lp-preview-kicker">SorrIA Atendente</span>
+                <ul>
+                  <li>3 consultas confirmadas enquanto voce atendia</li>
+                  <li>2 pacientes reativados no WhatsApp</li>
+                  <li>1 orcamento encaminhado para fechamento</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -772,6 +798,7 @@ export default function LandingPage() {
     <div className="lp-page-shell">
       <Navbar onLogin={goToLogin} />
       <Hero onLogin={goToLogin} />
+      <ShowcaseSection />
       <EcosystemSection />
       <ConsultorioSection />
       <AtendenteSection />
