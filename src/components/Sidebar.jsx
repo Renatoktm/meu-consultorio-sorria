@@ -5,8 +5,10 @@ import { usePlano } from '../hooks/usePlano'
 const Icons = {
   dashboard: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-      <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+      <rect x="3" y="3" width="7" height="7" />
+      <rect x="14" y="3" width="7" height="7" />
+      <rect x="14" y="14" width="7" height="7" />
+      <rect x="3" y="14" width="7" height="7" />
     </svg>
   ),
   pacientes: (
@@ -20,7 +22,8 @@ const Icons = {
   agenda: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-      <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
       <line x1="3" y1="10" x2="21" y2="10" />
     </svg>
   ),
@@ -46,11 +49,11 @@ const Icons = {
 }
 
 const modulos = [
-  { path: '/dashboard',     icon: Icons.dashboard,  label: 'Dashboard' },
-  { path: '/pacientes',     icon: Icons.pacientes,  label: 'Pacientes' },
-  { path: '/agenda',        icon: Icons.agenda,     label: 'Agenda' },
-  { path: '/orcamento',     icon: Icons.orcamento,  label: 'Orçamentos' },
-  { path: '/configuracoes', icon: Icons.config,     label: 'Configurações' },
+  { path: '/dashboard', icon: Icons.dashboard, label: 'Dashboard', hint: 'Resumo da operacao' },
+  { path: '/pacientes', icon: Icons.pacientes, label: 'Pacientes', hint: 'Cadastros e prontuarios' },
+  { path: '/agenda', icon: Icons.agenda, label: 'Agenda', hint: 'Consultas e rotina diaria' },
+  { path: '/orcamento', icon: Icons.orcamento, label: 'Orcamentos', hint: 'Propostas e retornos' },
+  { path: '/configuracoes', icon: Icons.config, label: 'Configuracoes', hint: 'Plano e integracoes' },
 ]
 
 export default function Sidebar() {
@@ -59,13 +62,25 @@ export default function Sidebar() {
   const { profile, user, signOut } = useAuth()
   const { plano } = usePlano()
 
-  function isActive(m) {
-    if (m.path === '/pacientes') return location.pathname.startsWith('/pacientes')
-    return location.pathname === m.path
+  function isActive(modulo) {
+    if (modulo.path === '/pacientes') return location.pathname.startsWith('/pacientes')
+    return location.pathname === modulo.path
   }
 
   const iniciais = (profile?.nome || user?.email || 'U')
-    .split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+    .split(' ')
+    .map(parte => parte[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+
+  const clinica = profile?.clinica || 'Meu consultorio'
+  const nome = profile?.nome || user?.email?.split('@')[0] || 'Dentista'
+  const planLabel = plano === 'pro'
+    ? 'Plano Pro ativo'
+    : plano === 'trial'
+      ? 'Periodo de teste'
+      : 'Plano gratuito'
 
   async function handleLogout() {
     await signOut()
@@ -74,42 +89,46 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      {/* Logo */}
       <div className="sidebar-logo">
-        <img src="/assets/logo.png" alt="SorrIA" style={{ height: 36, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+        <img src="/assets/logo.png" alt="SorrIA" style={{ height: 38, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+        <div className="sidebar-brand-copy">
+          <span className="sidebar-brand-kicker">Consultorio inteligente</span>
+          <strong className="sidebar-brand-title">Painel SorrIA</strong>
+        </div>
       </div>
 
-      {/* Nav */}
+      <div className="sidebar-status">
+        <span className="sidebar-status-dot" />
+        <div className="sidebar-status-copy">
+          <div className="sidebar-status-label">Operacao ativa</div>
+          <div className="sidebar-status-text">{clinica}</div>
+        </div>
+      </div>
+
       <div className="sidebar-nav">
-        <div className="sidebar-label">Menu</div>
-        {modulos.map(m => (
+        <div className="sidebar-label">Navegacao</div>
+        {modulos.map(modulo => (
           <button
-            key={m.path}
-            className={`sidebar-item ${isActive(m) ? 'active' : ''}`}
-            onClick={() => navigate(m.path)}
+            key={modulo.path}
+            className={`sidebar-item ${isActive(modulo) ? 'active' : ''}`}
+            onClick={() => navigate(modulo.path)}
           >
-            <span className="sidebar-icon">{m.icon}</span>
-            {m.label}
+            <span className="sidebar-icon">{modulo.icon}</span>
+            <span className="sidebar-item-copy">
+              <span className="sidebar-item-label">{modulo.label}</span>
+              <span className="sidebar-item-hint">{modulo.hint}</span>
+            </span>
           </button>
         ))}
       </div>
 
-      {/* Footer */}
       <div className="sidebar-footer">
         <div className="sidebar-footer-avatar">{iniciais}</div>
         <div className="sidebar-footer-info">
-          <div className="sidebar-footer-name">{profile?.clinica || profile?.nome || 'Minha Clínica'}</div>
-          <div className="sidebar-footer-plan">
-            {plano === 'pro' ? '⭐ Pro' : plano === 'trial' ? '🕐 Trial' : 'Gratuito'}
-          </div>
+          <div className="sidebar-footer-name">{nome}</div>
+          <div className="sidebar-footer-plan">{planLabel}</div>
         </div>
-        <button
-          onClick={handleLogout}
-          title="Sair"
-          style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', flexShrink: 0 }}
-          onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
-          onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}
-        >
+        <button onClick={handleLogout} title="Sair" className="sidebar-logout">
           {Icons.logout}
         </button>
       </div>
