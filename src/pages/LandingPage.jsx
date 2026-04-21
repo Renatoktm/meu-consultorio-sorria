@@ -201,7 +201,12 @@ function Hero({ onLogin }) {
         <div className="lp-hero-copy">
           <span className="lp-hero-badge">O ecossistema odontologico completo</span>
           <h1>
-            Dentro e fora da clinica, <span>a SorrIA cuida de tudo</span>
+            Dentro e fora da clinica,{' '}
+            <span className="lp-brand-word">
+              <span className="lp-brand-sorr">a Sorr</span>
+              <span className="lp-brand-ia">IA</span>
+            </span>{' '}
+            cuida de tudo
           </h1>
           <p className="lp-hero-text">
             Gestao interna completa + atendimento 24h pelo WhatsApp. Dois produtos integrados, uma clinica que
@@ -257,10 +262,10 @@ function ShowcaseSection() {
       <div className="lp-container lp-showcase-layout">
         <div className="lp-showcase-copy">
           <span className="lp-section-kicker">Painel da clinica</span>
-          <h2>O sistema aparece no momento certo: depois que a proposta humana ja convenceu.</h2>
+          <h2>Gestao e atendimento no mesmo ecossistema, sem perder a cara humana da SorrIA.</h2>
           <p>
-            A cara da SorrIA continua sendo atendimento, proximidade e resultado. Mais abaixo, o software entra em
-            cena com o painel que passa seguranca, organizacao e operacao centralizada.
+            O painel entra como reforco da proposta: mais organizacao, mais clareza e uma operacao que conecta
+            consultorio, agenda, documentos e WhatsApp no mesmo fluxo.
           </p>
 
           <div className="lp-showcase-notes">
@@ -463,12 +468,9 @@ function PricingSection({ onLogin }) {
       label: 'Gestao interna',
       title: 'Meu Consultorio',
       description: 'Organize a clinica por completo com a rotina interna em um painel so.',
-      price: anual ? `${precoAnualMes}` : `${precoMensal}`,
-      suffix: '/mes',
-      detail: anual ? `cobrado anualmente - R$ ${precoAnualTotal}/ano` : 'cobrado mensalmente',
-      badge: anual ? `Economize R$ ${economia}/ano` : '14 dias gratis, sem cartao',
       cta: 'Comecar teste gratis',
       ctaAction: 'login',
+      trial: '14 dias gratis, sem cartao',
       notes: ['Prontuario + odontograma FDI', 'Orcamentos em PDF', 'Receituario e atestados', 'Agenda Google Calendar', 'Pacientes ilimitados no Pro'],
     },
     {
@@ -476,12 +478,9 @@ function PricingSection({ onLogin }) {
       label: 'Mais completo',
       title: 'Clinica Conectada',
       description: 'Consultorio + Atendente integrados no mesmo ecossistema.',
-      price: anual ? `${bundleAnualMes}` : `${bundleMensal}`,
-      suffix: '/mes',
-      detail: anual ? `cobrado anualmente - R$ ${bundleAnualTotal}/ano` : 'Consultorio + Atendente com integracao nativa',
-      badge: anual ? `Economize R$ ${bundleEconomia}/ano` : 'Setup e implementacao sob consulta',
       cta: 'Quero a Clinica Conectada',
       ctaAction: 'whatsapp',
+      trial: 'Fale com um especialista',
       highlight: true,
       notes: ['Tudo do Consultorio Pro', 'SorrIA Atendente configurada', 'Agenda sincronizada bidirecional', 'Acompanhamento de implementacao', 'Fluxo comercial e operacional conectados'],
     },
@@ -513,9 +512,9 @@ function PricingSection({ onLogin }) {
       <div className="lp-container">
         <div className="lp-section-heading">
           <span className="lp-section-kicker">Precos</span>
-          <h2>Escolha o nivel de operacao que a sua clinica precisa agora.</h2>
+          <h2>Escolha como a SorrIA vai trabalhar com voce.</h2>
           <p>
-            A proposta comercial continua simples: comecar no Consultorio, contratar a Atendente ou ligar tudo no mesmo ecossistema.
+            Comece pela gestao, adicione o atendimento, ou assine o ecossistema completo de uma vez.
           </p>
         </div>
 
@@ -533,6 +532,7 @@ function PricingSection({ onLogin }) {
             onClick={() => setPeriodo('anual')}
           >
             Anual
+            <span className="lp-pricing-discount-tag">Economize 17%</span>
           </button>
         </div>
 
@@ -544,7 +544,34 @@ function PricingSection({ onLogin }) {
               <p className="lp-pricing-description">{plan.description}</p>
 
               <div className="lp-pricing-price-block">
-                {plan.customPrice ? (
+                {plan.id === 'consultorio' ? (
+                  <>
+                    <div className="lp-pricing-price-line">
+                      <span>R$</span>
+                      <strong>{anual ? precoAnualMes : precoMensal}</strong>
+                      <em>/mes</em>
+                    </div>
+                    <p>{anual ? `cobrado anualmente - R$ ${precoAnualTotal}/ano` : 'cobrado mensalmente'}</p>
+                    {anual && <span className="lp-pricing-badge">Economize R$ {economia}/ano</span>}
+                  </>
+                ) : plan.id === 'bundle' ? (
+                  <>
+                    <div className="lp-pricing-price-line">
+                      <span>R$</span>
+                      <strong>{anual ? bundleAnualMes : bundleMensal}</strong>
+                      <em>/mes</em>
+                    </div>
+                    <p>{anual ? `cobrado anualmente - R$ ${bundleAnualTotal}/ano` : 'Consultorio + Atendente com integracao nativa'}</p>
+                    {anual ? (
+                      <div className="lp-pricing-badge-stack">
+                        <span className="lp-pricing-badge">Economize R$ {bundleEconomia}/ano</span>
+                        <span className="lp-pricing-badge lp-pricing-badge--gift">Bonus de implementacao para clinica integrada</span>
+                      </div>
+                    ) : (
+                      <span className="lp-pricing-badge lp-pricing-badge--muted">+ taxa de implementacao (consulte)</span>
+                    )}
+                  </>
+                ) : plan.customPrice ? (
                   <strong className="lp-pricing-custom">{plan.customPrice}</strong>
                 ) : (
                   <div className="lp-pricing-price-line">
@@ -553,8 +580,12 @@ function PricingSection({ onLogin }) {
                     <em>{plan.suffix}</em>
                   </div>
                 )}
-                <p>{plan.detail}</p>
-                <span className="lp-pricing-badge">{plan.badge}</span>
+                {plan.id === 'atendente' && (
+                  <>
+                    <p>{plan.detail}</p>
+                    <span className="lp-pricing-badge">{plan.badge}</span>
+                  </>
+                )}
               </div>
 
               <ul className="lp-pricing-list">
@@ -565,7 +596,9 @@ function PricingSection({ onLogin }) {
 
               <button
                 type="button"
-                className={`lp-button ${plan.highlight ? 'lp-button--primary-bright' : 'lp-button--primary'}`}
+                className={`lp-button ${
+                  plan.highlight ? 'lp-button--primary-bright' : plan.id === 'atendente' ? 'lp-button--whatsapp' : 'lp-button--primary'
+                }`}
                 onClick={() => handleCta(plan.ctaAction)}
               >
                 {plan.cta}
@@ -575,7 +608,7 @@ function PricingSection({ onLogin }) {
         </div>
 
         <p className="lp-pricing-footnote">
-          Concorrentes costumam cobrar mais pela parte interna. Aqui a ideia e organizar o ecossistema inteiro da clinica.
+          Concorrentes cobram mais pela parte interna. Aqui a proposta e organizar o ecossistema inteiro da clinica.
         </p>
       </div>
     </section>
