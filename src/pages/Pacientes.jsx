@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePacientes } from '../hooks/usePacientes'
 import { usePlano } from '../hooks/usePlano'
+import { sanitizePhoneForWhatsApp } from '../lib/utils'
 
 const C = { primary: '#1a8a7b', dark: '#136b5e' }
 
@@ -230,7 +231,7 @@ export default function Pacientes() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {filtrados.map(p => {
             const idade = calcIdade(p.data_nascimento)
-            const tel = p.telefone?.replace(/\D/g, '')
+            const tel = sanitizePhoneForWhatsApp(p.telefone)
             const info = [
               idade != null && `${idade} anos`,
               p.telefone,

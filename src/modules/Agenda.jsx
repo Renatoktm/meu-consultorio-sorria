@@ -49,7 +49,7 @@ export default function Agenda() {
   const { user } = useAuth()
   const { pacientes } = usePacientes()
   const toast = useToast()
-  const { isConnected, loading: gcLoading, connectGoogle, getEvents, createEvent, deleteEvent } = useGoogleCalendar()
+  const { isConnected, isReconnecting, loading: gcLoading, connectGoogle, getEvents, createEvent, deleteEvent } = useGoogleCalendar()
 
   const hoje = useMemo(() => new Date(), [])
 
@@ -206,6 +206,29 @@ export default function Agenda() {
     date.getDate() === hoje.getDate() &&
     date.getMonth() === hoje.getMonth() &&
     date.getFullYear() === hoje.getFullYear()
+
+  // ─── Reconectando silenciosamente ─────────────────────────────────────────
+  if (!isConnected && isReconnecting) {
+    return (
+      <div>
+        <div className="page-header">
+          <div>
+            <h1 className="page-title">📅 Agenda</h1>
+            <p className="page-subtitle">Gerencie suas consultas integradas ao Google Calendar</p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 360 }}>
+          <div className="card" style={{ textAlign: 'center', maxWidth: 420, padding: '40px 32px' }}>
+            <div style={{ fontSize: 52, marginBottom: 16 }}>🔄</div>
+            <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: '#1f2937' }}>Reconectando ao Google Calendar...</h2>
+            <p style={{ color: '#6b7280', fontSize: 14, lineHeight: 1.6 }}>
+              Aguarde enquanto sua agenda é reconectada automaticamente.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // ─── Não conectado ────────────────────────────────────────────────────────
   if (!isConnected) {

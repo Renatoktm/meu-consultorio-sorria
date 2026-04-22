@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf'
 import { buildClinicHeader } from './pdfHelper'
+import { sanitizeForPDF } from './utils'
 
 function rodape(doc) {
   const hoje = new Date().toLocaleDateString('pt-BR')
@@ -38,7 +39,7 @@ export function gerarOrcamentoPDF({
 
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Paciente: ${paciente}`, 14, 57)
+  doc.text(`Paciente: ${sanitizeForPDF(paciente, 80)}`, 14, 57)
   doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 150, 57)
 
   doc.setDrawColor(13, 148, 136)
@@ -139,8 +140,8 @@ export function gerarReceituarioPDF({ paciente, data, idade, medicamentos, obser
 
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Paciente: ${paciente}`, 14, 59)
-  if (idade) doc.text(`Idade: ${idade}`, 120, 59)
+  doc.text(`Paciente: ${sanitizeForPDF(paciente, 80)}`, 14, 59)
+  if (idade) doc.text(`Idade: ${sanitizeForPDF(String(idade), 10)}`, 120, 59)
   doc.text(`Data: ${data || new Date().toLocaleDateString('pt-BR')}`, 150, 59)
 
   doc.setDrawColor(220, 220, 220)
@@ -148,16 +149,16 @@ export function gerarReceituarioPDF({ paciente, data, idade, medicamentos, obser
 
   let y = 73
   medicamentos.forEach((m, i) => {
-    const nome = m.nome || m.medicamento || ''
+    const nome = sanitizeForPDF(m.nome || m.medicamento || '', 80)
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(10)
     doc.text(`${i + 1}. ${nome}`, 14, y)
     y += 6
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(9)
-    if (m.posologia) { doc.text(`    Posologia: ${m.posologia}`, 14, y); y += 5 }
-    if (m.via)      { doc.text(`    Via: ${m.via}`, 14, y); y += 5 }
-    if (m.quantidade) { doc.text(`    Quantidade: ${m.quantidade}`, 14, y); y += 5 }
+    if (m.posologia) { doc.text(`    Posologia: ${sanitizeForPDF(m.posologia, 100)}`, 14, y); y += 5 }
+    if (m.via)      { doc.text(`    Via: ${sanitizeForPDF(m.via, 40)}`, 14, y); y += 5 }
+    if (m.quantidade) { doc.text(`    Quantidade: ${sanitizeForPDF(m.quantidade, 40)}`, 14, y); y += 5 }
     y += 4
   })
 
@@ -168,7 +169,7 @@ export function gerarReceituarioPDF({ paciente, data, idade, medicamentos, obser
     doc.text('Observações:', 14, y)
     y += 5
     doc.setFont('helvetica', 'normal')
-    const linhas = doc.splitTextToSize(observacoes, 170)
+    const linhas = doc.splitTextToSize(sanitizeForPDF(observacoes, 500), 170)
     doc.text(linhas, 14, y)
     y += linhas.length * 5 + 4
   }
@@ -271,7 +272,7 @@ export function gerarExamesPDF({ paciente, data, exames, obsGeral, dentista, cro
 
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
-  doc.text(`Paciente: ${paciente}`, 14, 59)
+  doc.text(`Paciente: ${sanitizeForPDF(paciente, 80)}`, 14, 59)
   doc.text(`Data: ${data || new Date().toLocaleDateString('pt-BR')}`, 150, 59)
 
   doc.setDrawColor(220, 220, 220)
@@ -290,19 +291,19 @@ export function gerarExamesPDF({ paciente, data, exames, obsGeral, dentista, cro
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(9)
     doc.setTextColor(80, 80, 80)
-    doc.text(grupo.toUpperCase(), 14, y)
+    doc.text(sanitizeForPDF(grupo, 50).toUpperCase(), 14, y)
     y += 5
     doc.setTextColor(0, 0, 0)
 
     itens.forEach(e => {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(10)
-      doc.text(`${n}. ${e.nome}`, 18, y)
+      doc.text(`${n}. ${sanitizeForPDF(e.nome, 80)}`, 18, y)
       y += 6
       if (e.obs) {
         doc.setFontSize(8)
         doc.setTextColor(100, 100, 100)
-        doc.text(`   Obs: ${e.obs}`, 18, y)
+        doc.text(`   Obs: ${sanitizeForPDF(e.obs, 100)}`, 18, y)
         doc.setTextColor(0, 0, 0)
         y += 5
       }

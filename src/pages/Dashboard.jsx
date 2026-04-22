@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { useGoogleCalendar } from '../hooks/useGoogleCalendar'
 import { usePlano } from '../hooks/usePlano'
 import ModalUpgrade from '../components/ModalUpgrade'
+import { sanitizePhoneForWhatsApp } from '../lib/utils'
 import '../styles/dashboard.css'
 
 const moneyFormatter = new Intl.NumberFormat('pt-BR', {
@@ -188,12 +189,12 @@ export default function Dashboard() {
   }
 
   function abrirWhatsApp(telefone) {
-    const numero = (telefone || '').replace(/\D/g, '')
+    const numero = sanitizePhoneForWhatsApp(telefone)
     if (!numero) {
-      alert('Telefone nao cadastrado para este paciente.')
+      alert('Telefone inválido ou não cadastrado para este paciente.')
       return
     }
-    window.open(`https://wa.me/55${numero}`, '_blank')
+    window.open(`https://wa.me/55${numero}`, '_blank', 'noopener,noreferrer')
   }
 
   const mesAtual = new Date().toLocaleDateString('pt-BR', {
