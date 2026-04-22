@@ -299,7 +299,7 @@ export default function PacienteDetalhe() {
   const carregarEvolucoes = useCallback(async () => {
     if (!paciente?.id) return
     setCarregandoEvol(true)
-    const { data, error } = await supabase.from('evolucoes').select('*').eq('paciente_id', paciente.id).order('data_atendimento', { ascending: false })
+    const { data, error } = await supabase.from('evolucoes').select('*').eq('paciente_id', paciente.id).eq('user_id', user.id).order('data_atendimento', { ascending: false })
     if (!error) setEvolucoes(data || [])
     else setEvolucoes([])
     setCarregandoEvol(false)
@@ -330,13 +330,13 @@ export default function PacienteDetalhe() {
   const carregarOrcamentos = useCallback(async () => {
     if (!paciente?.id) return
     setCarregandoOrc(true)
-    const { data } = await supabase.from('orcamentos').select('*').eq('paciente_id', paciente.id).order('created_at', { ascending: false })
+    const { data } = await supabase.from('orcamentos').select('*').eq('paciente_id', paciente.id).eq('user_id', user.id).order('created_at', { ascending: false })
     setOrcamentos(data || [])
     setCarregandoOrc(false)
   }, [paciente?.id])
 
   async function atualizarStatusOrc(id, novoStatus) {
-    const { error } = await supabase.from('orcamentos').update({ status: novoStatus }).eq('id', id)
+    const { error } = await supabase.from('orcamentos').update({ status: novoStatus }).eq('id', id).eq('user_id', user.id)
     if (error) { toast('Erro ao atualizar status.', 'error'); return }
     setOrcamentos(prev => prev.map(o => o.id === id ? { ...o, status: novoStatus } : o))
   }

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../styles/landing.css'
 
-const SUPABASE_URL = 'https://nfkhnjglkvyduhzauavh.supabase.co'
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const CHAT_URL = `${SUPABASE_URL}/functions/v1/sorria-chat`
 
 const WA_ATENDENTE = 'https://wa.me/5537999722971?text=Ol%C3%A1!%20Tenho%20interesse%20na%20SorrIA%20Atendente%20Virtual%20para%20minha%20cl%C3%ADnica.%20Pode%20me%20explicar%20como%20funciona%20a%20implementa%C3%A7%C3%A3o%3F'

@@ -16,8 +16,12 @@ export default function Cadastro() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (form.senha.length < 6) {
-      toast('A senha deve ter pelo menos 6 caracteres.', 'error')
+    if (form.senha.length < 8) {
+      toast('A senha deve ter pelo menos 8 caracteres.', 'error')
+      return
+    }
+    if (!/[A-Za-z]/.test(form.senha) || !/[0-9]/.test(form.senha)) {
+      toast('A senha deve conter letras e números.', 'error')
       return
     }
     setLoading(true)
@@ -62,7 +66,7 @@ export default function Cadastro() {
           </div>
           <div className="form-group">
             <label className="form-label">Senha *</label>
-            <input className="form-input" type="password" placeholder="Mínimo 6 caracteres" value={form.senha} onChange={set('senha')} required />
+            <input className="form-input" type="password" placeholder="Mínimo 8 caracteres com letras e números" value={form.senha} onChange={set('senha')} required />
           </div>
           <button type="submit" className="btn btn-primary btn-lg w-full" disabled={loading}>
             {loading ? 'Criando...' : 'Criar conta gratuita'}

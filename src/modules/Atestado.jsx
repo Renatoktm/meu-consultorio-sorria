@@ -6,6 +6,7 @@ import { useToast } from '../components/Toast'
 import Autocomplete from '../components/Autocomplete'
 import { gerarAtestadoPDF } from '../lib/pdf'
 import { fetchClinicaData } from '../lib/pdfHelper'
+import { maskCPF } from '../lib/utils'
 
 const O = {
   primary: '#ea580c', dark: '#c2410c', bg: '#fff7ed',
@@ -100,7 +101,7 @@ export default function Atestado() {
         {pacienteSelecionado && (
           <div style={{ marginTop: 10, padding: '8px 12px', background: O.bg, borderRadius: 6, fontSize: 13, color: O.text }}>
             ✅ {pacienteSelecionado.nome}
-            {pacienteSelecionado.cpf && <> · CPF: <strong>{pacienteSelecionado.cpf}</strong></>}
+            {pacienteSelecionado.cpf && <> · CPF: <strong>{maskCPF(pacienteSelecionado.cpf)}</strong></>}
           </div>
         )}
         <div className="form-row" style={{ marginTop: 14 }}>
@@ -145,7 +146,7 @@ export default function Atestado() {
           Atesto para os devidos fins que o(a) paciente{' '}
           <strong>{pacienteSelecionado?.nome || '[nome do paciente]'}</strong>
           {pacienteSelecionado?.cpf
-            ? <>, portador(a) do CPF <strong>{pacienteSelecionado.cpf}</strong>,</>
+            ? <>, portador(a) do CPF <strong>{maskCPF(pacienteSelecionado.cpf)}</strong>,</>
             : ','
           }
           {' '}esteve sob meus cuidados odontológicos no dia{' '}
