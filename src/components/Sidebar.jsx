@@ -49,11 +49,11 @@ const Icons = {
 }
 
 const modulos = [
-  { path: '/dashboard', icon: Icons.dashboard, label: 'Dashboard', hint: 'Resumo da operacao' },
-  { path: '/pacientes', icon: Icons.pacientes, label: 'Pacientes', hint: 'Cadastros e prontuarios' },
-  { path: '/agenda', icon: Icons.agenda, label: 'Agenda', hint: 'Consultas e rotina diaria' },
-  { path: '/orcamento', icon: Icons.orcamento, label: 'Orcamentos', hint: 'Propostas e retornos' },
-  { path: '/configuracoes', icon: Icons.config, label: 'Configuracoes', hint: 'Plano e integracoes' },
+  { path: '/dashboard', icon: Icons.dashboard, label: 'Dashboard', hint: 'Resumo da operação' },
+  { path: '/pacientes', icon: Icons.pacientes, label: 'Pacientes', hint: 'Cadastros e prontuários' },
+  { path: '/agenda', icon: Icons.agenda, label: 'Agenda', hint: 'Consultas e rotina diária' },
+  { path: '/orcamento', icon: Icons.orcamento, label: 'Orçamentos', hint: 'Propostas e retornos' },
+  { path: '/configuracoes', icon: Icons.config, label: 'Configurações', hint: 'Plano e integrações' },
 ]
 
 export default function Sidebar() {
@@ -74,12 +74,12 @@ export default function Sidebar() {
     .toUpperCase()
     .slice(0, 2)
 
-  const clinica = profile?.clinica || 'Meu consultorio'
+  const clinica = profile?.clinica || 'Meu consultório'
   const nome = profile?.nome || user?.email?.split('@')[0] || 'Dentista'
   const planLabel = plano === 'pro'
     ? 'Plano Pro ativo'
     : plano === 'trial'
-      ? 'Periodo de teste'
+      ? 'Período de teste'
       : 'Plano gratuito'
 
   async function handleLogout() {
@@ -92,7 +92,7 @@ export default function Sidebar() {
       <div className="sidebar-logo">
         <img src="/assets/logo.png" alt="SorrIA" style={{ height: 38, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
         <div className="sidebar-brand-copy">
-          <span className="sidebar-brand-kicker">Consultorio inteligente</span>
+          <span className="sidebar-brand-kicker">Consultório inteligente</span>
           <strong className="sidebar-brand-title">Painel SorrIA</strong>
         </div>
       </div>
@@ -100,13 +100,13 @@ export default function Sidebar() {
       <div className="sidebar-status">
         <span className="sidebar-status-dot" />
         <div className="sidebar-status-copy">
-          <div className="sidebar-status-label">Operacao ativa</div>
+          <div className="sidebar-status-label">Operação ativa</div>
           <div className="sidebar-status-text">{clinica}</div>
         </div>
       </div>
 
       <div className="sidebar-nav">
-        <div className="sidebar-label">Navegacao</div>
+        <div className="sidebar-label">Navegação</div>
         {modulos.map(modulo => (
           <button
             key={modulo.path}

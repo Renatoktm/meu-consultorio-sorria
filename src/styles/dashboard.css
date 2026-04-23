@@ -1,7 +1,7 @@
 .db-page {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   padding-bottom: 10px;
 }
 
@@ -10,9 +10,9 @@
 .db-plan-banner {
   position: relative;
   overflow: hidden;
-  border-radius: 34px;
+  border-radius: 20px;
   border: 1px solid rgba(17, 42, 52, 0.08);
-  box-shadow: 0 30px 80px rgba(10, 30, 38, 0.08);
+  box-shadow: 0 4px 16px rgba(10, 30, 38, 0.06);
   animation: db-rise 420ms ease both;
 }
 
@@ -116,10 +116,10 @@
 }
 
 .db-hero-title {
-  max-width: 11ch;
-  font-size: clamp(2.8rem, 5.2vw, 4.4rem);
-  line-height: 0.94;
-  font-weight: 900;
+  max-width: none;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.2;
+  font-weight: 800;
   color: #0d2832;
 }
 
@@ -130,8 +130,8 @@
 .db-empty-state p,
 .db-status-card p {
   font-size: 15px;
-  line-height: 1.75;
-  color: #557176;
+  line-height: 1.65;
+  color: #2d5560;
 }
 
 .db-chip-row {
@@ -402,21 +402,21 @@
 .db-metrics-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 16px;
+  gap: 10px;
 }
 
 .db-metric-card {
   position: relative;
   overflow: hidden;
   display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  min-height: 150px;
-  padding: 22px 20px;
-  border-radius: 26px;
+  gap: 14px;
+  align-items: center;
+  min-height: 110px;
+  padding: 18px 16px;
+  border-radius: 16px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 250, 248, 0.98));
   border: 1px solid rgba(23, 49, 59, 0.08);
-  box-shadow: 0 22px 50px rgba(18, 42, 51, 0.06);
+  box-shadow: 0 2px 8px rgba(18, 42, 51, 0.05);
   animation: db-rise 420ms ease both;
 }
 
@@ -435,9 +435,9 @@
   content: '';
   position: absolute;
   inset: auto 0 0;
-  height: 4px;
+  height: 3px;
   background: var(--accent);
-  opacity: 0.45;
+  opacity: 0.7;
 }
 
 .db-metric-card::before {
@@ -478,9 +478,9 @@
 }
 
 .db-metric-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   flex-shrink: 0;
   background: var(--accent-soft);
   color: var(--accent);
@@ -502,10 +502,10 @@
 }
 
 .db-metric-value {
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 0.94;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  line-height: 1;
   font-weight: 900;
-  color: #0f2830;
+  color: #0a1e25;
 }
 
 .db-metric-sub {
@@ -516,12 +516,12 @@
 .db-main-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.36fr) minmax(320px, 0.94fr);
-  gap: 20px;
+  gap: 16px;
 }
 
 .db-side-stack {
   display: grid;
-  gap: 20px;
+  gap: 16px;
 }
 
 .db-panel {
@@ -561,7 +561,7 @@
 .db-patient-row,
 .db-action-card,
 .db-status-card {
-  border-radius: 24px;
+  border-radius: 14px;
   border: 1px solid rgba(23, 49, 59, 0.08);
 }
 
