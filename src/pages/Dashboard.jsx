@@ -257,7 +257,7 @@ export default function Dashboard() {
       <section className="db-hero">
         <div className="db-hero-main">
           <div className="db-hero-kicker">Central do consultório</div>
-          <h1 className="db-hero-title">{saudacao}, {nome} 👋</h1>
+          <h1 className="db-hero-title">{saudacao}, Dr(a). {nome} 👋</h1>
           <p className="db-hero-text">
             {pulseTitle}. Acompanhe pacientes, agenda, documentos e orçamentos sem perder o contexto do dia.
           </p>
