@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabase'
@@ -8,10 +8,6 @@ import ModalUpgrade from '../components/ModalUpgrade'
 import '../styles/dashboard.css'
 
 const moneyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
-const moneyShort = v => {
-  if (v >= 1000) return `R$\u00a0${(v / 1000).toFixed(1)}k`
-  return moneyFormatter.format(v)
-}
 
 // ── SVG Sparkline ─────────────────────────────────────────────────────────────
 function Sparkline({ data = [], color = '#0f766e', height = 32, width = 80 }) {
