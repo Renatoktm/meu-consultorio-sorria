@@ -76,6 +76,19 @@ const Icons = {
   ),
 }
 
+// Extrai primeiro nome ignorando prefixos como Dr., Dra.
+function primeiroNome(nomeCompleto) {
+  if (!nomeCompleto) return 'Dentista'
+  const prefixos = ['dr.', 'dra.', 'dr', 'dra', 'prof.', 'prof']
+  const partes = nomeCompleto.trim().split(/\s+/)
+  for (const parte of partes) {
+    if (!prefixos.includes(parte.toLowerCase())) {
+      return parte
+    }
+  }
+  return partes[partes.length - 1] || 'Dentista'
+}
+
 export default function Dashboard() {
   const { profile, user } = useAuth()
   const navigate = useNavigate()
@@ -98,8 +111,8 @@ export default function Dashboard() {
 
   const hora = new Date().getHours()
   const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite'
-  const nome = profile?.nome?.split(' ')[0] || user?.email?.split('@')[0] || 'Dentista'
-  const clinica = profile?.clinica || 'Seu consultorio'
+  const nome = primeiroNome(profile?.nome) || user?.email?.split('@')[0] || 'Dentista'
+  const clinica = profile?.clinica || 'Seu consultório'
 
   useEffect(() => {
     if (user?.id) carregarDados()
@@ -110,10 +123,8 @@ export default function Dashboard() {
       setConsultasMes(null)
       return
     }
-
     const agora = new Date()
     const fimMes = new Date(agora.getFullYear(), agora.getMonth() + 1, 1)
-
     getEvents(agora.toISOString(), fimMes.toISOString()).then(eventos => {
       setConsultasMes(eventos.length)
     })
@@ -121,12 +132,7 @@ export default function Dashboard() {
 
   async function carregarDados() {
     setCarregando(true)
-
-    const inicioMes = new Date(
-      new Date().getFullYear(),
-      new Date().getMonth(),
-      1,
-    ).toISOString()
+    const inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
 
     try {
       const [
@@ -139,39 +145,26 @@ export default function Dashboard() {
         supabase.from('pacientes').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
         supabase.from('orcamentos').select('valor_total, status').eq('user_id', user.id).in('status', ['em_analise', 'pendente']),
         supabase.from('orcamentos').select('valor_total').eq('user_id', user.id).eq('status', 'aprovado').gte('created_at', inicioMes),
-        supabase
-          .from('orcamentos')
-          .select('*, pacientes(nome, telefone)')
-          .eq('user_id', user.id)
-          .in('status', ['em_analise', 'pendente'])
-          .order('created_at', { ascending: false })
-          .limit(5),
-        supabase
-          .from('pacientes')
-          .select('id, nome, created_at, convenio')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(5),
+        supabase.from('orcamentos').select('*, pacientes(nome, telefone)').eq('user_id', user.id).in('status', ['em_analise', 'pendente']).order('created_at', { ascending: false }).limit(5),
+        supabase.from('pacientes').select('id, nome, created_at, convenio').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
       ])
 
       let documentos = 0
-
       try {
         const [{ count: receituarios }, { count: atestados }, { count: exames }] = await Promise.all([
           supabase.from('receituarios').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('created_at', inicioMes),
           supabase.from('atestados').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('created_at', inicioMes),
           supabase.from('exames').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('created_at', inicioMes),
         ])
-
         documentos = (receituarios || 0) + (atestados || 0) + (exames || 0)
       } catch (_) {}
 
       setResumo({
         pacientes: totalPacientes || 0,
         emAnalise: emAnaliseRows?.length || 0,
-        emAnaliseValor: emAnaliseRows?.reduce((soma, item) => soma + parseFloat(item.valor_total || 0), 0) || 0,
+        emAnaliseValor: emAnaliseRows?.reduce((s, i) => s + parseFloat(i.valor_total || 0), 0) || 0,
         aprovados: aprovadosRows?.length || 0,
-        aprovadosValor: aprovadosRows?.reduce((soma, item) => soma + parseFloat(item.valor_total || 0), 0) || 0,
+        aprovadosValor: aprovadosRows?.reduce((s, i) => s + parseFloat(i.valor_total || 0), 0) || 0,
         documentos,
       })
       setOrcamentosAbertos(abertos || [])
@@ -189,111 +182,60 @@ export default function Dashboard() {
 
   function abrirWhatsApp(telefone) {
     const numero = (telefone || '').replace(/\D/g, '')
-    if (!numero) {
-      alert('Telefone nao cadastrado para este paciente.')
-      return
-    }
+    if (!numero) { alert('Telefone não cadastrado para este paciente.'); return }
     window.open(`https://wa.me/55${numero}`, '_blank')
   }
 
-  const mesAtual = new Date().toLocaleDateString('pt-BR', {
-    month: 'long',
-    year: 'numeric',
-  })
-
-  const dataCompleta = new Date().toLocaleDateString('pt-BR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
+  const mesAtual = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+  const dataCompleta = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
   const planLabel = plano === 'pro'
     ? 'Plano Pro ativo'
-    : trialAtivo
-      ? `Teste premium · ${diasTrial} dia${diasTrial === 1 ? '' : 's'}`
-      : trialExpirado
-        ? 'Trial encerrado'
-        : 'Plano gratuito'
+    : trialAtivo ? `Teste premium · ${diasTrial} dia${diasTrial === 1 ? '' : 's'}`
+    : trialExpirado ? 'Trial encerrado'
+    : 'Plano gratuito'
 
   const pulseTitle = trialExpirado
-    ? 'Sua assinatura precisa de atencao'
+    ? 'Sua assinatura precisa de atenção'
     : resumo.emAnalise > 0
-      ? `${resumo.emAnalise} orcamento${resumo.emAnalise === 1 ? '' : 's'} aguardando retorno`
-      : 'Fluxo do consultorio sob controle'
-
-  const pulseText = trialExpirado
-    ? 'Renove o plano Pro para continuar usando todos os modulos sem bloqueios.'
-    : resumo.emAnalise > 0
-      ? 'Acompanhe os contatos pendentes para transformar analises em aprovacoes.'
-      : 'Hoje voce esta com a fila limpa e pode focar no atendimento.'
+      ? `${resumo.emAnalise} orçamento${resumo.emAnalise === 1 ? '' : 's'} aguardando retorno`
+      : 'Fluxo do consultório sob controle'
 
   const limitProgress = Math.min((total / LIMITE_FREE) * 100, 100)
-  const followUpsUrgentes = orcamentosAbertos.filter(item => diasEmAberto(item.created_at) > 7).length
+  const followUpsUrgentes = orcamentosAbertos.filter(i => diasEmAberto(i.created_at) > 7).length
   const ticketMedioAprovado = resumo.aprovados > 0 ? resumo.aprovadosValor / resumo.aprovados : 0
   const ticketMedioEmAnalise = resumo.emAnalise > 0 ? resumo.emAnaliseValor / resumo.emAnalise : 0
 
   const cards = [
-    {
-      icon: Icons.patients,
-      label: 'Pacientes ativos',
-      valor: resumo.pacientes,
-      sub: 'base cadastrada',
-      tone: 'teal',
-    },
-    {
-      icon: Icons.pipeline,
-      label: 'Em analise',
-      valor: resumo.emAnalise,
-      sub: resumo.emAnalise > 0 ? `${moneyFormatter.format(resumo.emAnaliseValor)} em aberto` : 'nenhum pendente',
-      tone: 'amber',
-    },
-    {
-      icon: Icons.approved,
-      label: 'Aprovados no mes',
-      valor: resumo.aprovados,
-      sub: resumo.aprovados > 0 ? `${moneyFormatter.format(resumo.aprovadosValor)} em ${mesAtual}` : `resultado de ${mesAtual}`,
-      tone: 'green',
-    },
-    {
-      icon: Icons.documents,
-      label: 'Documentos gerados',
-      valor: resumo.documentos,
-      sub: 'emitidos neste mes',
-      tone: 'purple',
-    },
-    {
-      icon: Icons.calendar,
-      label: 'Consultas agendadas',
-      valor: gcConnected ? (consultasMes ?? '...') : '—',
-      sub: gcConnected ? 'restantes neste mes' : 'Conecte o Google Calendar',
-      tone: 'blue',
-    },
+    { icon: Icons.patients,  label: 'Pacientes ativos',    valor: resumo.pacientes,  sub: 'base cadastrada',                                                                                            tone: 'teal'   },
+    { icon: Icons.pipeline,  label: 'Em análise',          valor: resumo.emAnalise,  sub: resumo.emAnalise > 0 ? `${moneyFormatter.format(resumo.emAnaliseValor)} em aberto` : 'nenhum pendente',        tone: 'amber'  },
+    { icon: Icons.approved,  label: 'Aprovados no mês',    valor: resumo.aprovados,  sub: resumo.aprovados > 0 ? `${moneyFormatter.format(resumo.aprovadosValor)} em ${mesAtual}` : `resultado de ${mesAtual}`, tone: 'green'  },
+    { icon: Icons.documents, label: 'Documentos gerados',  valor: resumo.documentos, sub: 'emitidos neste mês',                                                                                          tone: 'purple' },
+    { icon: Icons.calendar,  label: 'Consultas agendadas', valor: gcConnected ? (consultasMes ?? '...') : '—', sub: gcConnected ? 'restantes neste mês' : 'Conecte o Google Calendar',                   tone: 'blue'   },
   ]
 
   const quickActions = [
-    { label: 'Novo paciente', caption: 'Abrir prontuario', path: '/prontuario', tone: 'teal' },
-    { label: 'Novo orcamento', caption: 'Registrar proposta', path: '/orcamento', tone: 'amber' },
-    { label: 'Receituario', caption: 'Gerar documento', path: '/receituario', tone: 'purple' },
-    { label: 'Solicitar exames', caption: 'Encaminhamento rapido', path: '/exames', tone: 'blue' },
+    { label: 'Novo paciente',    caption: 'Abrir prontuário',         path: '/pacientes',   tone: 'teal'   },
+    { label: 'Novo orçamento',   caption: 'Registrar proposta',       path: '/orcamento',   tone: 'amber'  },
+    { label: 'Receituário',      caption: 'Gerar documento',          path: '/receituario', tone: 'purple' },
+    { label: 'Solicitar exames', caption: 'Encaminhamento rápido',    path: '/exames',      tone: 'blue'   },
   ]
 
   let banner = null
-
   if (trialAtivo) {
     banner = {
       tone: 'success',
       eyebrow: 'Teste premium ativo',
       title: `${diasTrial} dia${diasTrial === 1 ? '' : 's'} para experimentar tudo`,
-      description: 'Voce esta usando todos os recursos liberados. Aproveite para validar agenda, orcamentos e documentos.',
+      description: 'Você está usando todos os recursos liberados. Aproveite para validar agenda, orçamentos e documentos.',
       action: { label: 'Ver planos', onClick: () => setShowUpgrade(true) },
     }
   } else if (trialExpirado) {
     banner = {
       tone: 'warning',
       eyebrow: 'Acesso pendente',
-      title: 'Seu periodo de teste terminou',
-      description: 'Assine o plano Pro para continuar com o sistema completo e sem bloqueios nas rotinas da clinica.',
+      title: 'Seu período de teste terminou',
+      description: 'Assine o plano Pro para continuar com o sistema completo e sem bloqueios nas rotinas da clínica.',
       action: { label: 'Assinar Pro', onClick: () => setShowUpgrade(true) },
     }
   } else if (isFree) {
@@ -302,8 +244,8 @@ export default function Dashboard() {
       eyebrow: 'Plano gratuito',
       title: !podeAdicionarPaciente ? 'Limite de pacientes atingido' : `${total} de ${LIMITE_FREE} pacientes utilizados`,
       description: !podeAdicionarPaciente
-        ? 'Faca upgrade para continuar cadastrando pacientes e manter o ritmo do consultorio.'
-        : 'Voce ainda pode usar o modo gratuito, mas o plano Pro libera crescimento sem limite.',
+        ? 'Faça upgrade para continuar cadastrando pacientes e manter o ritmo do consultório.'
+        : 'Você ainda pode usar o modo gratuito, mas o plano Pro libera crescimento sem limite.',
       action: { label: 'Fazer upgrade', onClick: () => setShowUpgrade(true) },
     }
   }
@@ -314,20 +256,18 @@ export default function Dashboard() {
 
       <section className="db-hero">
         <div className="db-hero-main">
-          <div className="db-hero-kicker">Central do consultorio</div>
-          <h1 className="db-hero-title">{saudacao}, Dr(a). {nome}</h1>
+          <div className="db-hero-kicker">Central do consultório</div>
+          <h1 className="db-hero-title">{saudacao}, {nome} 👋</h1>
           <p className="db-hero-text">
-            {pulseTitle}. Acompanhe pacientes, agenda, documentos e orcamentos sem perder o contexto do dia.
+            {pulseTitle}. Acompanhe pacientes, agenda, documentos e orçamentos sem perder o contexto do dia.
           </p>
-
           <div className="db-chip-row">
             <span className="db-chip">{clinica}</span>
             <span className="db-chip">{planLabel}</span>
             <span className={`db-chip ${gcConnected ? 'is-live' : ''}`}>
-              {gcConnected ? 'Google Calendar conectado' : 'Agenda ainda nao conectada'}
+              {gcConnected ? 'Google Calendar conectado' : 'Agenda não conectada'}
             </span>
           </div>
-
           <div className="db-hero-footer">
             <div className="db-hero-date">{dataCompleta}</div>
             <button type="button" className="db-secondary-button" onClick={carregarDados}>
@@ -343,32 +283,28 @@ export default function Dashboard() {
             {carregando ? '...' : moneyFormatter.format(resumo.aprovadosValor)}
           </div>
           <p className="db-hero-side-text">
-            Valor aprovado em {mesAtual}. O quadro abaixo resume pipeline, urgencias e ticket medio sem repetir os cards do painel.
+            Valor aprovado em {mesAtual}. Pipeline, urgências e ticket médio em destaque.
           </p>
-
           <div className="db-summary-grid">
             <div className="db-summary-card">
               <span className="db-summary-label">Pipeline aberto</span>
               <strong>{carregando ? '...' : moneyFormatter.format(resumo.emAnaliseValor)}</strong>
-              <small>{resumo.emAnalise} proposta{resumo.emAnalise === 1 ? '' : 's'} em analise</small>
+              <small>{resumo.emAnalise} proposta{resumo.emAnalise === 1 ? '' : 's'} em análise</small>
             </div>
-
             <div className="db-summary-card">
               <span className="db-summary-label">Follow-ups urgentes</span>
               <strong>{carregando ? '...' : followUpsUrgentes}</strong>
-              <small>{followUpsUrgentes === 0 ? 'Nenhum contato atrasado' : 'Precisam de acao imediata'}</small>
+              <small>{followUpsUrgentes === 0 ? 'Nenhum contato atrasado' : 'Precisam de ação imediata'}</small>
             </div>
-
             <div className="db-summary-card">
-              <span className="db-summary-label">Ticket medio aprovado</span>
+              <span className="db-summary-label">Ticket médio aprovado</span>
               <strong>{carregando ? '...' : moneyFormatter.format(ticketMedioAprovado)}</strong>
-              <small>{resumo.aprovados > 0 ? 'Media das aprovacoes do mes' : 'Ainda sem aprovacoes neste mes'}</small>
+              <small>{resumo.aprovados > 0 ? 'Média das aprovações do mês' : 'Ainda sem aprovações neste mês'}</small>
             </div>
-
             <div className="db-summary-card">
-              <span className="db-summary-label">Ticket medio em analise</span>
+              <span className="db-summary-label">Ticket médio em análise</span>
               <strong>{carregando ? '...' : moneyFormatter.format(ticketMedioEmAnalise)}</strong>
-              <small>{resumo.emAnalise > 0 ? 'Media do pipeline atual' : 'Sem pipeline em aberto agora'}</small>
+              <small>{resumo.emAnalise > 0 ? 'Média do pipeline atual' : 'Sem pipeline em aberto agora'}</small>
             </div>
           </div>
         </div>
@@ -377,20 +313,13 @@ export default function Dashboard() {
       <section className="db-quick-strip-panel db-panel">
         <div className="db-panel-head">
           <div>
-            <span className="db-panel-kicker">Acesso rapido</span>
-            <h2>Entradas mais usadas do dia</h2>
-            <p>Os atalhos principais ficam no topo para acelerar a rotina da recepcao e do dentista.</p>
+            <span className="db-panel-kicker">Acesso rápido</span>
+            <h2>O que você precisa fazer agora?</h2>
           </div>
         </div>
-
         <div className="db-actions-grid db-actions-grid--top">
           {quickActions.map(action => (
-            <button
-              key={action.path}
-              type="button"
-              className={`db-action-card is-${action.tone}`}
-              onClick={() => navigate(action.path)}
-            >
+            <button key={action.path} type="button" className={`db-action-card is-${action.tone}`} onClick={() => navigate(action.path)}>
               <span className="db-action-label">{action.label}</span>
               <span className="db-action-caption">{action.caption}</span>
               <span className="db-inline-icon">{Icons.arrow}</span>
@@ -406,7 +335,6 @@ export default function Dashboard() {
             <strong>{banner.title}</strong>
             <p>{banner.description}</p>
           </div>
-
           <div className="db-plan-banner-actions">
             {isFree && (
               <div className="db-plan-meter">
@@ -416,7 +344,6 @@ export default function Dashboard() {
                 <span>{total}/{LIMITE_FREE} pacientes</span>
               </div>
             )}
-
             <button type="button" className="db-primary-button" onClick={banner.action.onClick}>
               {banner.action.label}
             </button>
@@ -441,14 +368,12 @@ export default function Dashboard() {
         <article className="db-panel">
           <div className="db-panel-head">
             <div>
-              <span className="db-panel-kicker">Pipeline de conversao</span>
-              <h2>Orcamentos aguardando retorno</h2>
+              <span className="db-panel-kicker">Pipeline de conversão</span>
+              <h2>Orçamentos aguardando retorno</h2>
               <p>Priorize os contatos mais antigos para evitar propostas paradas.</p>
             </div>
-
             <button type="button" className="db-ghost-button" onClick={() => navigate('/orcamento')}>
-              Ver orcamentos
-              <span className="db-inline-icon">{Icons.arrow}</span>
+              Ver orçamentos <span className="db-inline-icon">{Icons.arrow}</span>
             </button>
           </div>
 
@@ -456,13 +381,13 @@ export default function Dashboard() {
             <div className="db-empty-state">
               <div className="db-empty-icon">{Icons.spark}</div>
               <strong>Carregando seus dados</strong>
-              <p>Estou buscando os orcamentos em aberto para montar o painel.</p>
+              <p>Buscando orçamentos em aberto para montar o painel.</p>
             </div>
           ) : orcamentosAbertos.length === 0 ? (
             <div className="db-empty-state">
               <div className="db-empty-icon">{Icons.approved}</div>
-              <strong>Nenhum orcamento aguardando retorno</strong>
-              <p>Seu pipeline esta limpo agora. Aproveite para gerar novas oportunidades.</p>
+              <strong>Nenhum orçamento aguardando retorno</strong>
+              <p>Seu pipeline está limpo. Aproveite para gerar novas oportunidades.</p>
             </div>
           ) : (
             <div className="db-budget-list">
@@ -470,43 +395,26 @@ export default function Dashboard() {
                 const dias = diasEmAberto(orcamento.created_at)
                 const telefone = orcamento.pacientes?.telefone || ''
                 const urgency = dias > 7 ? 'critical' : dias >= 3 ? 'warm' : 'fresh'
-                const patientName = orcamento.pacientes?.nome || 'Paciente nao identificado'
-
                 return (
                   <div key={orcamento.id} className={`db-budget-row is-${urgency}`}>
                     <div className="db-budget-col">
                       <span className="db-budget-label">Paciente</span>
-                      <strong>{patientName}</strong>
+                      <strong>{orcamento.pacientes?.nome || 'Paciente não identificado'}</strong>
                       <small>{new Date(orcamento.created_at).toLocaleDateString('pt-BR')}</small>
                     </div>
-
                     <div className="db-budget-col">
                       <span className="db-budget-label">Valor estimado</span>
                       <strong>{moneyFormatter.format(parseFloat(orcamento.valor_total || 0))}</strong>
-                      <small>{orcamento.status === 'pendente' ? 'Pendente' : 'Em analise'}</small>
+                      <small>{orcamento.status === 'pendente' ? 'Pendente' : 'Em análise'}</small>
                     </div>
-
                     <div className="db-budget-col">
                       <span className="db-budget-label">Janela de retorno</span>
                       <strong className={`db-budget-pill is-${urgency}`}>
                         {dias === 0 ? 'Hoje' : `${dias} dia${dias === 1 ? '' : 's'}`}
                       </strong>
-                      <small>
-                        {dias > 7
-                          ? 'Precisa de acao imediata'
-                          : dias >= 3
-                            ? 'Bom momento para follow-up'
-                            : 'Contato recente'}
-                      </small>
+                      <small>{dias > 7 ? 'Ação imediata' : dias >= 3 ? 'Bom momento para follow-up' : 'Contato recente'}</small>
                     </div>
-
-                    <button
-                      type="button"
-                      className="db-whatsapp-button"
-                      onClick={() => abrirWhatsApp(telefone)}
-                      disabled={!telefone}
-                      title={telefone ? `WhatsApp: ${telefone}` : 'Telefone nao cadastrado'}
-                    >
+                    <button type="button" className="db-whatsapp-button" onClick={() => abrirWhatsApp(telefone)} disabled={!telefone}>
                       <span className="db-inline-icon">{Icons.whatsapp}</span>
                       WhatsApp
                     </button>
@@ -521,47 +429,34 @@ export default function Dashboard() {
           <article className="db-panel">
             <div className="db-panel-head">
               <div>
-                <span className="db-panel-kicker">Status do sistema</span>
-                <h2>Operacao auxiliar</h2>
-                <p>Informacoes de integracao e capacidade ficam separadas do acesso rapido para manter o topo mais objetivo.</p>
+                <span className="db-panel-kicker">Integrações</span>
+                <h2>Status do sistema</h2>
               </div>
             </div>
-
             <div className="db-status-card">
               <div>
-                <span className="db-panel-kicker">Integracao</span>
-                <strong>{gcConnected ? 'Agenda sincronizada' : 'Google Calendar desconectado'}</strong>
-                <p>
-                  {gcConnected
-                    ? `Voce tem ${consultasMes ?? '...'} consulta${consultasMes === 1 ? '' : 's'} previstas para este mes.`
-                    : 'Conecte sua agenda para acompanhar os compromissos direto no painel.'}
-                </p>
+                <span className="db-panel-kicker">Google Calendar</span>
+                <strong>{gcConnected ? 'Agenda sincronizada' : 'Não conectado'}</strong>
+                <p>{gcConnected ? `Você tem ${consultasMes ?? '...'} consulta${consultasMes === 1 ? '' : 's'} previstas para este mês.` : 'Conecte sua agenda para ver os compromissos direto no painel.'}</p>
               </div>
-
               <button type="button" className="db-ghost-button" onClick={() => navigate('/configuracoes')}>
-                {gcConnected ? 'Gerenciar integracao' : 'Conectar agenda'}
+                {gcConnected ? 'Gerenciar' : 'Conectar agenda'}
               </button>
             </div>
-
             <div className="db-status-card is-soft">
               <div>
                 <span className="db-panel-kicker">Capacidade</span>
-                <strong>{isFree ? 'Limite do plano gratuito' : 'Crescimento liberado'}</strong>
-                <p>
-                  {isFree
-                    ? `${total} de ${LIMITE_FREE} pacientes ocupados no plano atual.`
-                    : 'Seu plano atual permite seguir cadastrando pacientes sem limite.'}
-                </p>
+                <strong>{isFree ? 'Plano gratuito' : 'Crescimento liberado'}</strong>
+                <p>{isFree ? `${total} de ${LIMITE_FREE} pacientes utilizados no plano atual.` : 'Seu plano permite cadastrar pacientes sem limite.'}</p>
               </div>
-
-              {isFree ? (
+              {isFree && (
                 <div className="db-plan-meter">
                   <div className="db-plan-meter-track">
                     <div className="db-plan-meter-fill" style={{ width: `${limitProgress}%` }} />
                   </div>
                   <span>{Math.round(limitProgress)}% usado</span>
                 </div>
-              ) : null}
+              )}
             </div>
           </article>
 
@@ -569,15 +464,12 @@ export default function Dashboard() {
             <div className="db-panel-head">
               <div>
                 <span className="db-panel-kicker">Relacionamento</span>
-                <h2>Ultimos pacientes cadastrados</h2>
-                <p>Um atalho para retomar historicos e voltar ao prontuario rapidamente.</p>
+                <h2>Últimos pacientes cadastrados</h2>
               </div>
-
-              <button type="button" className="db-ghost-button" onClick={() => navigate('/prontuario')}>
-                Ver pacientes
+              <button type="button" className="db-ghost-button" onClick={() => navigate('/pacientes')}>
+                Ver todos
               </button>
             </div>
-
             {carregando ? (
               <div className="db-empty-state compact">
                 <div className="db-empty-icon">{Icons.patients}</div>
@@ -587,29 +479,19 @@ export default function Dashboard() {
               <div className="db-empty-state compact">
                 <div className="db-empty-icon">{Icons.patients}</div>
                 <strong>Nenhum paciente cadastrado</strong>
-                <p>Comece adicionando o primeiro cadastro para alimentar o consultorio.</p>
-                <button type="button" className="db-primary-button" onClick={() => navigate('/prontuario')}>
+                <p>Adicione o primeiro cadastro para começar.</p>
+                <button type="button" className="db-primary-button" onClick={() => navigate('/pacientes')}>
                   Cadastrar paciente
                 </button>
               </div>
             ) : (
               <div className="db-patient-list">
                 {ultimosPacientes.map(patient => (
-                  <button
-                    key={patient.id}
-                    type="button"
-                    className="db-patient-row"
-                    onClick={() => navigate('/prontuario')}
-                  >
-                    <span className="db-patient-avatar">
-                      {patient.nome?.charAt(0)?.toUpperCase() || 'P'}
-                    </span>
+                  <button key={patient.id} type="button" className="db-patient-row" onClick={() => navigate('/pacientes')}>
+                    <span className="db-patient-avatar">{patient.nome?.charAt(0)?.toUpperCase() || 'P'}</span>
                     <span className="db-patient-copy">
                       <strong>{patient.nome}</strong>
-                      <small>
-                        {patient.convenio ? `${patient.convenio} · ` : ''}
-                        {patient.created_at ? new Date(patient.created_at).toLocaleDateString('pt-BR') : 'Cadastro recente'}
-                      </small>
+                      <small>{patient.convenio ? `${patient.convenio} · ` : ''}{patient.created_at ? new Date(patient.created_at).toLocaleDateString('pt-BR') : 'Cadastro recente'}</small>
                     </span>
                     <span className="db-inline-icon">{Icons.arrow}</span>
                   </button>
