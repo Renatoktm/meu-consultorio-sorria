@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { usePacientes } from '../hooks/usePacientes'
 import { usePlano } from '../hooks/usePlano'
@@ -35,7 +35,7 @@ const STATUS_CONFIG = {
 }
 const FORMA_LABEL = { pix: 'PIX', avista: 'À Vista', cartao: 'Cartão', convenio: 'Convênio' }
 
-// ─── Avatar ───────────────────────────────────────────────────────────────────
+// ─── Avatar / FotoAvatar ──────────────────────────────────────────────────────
 function Avatar({ nome, size = 52 }) {
   const iniciais = (nome || '?').split(' ').filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('')
   return (
@@ -46,6 +46,51 @@ function Avatar({ nome, size = 52 }) {
       color: '#fff', fontWeight: 700, fontSize: size * 0.36, flexShrink: 0,
     }}>
       {iniciais}
+    </div>
+  )
+}
+
+function FotoAvatar({ nome, fotoUrl, size = 96, onClickUpload, uploading }) {
+  const iniciais = (nome || '?').split(' ').filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('')
+  return (
+    <div
+      onClick={onClickUpload}
+      title="Clique para alterar foto"
+      style={{
+        width: size, height: size, borderRadius: '50%', flexShrink: 0,
+        position: 'relative', cursor: 'pointer', overflow: 'hidden',
+        border: '3px solid #e2e8f0', boxShadow: '0 2px 12px rgba(0,0,0,.12)',
+        transition: 'border-color .2s',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = C.primary }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = '#e2e8f0' }}
+    >
+      {fotoUrl ? (
+        <img src={fotoUrl} alt={nome} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      ) : (
+        <div style={{
+          width: '100%', height: '100%',
+          background: 'linear-gradient(135deg, #0f766e, #3182ce)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: '#fff', fontWeight: 800, fontSize: size * 0.3,
+        }}>
+          {iniciais}
+        </div>
+      )}
+      {/* overlay ao hover */}
+      <div style={{
+        position: 'absolute', inset: 0, background: 'rgba(0,0,0,.42)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        opacity: 0, transition: 'opacity .2s', gap: 2,
+      }}
+        onMouseEnter={e => { e.currentTarget.style.opacity = 1 }}
+        onMouseLeave={e => { e.currentTarget.style.opacity = 0 }}
+      >
+        <span style={{ fontSize: 20 }}>{uploading ? '⏳' : '📷'}</span>
+        <span style={{ fontSize: 9, color: '#fff', fontWeight: 600, letterSpacing: '.04em' }}>
+          {uploading ? 'ENVIANDO...' : 'ALTERAR FOTO'}
+        </span>
+      </div>
     </div>
   )
 }
@@ -289,6 +334,52 @@ export default function PacienteDetalhe() {
     finally { setSaving(false) }
   }
 
+  // ── Foto do paciente ────────────────────────────────────────────────────────
+  const [fotoUrl, setFotoUrl] = useState(null)
+  const [uploadingFoto, setUploadingFoto] = useState(false)
+  const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    setFotoUrl(paciente?.foto_url || null)
+  }, [paciente?.id, paciente?.foto_url])
+
+  async function uploadFoto(file) {
+    if (!file || !paciente?.id) return
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+    if (!allowed.includes(file.type)) { toast('Use JPG, PNG ou WebP.', 'error'); return }
+    setUploadingFoto(true)
+    try {
+      const ext = file.name.split('.').pop().toLowerCase()
+      const path = `${user.id}/${paciente.id}.${ext}`
+      const { error: upErr } = await supabase.storage.from('patient-photos').upload(path, file, { upsert: true, contentType: file.type })
+      if (upErr) throw upErr
+      const { data: urlData } = supabase.storage.from('patient-photos').getPublicUrl(path)
+      const url = `${urlData.publicUrl}?t=${Date.now()}`
+      await updatePaciente(paciente.id, { foto_url: urlData.publicUrl })
+      setFotoUrl(url)
+      toast('Foto atualizada!', 'success')
+    } catch (e) { toast('Erro ao enviar foto: ' + e.message, 'error') }
+    finally { setUploadingFoto(false) }
+  }
+
+  // ── Stats da ficha ──────────────────────────────────────────────────────────
+  const [stats, setStats] = useState({ nEvolucoes: 0, nOrcamentos: 0, ultimaVisita: null })
+
+  useEffect(() => {
+    if (!paciente?.id) return
+    Promise.all([
+      supabase.from('evolucoes').select('data_atendimento').eq('paciente_id', paciente.id).order('data_atendimento', { ascending: false }).limit(1),
+      supabase.from('evolucoes').select('*', { count: 'exact', head: true }).eq('paciente_id', paciente.id),
+      supabase.from('orcamentos').select('*', { count: 'exact', head: true }).eq('paciente_id', paciente.id),
+    ]).then(([evLast, evCount, orcCount]) => {
+      setStats({
+        nEvolucoes: evCount.count || 0,
+        nOrcamentos: orcCount.count || 0,
+        ultimaVisita: evLast.data?.[0]?.data_atendimento || null,
+      })
+    })
+  }, [paciente?.id])
+
   // ── Evolução ────────────────────────────────────────────────────────────────
   const [evolucoes, setEvolucoes] = useState([])
   const [carregandoEvol, setCarregandoEvol] = useState(false)
@@ -399,40 +490,137 @@ export default function PacienteDetalhe() {
 
   return (
     <div>
-      {/* ── Header do paciente ─────────────────────────────────────────────── */}
-      <div style={{ ...cardStyle, marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-          <button onClick={() => navigate('/pacientes')} style={{ padding: '7px 14px', background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 8, fontSize: 13, fontWeight: 600, color: '#4a5568', cursor: 'pointer' }}>
+      {/* ── Input de foto oculto ────────────────────────────────────────────── */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/jpg,image/png,image/webp"
+        style={{ display: 'none' }}
+        onChange={e => { if (e.target.files[0]) uploadFoto(e.target.files[0]); e.target.value = '' }}
+      />
+
+      {/* ── Ficha do paciente ────────────────────────────────────────────────── */}
+      <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,.09)', marginBottom: 16, overflow: 'hidden' }}>
+
+        {/* Topo da ficha: faixa verde com botão voltar */}
+        <div style={{ background: C.primary, padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <button
+            onClick={() => navigate('/pacientes')}
+            style={{ padding: '5px 13px', background: 'rgba(255,255,255,.18)', border: '1.5px solid rgba(255,255,255,.35)', borderRadius: 7, fontSize: 13, fontWeight: 600, color: '#fff', cursor: 'pointer' }}
+          >
             ← Pacientes
           </button>
-
-          <Avatar nome={nome} size={48} />
-
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <h2 style={{ fontSize: 20, fontWeight: 800, color: '#1a202c', lineHeight: 1.2 }}>{nome}</h2>
-            <p style={{ fontSize: 13, color: '#718096', marginTop: 2 }}>
-              {[
-                idade != null && `${idade} anos`,
-                dados.telefone || paciente?.telefone,
-                dados.convenio || paciente?.convenio,
-              ].filter(Boolean).join(' · ') || 'Sem informações'}
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
             {tel && (
-              <a
-                href={`https://wa.me/55${tel}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ padding: '8px 14px', borderRadius: 8, fontSize: 13, fontWeight: 600, background: '#dcfce7', color: '#166534', border: '1.5px solid #86efac', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
-              >
+              <a href={`https://wa.me/55${tel}`} target="_blank" rel="noopener noreferrer"
+                style={{ padding: '6px 13px', borderRadius: 7, fontSize: 13, fontWeight: 600, background: '#25D366', color: '#fff', border: 'none', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                 📱 WhatsApp
               </a>
             )}
-            <button onClick={() => setAba('dados')} style={{ padding: '8px 14px', borderRadius: 8, fontSize: 13, fontWeight: 600, background: aba === 'dados' ? C.primary : '#f1f5f9', color: aba === 'dados' ? '#fff' : '#4a5568', border: 'none', cursor: 'pointer' }}>
+            <button onClick={() => setAba('dados')}
+              style={{ padding: '6px 13px', borderRadius: 7, fontSize: 13, fontWeight: 600, background: 'rgba(255,255,255,.18)', border: '1.5px solid rgba(255,255,255,.35)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}>
               ✏️ Editar dados
             </button>
+          </div>
+        </div>
+
+        {/* Corpo da ficha */}
+        <div style={{ padding: '20px 24px' }}>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+
+            {/* Foto */}
+            <FotoAvatar
+              nome={nome}
+              fotoUrl={fotoUrl}
+              size={100}
+              onClickUpload={() => !ehNovo && fileInputRef.current?.click()}
+              uploading={uploadingFoto}
+            />
+
+            {/* Dados principais */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', lineHeight: 1.2, marginBottom: 2 }}>{nome}</h2>
+
+              {/* Linha 1: idade + cpf */}
+              <p style={{ fontSize: 13, color: '#64748b', marginBottom: 8 }}>
+                {[
+                  idade != null && `${idade} anos`,
+                  (dados.cpf || paciente?.cpf) && `CPF: ${(dados.cpf || paciente?.cpf).replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}`,
+                ].filter(Boolean).join('  ·  ') || 'Sem informações'}
+              </p>
+
+              {/* Linha 2: contato */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 18px', fontSize: 13, color: '#374151', marginBottom: 6 }}>
+                {(dados.telefone || paciente?.telefone) && (
+                  <span>📱 {dados.telefone || paciente?.telefone}</span>
+                )}
+                {(dados.email || paciente?.email) && (
+                  <span>📧 {dados.email || paciente?.email}</span>
+                )}
+              </div>
+
+              {/* Linha 3: endereço */}
+              {(dados.logradouro || paciente?.logradouro) && (
+                <p style={{ fontSize: 13, color: '#374151', marginBottom: 6 }}>
+                  📍 {[dados.logradouro || paciente?.logradouro, dados.bairro || paciente?.bairro, dados.cidade || paciente?.cidade].filter(Boolean).join(' · ')}
+                </p>
+              )}
+
+              {/* Linha 4: convênio */}
+              {(dados.convenio || paciente?.convenio) && (
+                <p style={{ fontSize: 13, color: '#374151', marginBottom: 0 }}>
+                  🏥 Convênio: <strong>{dados.convenio || paciente?.convenio}</strong>
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* ── Badges de alertas clínicos ──────────────────────────────────── */}
+          {(() => {
+            const al = anamnese
+            const badges = []
+            if (al.alergias)      badges.push({ icon: '⚠️', text: `Alérgico(a): ${al.alergias.slice(0, 40)}${al.alergias.length > 40 ? '…' : ''}`, cor: '#dc2626', bg: '#fee2e2', border: '#fca5a5' })
+            if (al.gestante)      badges.push({ icon: '🤰', text: 'Gestante',           cor: '#7c3aed', bg: '#ede9fe', border: '#c4b5fd' })
+            if (al.anticoagulante)badges.push({ icon: '🩸', text: 'Anticoagulante',     cor: '#dc2626', bg: '#fee2e2', border: '#fca5a5' })
+            if (al.bifosfonato)   badges.push({ icon: '💊', text: 'Bifosfonato',         cor: '#b45309', bg: '#fef3c7', border: '#fcd34d' })
+            if (al.doencas)       badges.push({ icon: '🏥', text: al.doencas.slice(0, 35) + (al.doencas.length > 35 ? '…' : ''), cor: '#b45309', bg: '#fef3c7', border: '#fcd34d' })
+            if (al.medicamentos)  badges.push({ icon: '💊', text: `Med: ${al.medicamentos.slice(0, 30)}${al.medicamentos.length > 30 ? '…' : ''}`, cor: '#1d4ed8', bg: '#dbeafe', border: '#93c5fd' })
+            if (al.fumante)       badges.push({ icon: '🚬', text: 'Fumante',             cor: '#4b5563', bg: '#f3f4f6', border: '#d1d5db' })
+            if (al.alcool)        badges.push({ icon: '🍺', text: 'Uso de álcool',       cor: '#4b5563', bg: '#f3f4f6', border: '#d1d5db' })
+            if (badges.length === 0) return null
+            return (
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f1f5f9', display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {badges.map((b, i) => (
+                  <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 700, color: b.cor, background: b.bg, border: `1.5px solid ${b.border}` }}>
+                    {b.icon} {b.text}
+                  </span>
+                ))}
+              </div>
+            )
+          })()}
+
+          {/* ── Stats da ficha ──────────────────────────────────────────────── */}
+          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f1f5f9', display: 'flex', flexWrap: 'wrap', gap: '6px 24px' }}>
+            <button onClick={() => setAba('evolucao')} style={{ all: 'unset', cursor: 'pointer', fontSize: 13, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ fontSize: 15 }}>📈</span>
+              <span><strong style={{ color: '#0f172a' }}>{stats.nEvolucoes}</strong> {stats.nEvolucoes === 1 ? 'evolução' : 'evoluções'}</span>
+            </button>
+            <button onClick={() => setAba('orcamentos')} style={{ all: 'unset', cursor: 'pointer', fontSize: 13, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ fontSize: 15 }}>💰</span>
+              <span><strong style={{ color: '#0f172a' }}>{stats.nOrcamentos}</strong> {stats.nOrcamentos === 1 ? 'orçamento' : 'orçamentos'}</span>
+            </button>
+            {stats.ultimaVisita && (
+              <span style={{ fontSize: 13, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ fontSize: 15 }}>🗓️</span>
+                Última visita: <strong style={{ color: '#0f172a' }}>{new Date(stats.ultimaVisita + 'T12:00:00').toLocaleDateString('pt-BR')}</strong>
+              </span>
+            )}
+            {!ehNovo && (
+              <button onClick={() => fileInputRef.current?.click()} style={{ all: 'unset', cursor: 'pointer', fontSize: 13, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ fontSize: 15 }}>📷</span>
+                <span style={{ color: C.primary, fontWeight: 600 }}>{fotoUrl ? 'Alterar foto' : 'Adicionar foto'}</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
