@@ -173,8 +173,7 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   border-right: 1px solid rgba(255,255,255,0.06);
   box-shadow: inset -1px 0 0 rgba(255,255,255,0.02);
 }
@@ -260,7 +259,7 @@ input, select, textarea {
 .sidebar-nav {
   flex: 1;
   padding: 0 6px;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .sidebar-item {
