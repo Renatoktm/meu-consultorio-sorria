@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Cadastro from './pages/Cadastro'
 import LandingPage from './pages/LandingPage'
 import Dashboard from './pages/Dashboard'
+import CRM from './pages/CRM'
 import Configuracoes from './pages/Configuracoes'
 import Pacientes from './pages/Pacientes'
 import PacienteDetalhe from './pages/PacienteDetalhe'
@@ -50,6 +51,7 @@ export default function App() {
               </RotaProtegida>
             }>
               <Route path="/dashboard"       element={<Dashboard />} />
+              <Route path="/crm"             element={<CRM />} />
               <Route path="/agenda"          element={<Agenda />} />
               <Route path="/pacientes"       element={<Pacientes />} />
               <Route path="/pacientes/:id"   element={<PacienteDetalhe />} />

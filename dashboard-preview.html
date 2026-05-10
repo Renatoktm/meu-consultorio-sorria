@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview Dashboard SorrIA</title>
+    <link rel="stylesheet" href="./src/styles/global.css" />
+    <link rel="stylesheet" href="./src/styles/dashboard.css" />
+    <style>
+      body {
+        min-height: 100vh;
+      }
+
+      .preview-shell {
+        min-height: 100vh;
+      }
+
+      .preview-metric-value {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout preview-shell">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="./public/assets/logo.png" alt="SorrIA" style="height: 38px; width: auto; object-fit: contain; filter: brightness(0) invert(1);" />
+          <div class="sidebar-brand-copy">
+            <span class="sidebar-brand-kicker">Consultorio inteligente</span>
+            <strong class="sidebar-brand-title">Painel SorrIA</strong>
+          </div>
+        </div>
+
+        <div class="sidebar-status">
+          <span class="sidebar-status-dot"></span>
+          <div class="sidebar-status-copy">
+            <div class="sidebar-status-label">Operacao ativa</div>
+            <div class="sidebar-status-text">Consultorio Sorria</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav">
+          <div class="sidebar-label">Navegacao</div>
+
+          <button class="sidebar-item active">
+            <span class="sidebar-icon">D</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Dashboard</span>
+              <span class="sidebar-item-hint">Resumo da operacao</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">P</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Pacientes</span>
+              <span class="sidebar-item-hint">Cadastros e prontuarios</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">A</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Agenda</span>
+              <span class="sidebar-item-hint">Consultas e rotina diaria</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">O</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Orcamentos</span>
+              <span class="sidebar-item-hint">Propostas e retornos</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">C</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Configuracoes</span>
+              <span class="sidebar-item-hint">Plano e integracoes</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-avatar">RS</div>
+          <div class="sidebar-footer-info">
+            <div class="sidebar-footer-name">Renato</div>
+            <div class="sidebar-footer-plan">Plano Pro ativo</div>
+          </div>
+          <button class="sidebar-logout">></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <main class="app-content">
+          <div class="app-content-inner">
+            <div class="db-page">
+              <section class="db-hero">
+                <div class="db-hero-main">
+                  <div class="db-hero-kicker">Central do consultorio</div>
+                  <h1 class="db-hero-title">Boa tarde, Dr(a). Renato</h1>
+                  <p class="db-hero-text">
+                    7 orcamentos aguardando retorno. Acompanhe pacientes, agenda, documentos e propostas sem perder o contexto do dia.
+                  </p>
+
+                  <div class="db-chip-row">
+                    <span class="db-chip">Consultorio Sorria</span>
+                    <span class="db-chip">Plano Pro ativo</span>
+                    <span class="db-chip is-live">Google Calendar conectado</span>
+                  </div>
+
+                  <div class="db-hero-footer">
+                    <div class="db-hero-date">terca-feira, 21 de abril de 2026</div>
+                    <button class="db-secondary-button">Atualizar painel</button>
+                  </div>
+                </div>
+
+                <div class="db-hero-side">
+                  <div class="db-hero-side-label">Resumo executivo</div>
+                  <div class="db-hero-side-value">R$ 12.480</div>
+                  <p class="db-hero-side-text">
+                    Valor aprovado em abril de 2026. O quadro abaixo resume pipeline, urgencias e ticket medio sem repetir os cards do painel.
+                  </p>
+
+                  <div class="db-summary-grid">
+                    <div class="db-summary-card">
+                      <span class="db-summary-label">Pipeline aberto</span>
+                      <strong>R$ 6.840</strong>
+                      <small>7 propostas em analise</small>
+                    </div>
+
+                    <div class="db-summary-card">
+                      <span class="db-summary-label">Follow-ups urgentes</span>
+                      <strong>2</strong>
+                      <small>Precisam de acao imediata</small>
+                    </div>
+
+                    <div class="db-summary-card">
+                      <span class="db-summary-label">Ticket medio aprovado</span>
+                      <strong>R$ 1.560</strong>
+                      <small>Media das aprovacoes do mes</small>
+                    </div>
+
+                    <div class="db-summary-card">
+                      <span class="db-summary-label">Ticket medio em analise</span>
+                      <strong>R$ 977</strong>
+                      <small>Media do pipeline atual</small>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="db-quick-strip-panel db-panel">
+                <div class="db-panel-head">
+                  <div>
+                    <span class="db-panel-kicker">Acesso rapido</span>
+                    <h2>Entradas mais usadas do dia</h2>
+                    <p>Os atalhos principais ficam no topo para acelerar a rotina da recepcao e do dentista.</p>
+                  </div>
+                </div>
+
+                <div class="db-actions-grid db-actions-grid--top">
+                  <button class="db-action-card is-teal">
+                    <span class="db-action-label">Novo paciente</span>
+                    <span class="db-action-caption">Abrir prontuario</span>
+                    <span class="db-inline-icon">></span>
+                  </button>
+
+                  <button class="db-action-card is-amber">
+                    <span class="db-action-label">Novo orcamento</span>
+                    <span class="db-action-caption">Registrar proposta</span>
+                    <span class="db-inline-icon">></span>
+                  </button>
+
+                  <button class="db-action-card is-purple">
+                    <span class="db-action-label">Receituario</span>
+                    <span class="db-action-caption">Gerar documento</span>
+                    <span class="db-inline-icon">></span>
+                  </button>
+
+                  <button class="db-action-card is-blue">
+                    <span class="db-action-label">Solicitar exames</span>
+                    <span class="db-action-caption">Encaminhamento rapido</span>
+                    <span class="db-inline-icon">></span>
+                  </button>
+                </div>
+              </section>
+
+              <section class="db-plan-banner is-success">
+                <div class="db-plan-banner-copy">
+                  <span class="db-plan-banner-kicker">Teste premium ativo</span>
+                  <strong>Painel completo liberado para a clinica</strong>
+                  <p>Use esta fase para validar agenda, documentos, orcamentos e rotina comercial no mesmo ecossistema.</p>
+                </div>
+                <div class="db-plan-banner-actions">
+                  <button class="db-primary-button">Ver planos</button>
+                </div>
+              </section>
+
+              <section class="db-metrics-grid">
+                <article class="db-metric-card is-teal">
+                  <div class="db-metric-icon">P</div>
+                  <div class="db-metric-copy">
+                    <span class="db-metric-label">Pacientes ativos</span>
+                    <strong class="db-metric-value preview-metric-value">128</strong>
+                    <span class="db-metric-sub">base cadastrada</span>
+                  </div>
+                </article>
+
+                <article class="db-metric-card is-amber">
+                  <div class="db-metric-icon">O</div>
+                  <div class="db-metric-copy">
+                    <span class="db-metric-label">Em analise</span>
+                    <strong class="db-metric-value preview-metric-value">7</strong>
+                    <span class="db-metric-sub">R$ 6.840 em aberto</span>
+                  </div>
+                </article>
+
+                <article class="db-metric-card is-green">
+                  <div class="db-metric-icon">A</div>
+                  <div class="db-metric-copy">
+                    <span class="db-metric-label">Aprovados no mes</span>
+                    <strong class="db-metric-value preview-metric-value">8</strong>
+                    <span class="db-metric-sub">R$ 12.480 em abril</span>
+                  </div>
+                </article>
+
+                <article class="db-metric-card is-purple">
+                  <div class="db-metric-icon">D</div>
+                  <div class="db-metric-copy">
+                    <span class="db-metric-label">Documentos gerados</span>
+                    <strong class="db-metric-value preview-metric-value">26</strong>
+                    <span class="db-metric-sub">emitidos neste mes</span>
+                  </div>
+                </article>
+
+                <article class="db-metric-card is-blue">
+                  <div class="db-metric-icon">G</div>
+                  <div class="db-metric-copy">
+                    <span class="db-metric-label">Consultas agendadas</span>
+                    <strong class="db-metric-value preview-metric-value">14</strong>
+                    <span class="db-metric-sub">restantes neste mes</span>
+                  </div>
+                </article>
+              </section>
+
+              <section class="db-panel db-crm-panel">
+                <div class="db-panel-head">
+                  <div>
+                    <span class="db-panel-kicker">CRM integrado</span>
+                    <h2>Pipeline comercial conectado ao consultorio</h2>
+                    <p>Uma camada de CRM para acompanhar entrada, proposta, follow-up e fechamento sem sair da rotina da clinica.</p>
+                  </div>
+                  <button class="db-ghost-button">Abrir pipeline</button>
+                </div>
+
+                <div class="db-crm-grid">
+                  <article class="db-crm-lane is-teal">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Entrada</span>
+                        <strong>Novos contatos</strong>
+                      </div>
+                      <span class="db-crm-count">12</span>
+                    </div>
+                    <p class="db-crm-copy">Pacientes cadastrados neste mes e prontos para ganhar contexto comercial e clinico.</p>
+                    <div class="db-crm-list">
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Mariana Costa</strong>
+                          <span class="db-crm-item-tag">Novo</span>
+                        </div>
+                        <small>Particular - 21/04/2026</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Lucas Ferreira</strong>
+                          <span class="db-crm-item-tag">Novo</span>
+                        </div>
+                        <small>Unimed - 19/04/2026</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Ana Beatriz Lima</strong>
+                          <span class="db-crm-item-tag">Novo</span>
+                        </div>
+                        <small>Cadastro recente</small>
+                      </button>
+                    </div>
+                    <div class="db-crm-footer">
+                      <button class="db-ghost-button">Ver pacientes</button>
+                    </div>
+                  </article>
+
+                  <article class="db-crm-lane is-amber">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Proposta</span>
+                        <strong>Oportunidades abertas</strong>
+                      </div>
+                      <span class="db-crm-count">7</span>
+                    </div>
+                    <p class="db-crm-copy">Orcamentos ativos com valor visivel para a recepcao acompanhar sem depender de planilha.</p>
+                    <div class="db-crm-list">
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Mariana Costa</strong>
+                          <span class="db-crm-item-value">R$ 2.980</span>
+                        </div>
+                        <small>8 dias no pipeline</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Lucas Ferreira</strong>
+                          <span class="db-crm-item-value">R$ 1.640</span>
+                        </div>
+                        <small>4 dias no pipeline</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Daniel Souza</strong>
+                          <span class="db-crm-item-value">R$ 1.120</span>
+                        </div>
+                        <small>3 dias no pipeline</small>
+                      </button>
+                    </div>
+                    <div class="db-crm-footer">
+                      <button class="db-ghost-button">Ver orcamentos</button>
+                    </div>
+                  </article>
+
+                  <article class="db-crm-lane is-rose">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Follow-up</span>
+                        <strong>Fila de retorno</strong>
+                      </div>
+                      <span class="db-crm-count">2</span>
+                    </div>
+                    <p class="db-crm-copy">Contatos que pedem acao rapida para evitar esfriamento da conversa e perda de fechamento.</p>
+                    <div class="db-crm-list">
+                      <div class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Mariana Costa</strong>
+                          <span class="db-budget-pill is-critical">8d</span>
+                        </div>
+                        <small>Retorno vencido</small>
+                        <button class="db-crm-inline-action">WhatsApp</button>
+                      </div>
+                      <div class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Lucas Ferreira</strong>
+                          <span class="db-budget-pill is-warm">4d</span>
+                        </div>
+                        <small>Follow-up recomendado</small>
+                        <button class="db-crm-inline-action">WhatsApp</button>
+                      </div>
+                      <div class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Isabela Nogueira</strong>
+                          <span class="db-budget-pill is-fresh">1d</span>
+                        </div>
+                        <small>Contato novo</small>
+                        <button class="db-crm-inline-action">WhatsApp</button>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="db-crm-lane is-dark">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Fechamento</span>
+                        <strong>Resultado do mes</strong>
+                      </div>
+                      <span class="db-crm-count">53%</span>
+                    </div>
+                    <p class="db-crm-copy">Resumo de performance para saber se a operacao comercial esta convertendo com qualidade.</p>
+                    <div class="db-crm-outcome-grid">
+                      <div class="db-crm-outcome-card">
+                        <span>Aprovado</span>
+                        <strong>R$ 12.480</strong>
+                      </div>
+                      <div class="db-crm-outcome-card">
+                        <span>Ticket medio</span>
+                        <strong>R$ 1.560</strong>
+                      </div>
+                      <div class="db-crm-outcome-card">
+                        <span>Propostas ganhas</span>
+                        <strong>8</strong>
+                      </div>
+                      <div class="db-crm-outcome-card">
+                        <span>Documentos</span>
+                        <strong>26</strong>
+                      </div>
+                    </div>
+                    <div class="db-crm-footer">
+                      <button class="db-primary-button">Ver resumo executivo</button>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="db-main-grid">
+                <article class="db-panel">
+                  <div class="db-panel-head">
+                    <div>
+                      <span class="db-panel-kicker">Pipeline de conversao</span>
+                      <h2>Orcamentos aguardando retorno</h2>
+                      <p>Mostrando so os 5 retornos mais recentes para deixar o acompanhamento mais objetivo.</p>
+                    </div>
+                    <button class="db-ghost-button">Ver orcamentos</button>
+                  </div>
+
+                  <div class="db-budget-list">
+                    <div class="db-budget-row is-critical">
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Paciente</span>
+                        <strong>Mariana Costa</strong>
+                        <small>14/04/2026</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Valor estimado</span>
+                        <strong>R$ 2.980,00</strong>
+                        <small>Em analise</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Janela de retorno</span>
+                        <strong class="db-budget-pill is-critical">8 dias</strong>
+                        <small>Acao imediata</small>
+                      </div>
+                      <button class="db-whatsapp-button">WhatsApp</button>
+                    </div>
+
+                    <div class="db-budget-row is-warm">
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Paciente</span>
+                        <strong>Lucas Ferreira</strong>
+                        <small>18/04/2026</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Valor estimado</span>
+                        <strong>R$ 1.640,00</strong>
+                        <small>Pendente</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Janela de retorno</span>
+                        <strong class="db-budget-pill is-warm">4 dias</strong>
+                        <small>Bom momento</small>
+                      </div>
+                      <button class="db-whatsapp-button">WhatsApp</button>
+                    </div>
+
+                    <div class="db-budget-row is-warm">
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Paciente</span>
+                        <strong>Daniel Souza</strong>
+                        <small>19/04/2026</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Valor estimado</span>
+                        <strong>R$ 1.120,00</strong>
+                        <small>Em analise</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Janela de retorno</span>
+                        <strong class="db-budget-pill is-warm">3 dias</strong>
+                        <small>Bom momento</small>
+                      </div>
+                      <button class="db-whatsapp-button">WhatsApp</button>
+                    </div>
+
+                    <div class="db-budget-row is-fresh">
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Paciente</span>
+                        <strong>Isabela Nogueira</strong>
+                        <small>20/04/2026</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Valor estimado</span>
+                        <strong>R$ 890,00</strong>
+                        <small>Em analise</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Janela de retorno</span>
+                        <strong class="db-budget-pill is-fresh">1 dia</strong>
+                        <small>Contato recente</small>
+                      </div>
+                      <button class="db-whatsapp-button">WhatsApp</button>
+                    </div>
+
+                    <div class="db-budget-row is-fresh">
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Paciente</span>
+                        <strong>Ana Beatriz Lima</strong>
+                        <small>21/04/2026</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Valor estimado</span>
+                        <strong>R$ 760,00</strong>
+                        <small>Pendente</small>
+                      </div>
+                      <div class="db-budget-col">
+                        <span class="db-budget-label">Janela de retorno</span>
+                        <strong class="db-budget-pill is-fresh">Hoje</strong>
+                        <small>Contato recente</small>
+                      </div>
+                      <button class="db-whatsapp-button">WhatsApp</button>
+                    </div>
+                  </div>
+                </article>
+
+                <div class="db-side-stack">
+                  <article class="db-panel">
+                    <div class="db-panel-head">
+                      <div>
+                        <span class="db-panel-kicker">Status do sistema</span>
+                        <h2>Operacao auxiliar</h2>
+                        <p>Informacoes de integracao e capacidade ficam abaixo do acesso rapido para manter o topo mais objetivo.</p>
+                      </div>
+                    </div>
+
+                    <div class="db-status-card">
+                      <div>
+                        <span class="db-panel-kicker">Integracao</span>
+                        <strong>Agenda sincronizada</strong>
+                        <p>Voce tem 14 consultas previstas para este mes com Google Calendar conectado.</p>
+                      </div>
+                      <button class="db-ghost-button">Gerenciar integracao</button>
+                    </div>
+
+                    <div class="db-status-card is-soft">
+                      <div>
+                        <span class="db-panel-kicker">Capacidade</span>
+                        <strong>Crescimento liberado</strong>
+                        <p>Seu plano atual permite seguir cadastrando pacientes sem limite.</p>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="db-panel">
+                    <div class="db-panel-head">
+                      <div>
+                        <span class="db-panel-kicker">Relacionamento</span>
+                        <h2>Ultimos pacientes cadastrados</h2>
+                        <p>Retome historicos e volte ao prontuario com menos atrito.</p>
+                      </div>
+                      <button class="db-ghost-button">Ver pacientes</button>
+                    </div>
+
+                    <div class="db-patient-list">
+                      <button class="db-patient-row">
+                        <span class="db-patient-avatar">M</span>
+                        <span class="db-patient-copy">
+                          <strong>Mariana Costa</strong>
+                          <small>Particular - 21/04/2026</small>
+                        </span>
+                        <span class="db-inline-icon">></span>
+                      </button>
+
+                      <button class="db-patient-row">
+                        <span class="db-patient-avatar">L</span>
+                        <span class="db-patient-copy">
+                          <strong>Lucas Ferreira</strong>
+                          <small>Unimed - 19/04/2026</small>
+                        </span>
+                        <span class="db-inline-icon">></span>
+                      </button>
+
+                      <button class="db-patient-row">
+                        <span class="db-patient-avatar">I</span>
+                        <span class="db-patient-copy">
+                          <strong>Isabela Nogueira</strong>
+                          <small>Particular - 17/04/2026</small>
+                        </span>
+                        <span class="db-inline-icon">></span>
+                      </button>
+                    </div>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

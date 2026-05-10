@@ -33,6 +33,13 @@ const Icons = {
       <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
     </svg>
   ),
+  crm: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3v18h18" />
+      <path d="m7 15 4-4 3 3 5-6" />
+      <path d="M19 8h-4" />
+    </svg>
+  ),
   config: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="3" />
@@ -53,6 +60,7 @@ const modulos = [
   { path: '/pacientes', icon: Icons.pacientes, label: 'Pacientes', hint: 'Cadastros e prontuários' },
   { path: '/agenda', icon: Icons.agenda, label: 'Agenda', hint: 'Consultas e rotina diária' },
   { path: '/orcamento', icon: Icons.orcamento, label: 'Orçamentos', hint: 'Propostas e retornos' },
+  { path: '/crm', icon: Icons.crm, label: 'CRM', hint: 'Pipeline e follow-up' },
   { path: '/configuracoes', icon: Icons.config, label: 'Configurações', hint: 'Plano e integrações' },
 ]
 

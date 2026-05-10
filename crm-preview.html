@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview CRM SorrIA</title>
+    <link rel="stylesheet" href="./src/styles/global.css" />
+    <link rel="stylesheet" href="./src/styles/dashboard.css" />
+    <style>
+      body {
+        min-height: 100vh;
+      }
+
+      .preview-shell {
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout preview-shell">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="./public/assets/logo.png" alt="SorrIA" style="height: 38px; width: auto; object-fit: contain; filter: brightness(0) invert(1);" />
+          <div class="sidebar-brand-copy">
+            <span class="sidebar-brand-kicker">Consultorio inteligente</span>
+            <strong class="sidebar-brand-title">Painel SorrIA</strong>
+          </div>
+        </div>
+
+        <div class="sidebar-status">
+          <span class="sidebar-status-dot"></span>
+          <div class="sidebar-status-copy">
+            <div class="sidebar-status-label">Operacao ativa</div>
+            <div class="sidebar-status-text">Consultorio Sorria</div>
+          </div>
+        </div>
+
+        <div class="sidebar-nav">
+          <div class="sidebar-label">Navegacao</div>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">D</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Dashboard</span>
+              <span class="sidebar-item-hint">Resumo da operacao</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">P</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Pacientes</span>
+              <span class="sidebar-item-hint">Cadastros e prontuarios</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">A</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Agenda</span>
+              <span class="sidebar-item-hint">Consultas e rotina diaria</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">O</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Orcamentos</span>
+              <span class="sidebar-item-hint">Propostas e retornos</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item active">
+            <span class="sidebar-icon">C</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">CRM</span>
+              <span class="sidebar-item-hint">Pipeline e follow-up</span>
+            </span>
+          </button>
+
+          <button class="sidebar-item">
+            <span class="sidebar-icon">G</span>
+            <span class="sidebar-item-copy">
+              <span class="sidebar-item-label">Configuracoes</span>
+              <span class="sidebar-item-hint">Plano e integracoes</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-avatar">RS</div>
+          <div class="sidebar-footer-info">
+            <div class="sidebar-footer-name">Renato</div>
+            <div class="sidebar-footer-plan">Plano Pro ativo</div>
+          </div>
+          <button class="sidebar-logout">></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <main class="app-content">
+          <div class="app-content-inner">
+            <div class="db-page">
+              <section class="db-panel crm-page-hero">
+                <div class="db-panel-head">
+                  <div>
+                    <span class="db-panel-kicker">CRM integrado</span>
+                    <h2>Painel comercial da clinica</h2>
+                    <p>Acompanhe entrada, proposta, follow-up e fechamento em uma area propria, sem sobrecarregar o dashboard principal.</p>
+                  </div>
+
+                  <div class="crm-page-actions">
+                    <button class="db-secondary-button">Atualizar CRM</button>
+                    <button class="db-primary-button">Novo orcamento</button>
+                  </div>
+                </div>
+
+                <div class="crm-page-summary-grid">
+                  <article class="crm-page-summary-card is-teal">
+                    <span>Novos contatos</span>
+                    <strong>12</strong>
+                    <small>cadastros no mes atual</small>
+                  </article>
+
+                  <article class="crm-page-summary-card is-amber">
+                    <span>Pipeline aberto</span>
+                    <strong>R$ 6.840</strong>
+                    <small>7 oportunidades em andamento</small>
+                  </article>
+
+                  <article class="crm-page-summary-card is-rose">
+                    <span>Follow-ups urgentes</span>
+                    <strong>2</strong>
+                    <small>retornos que pedem acao imediata</small>
+                  </article>
+
+                  <article class="crm-page-summary-card is-dark">
+                    <span>Conversao do mes</span>
+                    <strong>53%</strong>
+                    <small>relacao entre propostas abertas e ganhas</small>
+                  </article>
+                </div>
+              </section>
+
+              <section class="db-panel db-crm-panel">
+                <div class="db-panel-head">
+                  <div>
+                    <span class="db-panel-kicker">Pipeline visual</span>
+                    <h2>Etapas que a recepcao e a clinica conseguem ler rapido</h2>
+                    <p>O CRM foi desenhado para conectar relacionamento, proposta e conversao usando os dados que ja nascem no sistema.</p>
+                  </div>
+                </div>
+
+                <div class="db-crm-grid">
+                  <article class="db-crm-lane is-teal">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Entrada</span>
+                        <strong>Novos contatos</strong>
+                      </div>
+                      <span class="db-crm-count">12</span>
+                    </div>
+                    <p class="db-crm-copy">Pacientes cadastrados neste mes e prontos para ganhar contexto comercial e clinico.</p>
+                    <div class="db-crm-list">
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Mariana Costa</strong>
+                          <span class="db-crm-item-tag">Novo</span>
+                        </div>
+                        <small>Particular - 21/04/2026</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Lucas Ferreira</strong>
+                          <span class="db-crm-item-tag">Novo</span>
+                        </div>
+                        <small>Unimed - 19/04/2026</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Ana Beatriz Lima</strong>
+                          <span class="db-crm-item-tag">Novo</span>
+                        </div>
+                        <small>Cadastro recente</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Patricia Gomes</strong>
+                          <span class="db-crm-item-tag">Novo</span>
+                        </div>
+                        <small>Bradesco - 18/04/2026</small>
+                      </button>
+                    </div>
+                    <div class="db-crm-footer">
+                      <button class="db-ghost-button">Ver pacientes</button>
+                    </div>
+                  </article>
+
+                  <article class="db-crm-lane is-amber">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Proposta</span>
+                        <strong>Oportunidades abertas</strong>
+                      </div>
+                      <span class="db-crm-count">7</span>
+                    </div>
+                    <p class="db-crm-copy">Orcamentos ativos com valor visivel para a recepcao acompanhar sem depender de planilha.</p>
+                    <div class="db-crm-list">
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Mariana Costa</strong>
+                          <span class="db-crm-item-value">R$ 2.980</span>
+                        </div>
+                        <small>8 dias no pipeline</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Lucas Ferreira</strong>
+                          <span class="db-crm-item-value">R$ 1.640</span>
+                        </div>
+                        <small>4 dias no pipeline</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Daniel Souza</strong>
+                          <span class="db-crm-item-value">R$ 1.120</span>
+                        </div>
+                        <small>3 dias no pipeline</small>
+                      </button>
+                      <button class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Isabela Nogueira</strong>
+                          <span class="db-crm-item-value">R$ 890</span>
+                        </div>
+                        <small>1 dia no pipeline</small>
+                      </button>
+                    </div>
+                    <div class="db-crm-footer">
+                      <button class="db-ghost-button">Ver orcamentos</button>
+                    </div>
+                  </article>
+
+                  <article class="db-crm-lane is-rose">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Follow-up</span>
+                        <strong>Fila de retorno</strong>
+                      </div>
+                      <span class="db-crm-count">2</span>
+                    </div>
+                    <p class="db-crm-copy">Contatos que pedem acao rapida para evitar esfriamento da conversa e perda de fechamento.</p>
+                    <div class="db-crm-list">
+                      <div class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Mariana Costa</strong>
+                          <span class="db-budget-pill is-critical">8d</span>
+                        </div>
+                        <small>Retorno vencido</small>
+                        <button class="db-crm-inline-action">WhatsApp</button>
+                      </div>
+                      <div class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Lucas Ferreira</strong>
+                          <span class="db-budget-pill is-warm">4d</span>
+                        </div>
+                        <small>Follow-up recomendado</small>
+                        <button class="db-crm-inline-action">WhatsApp</button>
+                      </div>
+                      <div class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Isabela Nogueira</strong>
+                          <span class="db-budget-pill is-fresh">1d</span>
+                        </div>
+                        <small>Contato novo</small>
+                        <button class="db-crm-inline-action">WhatsApp</button>
+                      </div>
+                      <div class="db-crm-item">
+                        <div class="db-crm-item-top">
+                          <strong>Ana Beatriz Lima</strong>
+                          <span class="db-budget-pill is-fresh">Hoje</span>
+                        </div>
+                        <small>Contato recente</small>
+                        <button class="db-crm-inline-action">WhatsApp</button>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="db-crm-lane is-dark">
+                    <div class="db-crm-lane-head">
+                      <div>
+                        <span class="db-crm-kicker">Fechamento</span>
+                        <strong>Resultado do mes</strong>
+                      </div>
+                      <span class="db-crm-count">53%</span>
+                    </div>
+                    <p class="db-crm-copy">Resumo de performance para saber se a operacao comercial esta convertendo com qualidade.</p>
+                    <div class="db-crm-outcome-grid">
+                      <div class="db-crm-outcome-card">
+                        <span>Aprovado</span>
+                        <strong>R$ 12.480</strong>
+                      </div>
+                      <div class="db-crm-outcome-card">
+                        <span>Ticket medio</span>
+                        <strong>R$ 1.560</strong>
+                      </div>
+                      <div class="db-crm-outcome-card">
+                        <span>Propostas ganhas</span>
+                        <strong>8</strong>
+                      </div>
+                      <div class="db-crm-outcome-card">
+                        <span>Documentos</span>
+                        <strong>26</strong>
+                      </div>
+                    </div>
+                    <div class="db-crm-footer">
+                      <button class="db-primary-button">Ver dashboard</button>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="db-main-grid">
+                <article class="db-panel">
+                  <div class="db-panel-head">
+                    <div>
+                      <span class="db-panel-kicker">Acoes recomendadas</span>
+                      <h2>Prioridades para o time hoje</h2>
+                      <p>Uma leitura rapida do que destrava fechamento e melhora a resposta comercial da clinica.</p>
+                    </div>
+                  </div>
+
+                  <div class="crm-actions-list">
+                    <article class="crm-action-card">
+                      <span class="crm-action-step">1</span>
+                      <div>
+                        <strong>Retornar oportunidades antigas</strong>
+                        <p>Comece pelos casos com mais de 7 dias sem resposta para reduzir perda de interesse.</p>
+                      </div>
+                    </article>
+
+                    <article class="crm-action-card">
+                      <span class="crm-action-step">2</span>
+                      <div>
+                        <strong>Converter cadastros recentes em proposta</strong>
+                        <p>Pacientes novos sem proposta aberta podem virar oportunidade com pouca friccao.</p>
+                      </div>
+                    </article>
+
+                    <article class="crm-action-card">
+                      <span class="crm-action-step">3</span>
+                      <div>
+                        <strong>Usar documentos como apoio de fechamento</strong>
+                        <p>Receitas, exames e anexos ajudam a clinica a transmitir seguranca e profissionalismo.</p>
+                      </div>
+                    </article>
+                  </div>
+                </article>
+
+                <article class="db-panel">
+                  <div class="db-panel-head">
+                    <div>
+                      <span class="db-panel-kicker">Navegacao rapida</span>
+                      <h2>Entradas do comercial</h2>
+                      <p>Atalhos para o que a recepcao mais usa na rotina de relacionamento e proposta.</p>
+                    </div>
+                  </div>
+
+                  <div class="db-actions-grid">
+                    <button class="db-action-card is-teal">
+                      <span class="db-action-label">Pacientes</span>
+                      <span class="db-action-caption">Cadastros e historico</span>
+                      <span class="db-inline-icon">></span>
+                    </button>
+
+                    <button class="db-action-card is-amber">
+                      <span class="db-action-label">Propostas</span>
+                      <span class="db-action-caption">Abrir e acompanhar</span>
+                      <span class="db-inline-icon">></span>
+                    </button>
+
+                    <button class="db-action-card is-blue">
+                      <span class="db-action-label">Agenda</span>
+                      <span class="db-action-caption">Confirmacoes do dia</span>
+                      <span class="db-inline-icon">></span>
+                    </button>
+
+                    <button class="db-action-card is-purple">
+                      <span class="db-action-label">Resumo geral</span>
+                      <span class="db-action-caption">Voltar ao painel executivo</span>
+                      <span class="db-inline-icon">></span>
+                    </button>
+                  </div>
+                </article>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

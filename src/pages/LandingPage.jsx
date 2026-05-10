@@ -457,8 +457,8 @@ function PricingSection({ onLogin }) {
   const precoAnualMes = Math.round(precoAnualTotal / 12)
   const economia = precoMensal * 12 - precoAnualTotal
 
-  const bundleMensal = 247
-  const bundleAnualTotal = 2470
+  const bundleMensal = 397
+  const bundleAnualTotal = 4164
   const bundleAnualMes = Math.round(bundleAnualTotal / 12)
   const bundleEconomia = bundleMensal * 12 - bundleAnualTotal
 
@@ -489,7 +489,7 @@ function PricingSection({ onLogin }) {
       label: 'Atendimento externo',
       title: 'SorrIA Atendente',
       description: 'WhatsApp 24h para sua clínica com configuração personalizada.',
-      customPrice: 'A partir de R$ 197/mês',
+      customPrice: 'A partir de R$ 297/mês',
       detail: '+ taxa de implementação (consulte)',
       badge: 'Solicite uma demonstração',
       cta: 'Solicitar implementação',
@@ -532,7 +532,7 @@ function PricingSection({ onLogin }) {
             onClick={() => setPeriodo('anual')}
           >
             Anual
-            <span className="lp-pricing-discount-tag">Economize 17%</span>
+            <span className="lp-pricing-discount-tag">Melhor valor</span>
           </button>
         </div>
 
