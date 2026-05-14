@@ -1686,6 +1686,158 @@
   flex-shrink: 0;
 }
 
+/* Ajuste de densidade: dashboard precisa ser confortável, mas mais operacional. */
+.db-page {
+  gap: 18px;
+}
+
+.db-hero {
+  gap: 18px;
+  padding: 24px;
+  border-radius: 28px;
+}
+
+.db-hero-left {
+  gap: 14px;
+}
+
+.db-hero-title {
+  max-width: 13ch;
+  font-size: clamp(2.15rem, 3.8vw, 3.35rem);
+}
+
+.db-hero-desc {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.db-chip {
+  min-height: 34px;
+  padding: 0 12px;
+}
+
+.db-proxima {
+  padding: 10px 12px;
+}
+
+.db-btn-refresh,
+.db-btn-primary,
+.db-btn-ghost,
+.db-btn-whatsapp,
+.db-btn-upgrade,
+.db-card-link {
+  min-height: 40px;
+  border-radius: 13px;
+}
+
+.db-metrics-grid {
+  gap: 12px;
+}
+
+.db-metric-card {
+  min-height: 118px;
+  padding: 16px;
+  border-radius: 22px;
+}
+
+.db-metric-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+}
+
+.db-metric-value {
+  font-size: clamp(1.65rem, 2.3vw, 2.25rem);
+}
+
+.db-main-grid,
+.db-col-left,
+.db-col-right {
+  gap: 16px;
+}
+
+.db-card {
+  padding: 18px;
+  border-radius: 24px;
+}
+
+.db-card-head {
+  margin-bottom: 14px;
+}
+
+.db-card-title {
+  margin-top: 7px;
+  font-size: clamp(1.18rem, 1.45vw, 1.52rem);
+}
+
+.db-actions-grid {
+  gap: 10px;
+}
+
+.db-action-btn {
+  min-height: 86px;
+  padding: 14px;
+  border-radius: 20px;
+}
+
+.db-action-label {
+  font-size: 15px;
+}
+
+.db-action-ico {
+  width: 32px;
+  height: 32px;
+}
+
+.db-budget-list,
+.db-patient-list {
+  gap: 9px;
+}
+
+.db-budget-row {
+  padding: 10px 12px;
+  border-radius: 18px;
+}
+
+.db-budget-col strong {
+  font-size: 14px;
+}
+
+.db-patient-row {
+  padding: 12px 14px;
+  border-radius: 18px;
+}
+
+.db-patient-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+}
+
+.db-banner {
+  padding: 18px;
+  border-radius: 22px;
+}
+
+.db-banner-title {
+  font-size: 20px;
+}
+
+.db-empty {
+  min-height: 164px;
+  padding: 18px;
+}
+
+.db-empty.compact {
+  min-height: 126px;
+}
+
+.db-empty-ico {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+}
+
 .db-metric-card:nth-child(1) { animation-delay: 40ms; }
 .db-metric-card:nth-child(2) { animation-delay: 80ms; }
 .db-metric-card:nth-child(3) { animation-delay: 120ms; }
