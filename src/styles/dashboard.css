@@ -1862,6 +1862,58 @@
   }
 }
 
+@media (max-width: 1420px) and (min-width: 1101px) {
+  .db-metrics-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .db-metric-card:nth-child(1),
+  .db-metric-card:nth-child(2),
+  .db-metric-card:nth-child(3),
+  .db-metric-card:nth-child(4),
+  .db-metric-card:nth-child(5) {
+    grid-column: span 3;
+  }
+
+  .db-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .db-col-right {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 1101px) {
+  .db-page {
+    gap: 14px;
+  }
+
+  .db-hero {
+    padding: 18px 20px;
+  }
+
+  .db-hero-title {
+    font-size: clamp(1.85rem, 3.1vw, 2.75rem);
+  }
+
+  .db-metric-card {
+    min-height: 104px;
+    padding: 14px;
+  }
+
+  .db-card,
+  .db-banner {
+    padding: 16px;
+  }
+
+  .db-action-btn {
+    min-height: 74px;
+  }
+}
+
 @media (max-width: 1260px) {
   .db-metrics-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));

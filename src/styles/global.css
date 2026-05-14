@@ -1340,3 +1340,77 @@ body {
     padding: 22px 16px 28px;
   }
 }
+
+@media (max-height: 760px) and (min-width: 1101px) {
+  .sidebar {
+    width: 256px;
+    padding: 10px;
+  }
+
+  .sidebar-logo {
+    padding: 12px 12px 8px;
+    gap: 10px;
+  }
+
+  .sidebar-logo img {
+    max-height: 32px;
+  }
+
+  .sidebar-status {
+    margin: 6px 6px 8px;
+    padding: 10px 12px;
+    border-radius: 18px;
+  }
+
+  .sidebar-label {
+    padding: 8px 12px 6px;
+  }
+
+  .sidebar-nav {
+    padding: 0 4px 8px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .sidebar-item {
+    gap: 10px;
+    padding: 9px 10px;
+    margin-bottom: 4px;
+    border-radius: 14px;
+  }
+
+  .sidebar-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+  }
+
+  .sidebar-item-label {
+    font-size: 13px;
+  }
+
+  .sidebar-item-hint {
+    font-size: 10px;
+  }
+
+  .sidebar-footer {
+    margin: 8px 6px 0;
+    padding: 10px;
+    border-radius: 18px;
+  }
+
+  .sidebar-footer-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+  }
+
+  .sidebar-logout {
+    width: 32px;
+    height: 32px;
+  }
+
+  .app-content {
+    padding: 18px 22px 28px;
+  }
+}
